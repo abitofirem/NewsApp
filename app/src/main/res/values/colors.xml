@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!--light theme -->
+    <color name="main_background">#FAF9F6</color> <!-- Fildişi Beyazı -->
+    <color name="secondary_text">#8F9BA9</color> <!-- Pastel Gri-Mavi -->
+    <color name="accent">#F4A6A1</color>         <!-- Pudra Mercan -->
+
+    <color name="bottom_nav_text_selected">@color/white</color>
+    <color name="bottom_nav_active_indicator_color">@color/accent</color>
+    <color name="bottom_nav_icon_unselected">#8F9BA9</color>
+    <color name="bottom_nav_text_unselected">#8F9BA9</color>
+    <color name="bottom_nav_icon_selected">@color/white</color>
+    
+    <!-- Modern navbar renkleri -->
+    <color name="navbar_shadow">#20000000</color>
+    <color name="navbar_border">#E0E0E0</color>
+    <color name="navbar_ripple">#1A000000</color>
+
+
+
+
+</resources>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.NavigationDrawer" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/main_background</item>
+        <item name="colorPrimaryVariant">@color/main_background</item>
+        <item name="colorOnPrimary">@color/secondary_text</item>
+        <item name="colorSecondary">@color/accent</item>
+        <item name="colorSecondaryVariant">@color/accent</item>
+        <item name="colorOnSecondary">@color/secondary_text</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/black</item>
+        <item name="colorOnSurfaceVariant">@color/secondary_text</item>
+        <item name="android:colorBackground">@color/main_background</item>
+        <item name="colorOnBackground">@color/black</item>
+        <item name="colorError">#B00020</item>
+        <item name="colorOnError">@color/white</item>
+    </style>
+
+    <style name="Theme.MainActivity" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/main_background</item>
+        <item name="colorPrimaryVariant">@color/main_background</item>
+        <item name="colorOnPrimary">@color/secondary_text</item>
+        <item name="colorSecondary">@color/accent</item>
+        <item name="colorSecondaryVariant">@color/accent</item>
+        <item name="colorOnSecondary">@color/secondary_text</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
+        <item name="colorSurface">@color/white</item> <item name="colorOnSurface">@color/black</item> <item name="colorOnSurfaceVariant">@color/secondary_text</item> <item name="android:colorBackground">@color/main_background</item> <item name="colorOnBackground">@color/black</item> <item name="colorError">#B00020</item> <item name="colorOnError">@color/white</item> </style>
+</resources>

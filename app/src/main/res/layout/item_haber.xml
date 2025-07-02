@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!---RecyclerView içindeki her bir haber öğesinin
+nasıl görüneceğini tanımlayan XML dosyası.
+
+-->
+
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginTop="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="?attr/colorSurface"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/haberImageView"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/placeholder_image"
+            android:contentDescription="Haber Görseli"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/haberBaslikTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="?attr/colorOnSurface"
+            tools:text="Haber Başlığı Buraya Gelecek"
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/haberIcerikTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:maxLines="3"
+            android:ellipsize="end"
+            tools:text="Bu, haberin kısa içeriğidir. Çok uzun metinler burada kesilir ve üç nokta ile devam eder..." />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

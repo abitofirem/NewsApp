@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">Haber Uygulaması</string>
+    <string name="open_nav">Navigasyon Menüsünü Aç</string>
+    <string name="close_nav">Navigasyon Menüsünü Kapat</string>
+
+    <string name="hello_blank_fragment">Merhaba boş fragment</string>
+
+    <!-- Navigation Menu Items -->
+    <string name="nav_home">Ana Sayfa</string>
+    <string name="nav_settings">Ayarlar</string>
+    <string name="nav_share">Paylaş</string>
+    <string name="nav_about">Hakkında</string>
+    <string name="nav_logout">Çıkış Yap</string>
+
+
+    <!-- Bottom Navigation Items -->
+    <string name="bottom_nav_a">A</string>
+    <string name="bottom_nav_b">B</string>
+    <string name="bottom_nav_c">C</string>
+    <string name="bottom_nav_d">D</string>
+    <string name="bottom_nav_e">E</string>
+
+    <!-- Fragment Titles -->
+    <string name="title_home">Ana Sayfa</string>
+    <string name="title_settings">Ayarlar</string>
+    <string name="title_share">Paylaş</string>
+    <string name="title_about">Hakkında</string>
+    <string name="title_logout">Çıkış Yap</string>
+
+    <!-- Settings Fragment -->
+    <string name="settings_title">Ayarlar</string>
+    <string name="title_news" translatable="false">Haberler</string>
+    <string name="dark_theme">Koyu Tema</string>
+    <string name="light_theme">Açık Tema</string>
+    <string name="language">Dil</string>
+    <string name="turkish">Türkçe</string>
+    <string name="english">English</string>
+    <string name="theme_icon_desc">Tema Simgesi</string>
+    <string name="language_icon_desc">Dil Simgesi</string>
+</resources>

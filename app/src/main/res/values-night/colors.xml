@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <resources>
+        <!--dark theme -->
+        <color name="white">#2D2D2D</color>
+        <color name="black">#EAEAEA</color>
+        <color name="main_background">#2C3E50</color>   <!-- Soluk Gece Mavisi -->
+        <color name="secondary_text">#BDC3C7</color>    <!-- Bulut Grisi -->
+        <color name="accent">#F78C6B</color>            <!-- Pastel Mercan -->
+
+    </resources>

@@ -9,13 +9,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Switch
 import android.widget.TextView
+import androidx.fragment.app.viewModels
 import com.example.navigationdrawerapp.databinding.FragmentSettingsBinding
+import com.example.navigationdrawerapp.viewmodel.NewsViewModel
 import java.util.Locale
 
 class SettingsFragment : Fragment() {
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
+
+
+    // NewsViewModel'i ekle
+    private val newsViewModel: NewsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -99,6 +105,9 @@ class SettingsFragment : Fragment() {
     private fun saveAndApplyLanguage(langCode: String) {
         val sharedPref = activity?.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         sharedPref?.edit()?.putString("app_language", langCode)?.apply()
+
+        //NewsViewModel'e dil değişikliğini bildir
+        newsViewModel.updateLanguage(langCode)
 
         //Dil değişikliğini uygulamak için gerekli kod
         val locale = Locale(langCode)

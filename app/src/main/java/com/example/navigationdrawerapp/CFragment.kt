@@ -41,7 +41,11 @@ class CFragment : Fragment() {
         setupRecyclerView()
 
         observeViewModel() //ViewModel'i gözlemlemeye başla
+    }
 
+    override fun onResume() {
+        super.onResume()
+        newsViewModel.fetchNews()
     }
 
     private fun setupRecyclerView() {

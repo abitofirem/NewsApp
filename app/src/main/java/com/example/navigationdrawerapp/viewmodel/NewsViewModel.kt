@@ -1,4 +1,7 @@
 package com.example.navigationdrawerapp.viewmodel
+import android.app.Application
+import android.content.Context
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,8 +10,13 @@ import com.example.navigationdrawerapp.Haber
 import com.example.navigationdrawerapp.api.RetrofitClient // Retrofit istemcimizi import edin
 import com.example.navigationdrawerapp.model.NewsResponse // NewsResponse modelimizi import edin
 import kotlinx.coroutines.launch // Coroutine başlatmak için
+import java.util.Locale
 
-class NewsViewModel : ViewModel() {
+//ViewModel yerine AndroidViewModel kullanıyoruz, çünkü Context'e ihtiyacımız var.
+class NewsViewModel(application: Application) : AndroidViewModel(application) { // <-- Burayı değiştir
+
+    //Uygulama context'ine erişim için
+    private val app = application
 
     //Haber listesi için LiveData (UI'ın gözlemleyeceği ve otomatik güncelleneceği veri)
     private val _newsList = MutableLiveData<List<Haber>>()
@@ -27,16 +35,45 @@ class NewsViewModel : ViewModel() {
     private val pageSize = 10 //Her seferinde kaç haber çekileceği (API'de belirtilmemiş, biz varsayılan 10 alıyoruz)
     var hasMoreNews = true //Daha fazla haber olup olmadığını kontrol eder (false olduğunda daha fazla yüklemeyi durdururuz)
 
-    //CollectAPI'ye gönderilecek varsayılan ülke ve etiket
-    private val defaultCountry = "tr" //Türkiye için 'tr'
+    //Dil ve ülke ayarları
+    private lateinit var currentLanguage: String // <-- Başlangıçta değer atamayacağız, init bloğunda okuyacağız
     private val defaultTag = "general" //Genel haberler için 'general'
 
+
     init {
-        //ViewModel ilk oluşturulduğunda haberleri çekmeye başla
+        // ViewModel ilk oluşturulduğunda kaydedilmiş dil tercihini yükle
+        currentLanguage = getSavedLanguagePreference() // <-- Yeni eklenen metod ile dili oku
+        // İlk haber çekme işlemi
         fetchNews()
     }
 
-    // Haberleri API'den çeken ana metod
+    //SharedPreferences'tan kaydedilen dil tercihini okuyan metod
+    private fun getSavedLanguagePreference(): String {
+        val sharedPref = app.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        //Eğer kaydedilmiş bir dil yoksa, varsayılan olarak cihazın dilini kullan
+        //Veya "tr" gibi bir varsayılan dil atayabilirsiniz.
+        return sharedPref.getString("app_language", Locale.getDefault().language) ?: "tr" // <-- Değiştirildi
+    }
+
+    //Dil değişikliğinde çağrılacak metod
+    fun updateLanguage(language: String) {
+        if (currentLanguage != language) {
+            currentLanguage = language
+            //Dil değiştiğinde listeyi sıfırla ve yeniden başla
+            resetNewsList()
+            fetchNews()
+        }
+    }
+
+    //Haber listesini sıfırla ve sayfalama değişkenlerini resetle
+    private fun resetNewsList() {
+        _newsList.value = emptyList()
+        currentPage = 0
+        hasMoreNews = true
+    }
+
+
+    //Haberleri API'den çeken ana metod
     fun fetchNews() {
         //Eğer zaten yükleniyorsa veya daha fazla haber yoksa tekrar çekme
         if (_isLoading.value == true || !hasMoreNews) {
@@ -48,10 +85,16 @@ class NewsViewModel : ViewModel() {
 
         viewModelScope.launch { //Coroutine'i ViewModel'in yaşam döngüsüne bağla
             try {
+                // Dil koduna göre ülke kodunu belirle
+                val country = when (currentLanguage) {
+                    "en" -> "en" // İngilizce için ABD
+                    "tr" -> "tr" // Türkçe için Türkiye
+                    else -> "tr" // Varsayılan olarak Türkiye
+                }
                 //RetrofitClient üzerinden API çağrısı yap
                 //API key'i NewsApiService'de @Headers ile sabitlendiği için burada göndermiyoruz.
                 val response: NewsResponse = RetrofitClient.instance.getNews(
-                    country = defaultCountry,
+                    country = country,
                     tag = defaultTag,
                     paging = currentPage
                 )

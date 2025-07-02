@@ -22,6 +22,32 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var toolbar: Toolbar
     private lateinit var bottomNavigationView: BottomNavigationView
 
+    //--- Dil Ayarları İçin Eklemeler BAŞLANGIÇ ---
+    //Bu metod, Activity'nin context'i oluşturulmadan önce çağrılır ve dil ayarını yapar.
+    override fun attachBaseContext(newBase: Context?) {
+        val language = getSavedLanguagePreference(newBase) //Kaydedilen dili al
+        val context = newBase?.let { updateResources(it, language) } ?: newBase
+        super.attachBaseContext(context)
+    }
+
+    //SharedPreferences'tan kaydedilen dil tercihini okuyan metod
+    private fun getSavedLanguagePreference(context: Context?): String {
+        val sharedPref = context?.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        //Eğer kaydedilmiş bir dil yoksa, varsayılan olarak cihazın dilini kullan
+        //Veya "tr" gibi bir varsayılan dil atayabilirsiniz.
+        return sharedPref?.getString("app_language", Locale.getDefault().language) ?: "tr"
+    }
+
+    //Kaynakları belirtilen dile göre güncelleyen metod
+    private fun updateResources(context: Context, language: String): Context {
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+        val config = Configuration(context.resources.configuration)
+        config.setLocale(locale)
+        return context.createConfigurationContext(config) //Yeni context oluştur
+    }
+    //--- Dil Ayarları İçin Eklemeler SONU ---
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

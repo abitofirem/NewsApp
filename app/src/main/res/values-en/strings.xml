@@ -35,4 +35,11 @@
     <string name="english">English</string>
     <string name="theme_icon_desc">Theme Icon</string>
     <string name="language_icon_desc">Language Icon</string>
+
+
+        <string name="search_hint">Search...</string>
+        <string name="leagues_title">Leagues</string>
+        <string name="search_icon_description">Search icon</string>
+        <string name="favorite_star_description">Favorite star</string>
+
 </resources>

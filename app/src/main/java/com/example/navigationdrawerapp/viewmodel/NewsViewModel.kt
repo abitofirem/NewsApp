@@ -93,12 +93,11 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) { 
                 }
                 //RetrofitClient üzerinden API çağrısı yap
                 //API key'i NewsApiService'de @Headers ile sabitlendiği için burada göndermiyoruz.
-                val response: NewsResponse = RetrofitClient.instance.getNews(
+                val response: NewsResponse = RetrofitClient.newsApiService.getNews( // <--- BU ŞEKİLDE OLMALI
                     country = country,
                     tag = defaultTag,
                     paging = currentPage
                 )
-
                 if (response.success) { //API yanıtı başarılı mı kontrol et
                     val fetchedNews = response.result //Haber listesini al
 

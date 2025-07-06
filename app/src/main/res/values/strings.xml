@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Haber Uygulaması</string>
     <string name="open_nav">Navigasyon Menüsünü Aç</string>
     <string name="close_nav">Navigasyon Menüsünü Kapat</string>
@@ -37,4 +37,16 @@
     <string name="english">English</string>
     <string name="theme_icon_desc">Tema Simgesi</string>
     <string name="language_icon_desc">Dil Simgesi</string>
+
+    <string name="search_hint" tools:ignore="MissingTranslation">Ara...</string>
+    <string name="leagues_title" tools:ignore="MissingTranslation">Ligler</string>
+    <string name="search_icon_description" tools:ignore="MissingTranslation">Arama ikonu</string>
+    <string name="favorite_star_description" tools:ignore="MissingTranslation">Favori yıldızı</string>
+
+    <string-array name="week_options">
+        <item>1. Hafta</item>
+        <item>2. Hafta</item>
+        <item>3. Hafta</item>
+        <item>38. Hafta</item>
+    </string-array>
 </resources>

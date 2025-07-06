@@ -20,7 +20,6 @@
     <color name="navbar_border">#E0E0E0</color>
     <color name="navbar_ripple">#1A000000</color>
 
-
-
+    <color name="main_background_darker">#E0E0E0</color> ```
 
 </resources>

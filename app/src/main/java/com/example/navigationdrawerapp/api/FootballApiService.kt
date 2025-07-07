@@ -1,15 +1,18 @@
 package com.example.navigationdrawerapp.api // Projenizin API paketi
 
 import com.example.navigationdrawerapp.model.LeagueResponse
+import com.example.navigationdrawerapp.model.StandingResponse
 import retrofit2.http.GET
-import retrofit2.http.Headers
+import retrofit2.http.Query
+import retrofit2.Response //<-- Retrofit2'den Response
 
 interface FootballApiService {
 
-    @Headers(
-        "content-type: application/json",
- //     "authorization: apikey 2gmUrMjHzi3aQLY6FYXbhE:078zdz0PXeIEbP5VbRNstp" // API_KEY'in doğru olduğunu varsayıyorum
-    )
     @GET("football/leaguesList")
-    suspend fun getLeagues(): LeagueResponse
+    suspend fun getLeagues(): Response<LeagueResponse> //Response<LeagueResponse> döndürmeli
+
+    @GET("football/league")
+    suspend fun getLeagueStandings(
+        @Query("data.league") leagueKey: String
+    ): Response<StandingResponse> //Response<StandingResponse> döndürmeli
 }

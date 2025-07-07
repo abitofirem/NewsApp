@@ -4,17 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.navigationdrawerapp.model.League
-import com.example.navigationdrawerapp.api.FootballApiService // import et!
+import com.example.navigationdrawerapp.model.TeamStanding // BURAYI TeamStanding olarak import et!
+import com.example.navigationdrawerapp.api.FootballApiService
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 
-class LeagueViewModel : ViewModel() {
+class LeagueDetailViewModel : ViewModel() {
 
-    // API Key ve Base URL'i buraya da kopyala
     private val API_KEY = "2gmUrMjHzi3aQLY6FYXbhE:078zdz0PXeIEbP5VbRNstp"
     private val BASE_URL = "https://api.collectapi.com/"
 
@@ -40,8 +39,8 @@ class LeagueViewModel : ViewModel() {
             .create(FootballApiService::class.java)
     }
 
-    private val _leagues = MutableLiveData<List<League>?>()
-    val leagues: LiveData<List<League>?> = _leagues
+    private val _standings = MutableLiveData<List<TeamStanding>?>() //BURASI List<TeamStanding> OLDU
+    val standings: LiveData<List<TeamStanding>?> = _standings
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -49,23 +48,23 @@ class LeagueViewModel : ViewModel() {
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
-    fun fetchLeagues() {
+    fun fetchStandings(leagueKey: String) {
         _isLoading.value = true
         _errorMessage.value = null
 
         viewModelScope.launch {
             try {
-                val response = footballApiService.getLeagues()
+                val response = footballApiService.getLeagueStandings(leagueKey)
                 if (response.isSuccessful) {
-                    _leagues.value = response.body()?.result
+                    _standings.value = response.body()?.result //response.body()?.result zaten List<TeamStanding> olacak
                 } else {
                     val errorBody = response.errorBody()?.string()
-                    _errorMessage.value = "Ligler çekilemedi: ${response.code()} - $errorBody"
-                    _leagues.value = null
+                    _errorMessage.value = "Puan durumu çekilemedi: ${response.code()} - ${errorBody ?: "Bilinmeyen hata"}"
+                    _standings.value = null
                 }
             } catch (e: Exception) {
                 _errorMessage.value = "Hata oluştu: ${e.localizedMessage}"
-                _leagues.value = null
+                _standings.value = null
                 e.printStackTrace()
             } finally {
                 _isLoading.value = false

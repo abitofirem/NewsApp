@@ -96,4 +96,17 @@ dependencies {
     implementation(libs.glide)
     annotationProcessor(libs.compiler)
 
+    //Navigation Component
+    implementation(libs.androidx.navigation.fragment.ktx.v291)
+    implementation(libs.androidx.navigation.ui.ktx.v291)
+
+    //Lifecycle ViewModel KTX (gerekliyse)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx.v270)
+    implementation(libs.androidx.lifecycle.livedata.ktx.v270)
+
+    //Gson kütüphanesi (LeagueViewModel'da caching için)
+    implementation(libs.gson)
+
+    //Kotlin standart kütüphanesi (genellikle varsayılan olarak eklenir ama kontrol etmende fayda var)
+    implementation(kotlin("stdlib"))
 }

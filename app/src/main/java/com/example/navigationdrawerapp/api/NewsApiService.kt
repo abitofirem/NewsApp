@@ -11,7 +11,7 @@ interface NewsApiService {
     //Endpoint: https://api.collectapi.com/news/getNews
     @Headers( //API anahtarınızı burada belirtiyoruz
         "content-type: application/json",
- //       "authorization: apikey 2gmUrMjHzi3aQLY6FYXbhE:078zdz0PXeIEbP5VbRNstp" //API_KEY
+ //      "authorization: apikey 2gmUrMjHzi3aQLY6FYXbhE:078zdz0PXeIEbP5VbRNstp" //API_KEY
     )
     @GET("news/getNews") //API'nizin temel URL'si üzerine eklenecek yol
     suspend fun getNews(

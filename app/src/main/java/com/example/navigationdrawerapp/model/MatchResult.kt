@@ -11,4 +11,5 @@ data class MatchResult(
     val awayTeam: String?, //'away' olarak geliyor, daha açıklayıcı 'awayTeam' yaptım
     @SerializedName("home")
     val homeTeam: String? //'home' olarak geliyor, daha açıklayıcı 'homeTeam' yaptım
+
 )

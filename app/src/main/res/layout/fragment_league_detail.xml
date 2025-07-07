@@ -32,45 +32,56 @@
         app:layout_constraintTop_toBottomOf="@id/iv_league_detail_logo"
         tools:text="Trendyol Süper Lig" />
 
-    <com.google.android.material.button.MaterialButtonToggleGroup
-        android:id="@+id/toggle_button_group_tabs"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="24dp"
-        app:checkedButton="@id/btn_standings" app:selectionRequired="true"
-        app:singleSelection="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_league_detail_name">
 
-        <Button
-            android:id="@+id/btn_standings"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="wrap_content"
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggle_button_group_tabs"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Puan Durumu"
-            android:textColor="@color/black" />
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="24dp"
+            app:checkedButton="@id/btn_standings"
+            app:selectionRequired="true"
+            app:singleSelection="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_league_detail_name"
+            tools:ignore="DuplicateIds">
 
-        <Button
+            <Button
+                android:id="@+id/btn_standings"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Puan Durumu"
+                android:textColor="@color/tab_button_text_color_selector"
+                app:backgroundTint="@color/tab_button_background_selector" app:strokeColor="@color/selected_tab_background" app:strokeWidth="1dp" app:cornerRadius="8dp" /> <Button
             android:id="@+id/btn_fixtures"
-            style="?attr/materialButtonOutlinedStyle"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Fikstür"
-            android:textColor="@color/black" />
+            android:textColor="@color/tab_button_text_color_selector"
+            app:backgroundTint="@color/tab_button_background_selector"
+            app:strokeColor="@color/selected_tab_background"
+            app:strokeWidth="1dp"
+            app:cornerRadius="8dp" />
 
-        <Button
-            android:id="@+id/btn_stats"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="İstatistik"
-            android:textColor="@color/black" />
+            <Button
+                android:id="@+id/btn_stats"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="İstatistik"
+                android:textColor="@color/tab_button_text_color_selector"
+                app:backgroundTint="@color/tab_button_background_selector"
+                app:strokeColor="@color/selected_tab_background"
+                app:strokeWidth="1dp"
+                app:cornerRadius="8dp" />
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
     <androidx.constraintlayout.widget.ConstraintLayout

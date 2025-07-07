@@ -22,4 +22,10 @@
 
     <color name="main_background_darker">#E0E0E0</color> ```
 
+
+    <color name="selected_tab_background">@color/accent</color>
+    <color name="selected_tab_text">#FFFFFF</color>
+    <color name="unselected_tab_background">@android:color/transparent</color>
+    <color name="unselected_tab_text">#000000</color>
+
 </resources>

@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toStartOf="@+id/tv_score"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Galatasaray"
+        tools:text="Antalyaspor"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintWidth_percent="0.4"
@@ -36,23 +36,21 @@
         app:layout_constraintEnd_toStartOf="@+id/tv_away_team_name"
         app:layout_constraintStart_toEndOf="@+id/tv_home_team_name"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="3 - 1" />
-
-    <TextView
-        android:id="@+id/tv_away_team_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_score"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Fenerbahçe"
-        app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintWidth_percent="0.4"
-        android:layout_marginStart="8dp"/>
+        tools:text="2 - 1" /> <TextView
+    android:id="@+id/tv_away_team_name"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:gravity="start"
+    android:textColor="@color/black"
+    android:textSize="16sp"
+    android:textStyle="bold"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@+id/tv_score"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:text="Trabzonspor"
+    app:layout_constraintHorizontal_bias="1"
+    app:layout_constraintWidth_percent="0.4"
+    android:layout_marginStart="8dp"/>
 
     <TextView
         android:id="@+id/tv_match_date"
@@ -65,6 +63,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_score"
-        tools:text="01 Eylül 2018 Cumartesi 19:15" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        tools:text="30 Mayıs 2025 Cuma 17:00" /> </androidx.constraintlayout.widget.ConstraintLayout>

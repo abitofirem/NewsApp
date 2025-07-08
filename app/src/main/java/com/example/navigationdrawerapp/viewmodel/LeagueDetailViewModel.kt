@@ -1,19 +1,23 @@
 package com.example.navigationdrawerapp.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.navigationdrawerapp.model.TeamStanding //BURAYI TeamStanding olarak import et!
+import com.example.navigationdrawerapp.model.TeamStanding
 import com.example.navigationdrawerapp.api.FootballApiService
+import com.example.navigationdrawerapp.model.GoalKing
+import com.example.navigationdrawerapp.model.GoalKingResponse // Eklendi
+import com.example.navigationdrawerapp.model.MatchResult
+import com.example.navigationdrawerapp.model.MatchResultResponse
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
-import com.example.navigationdrawerapp.model.MatchResult
-import com.example.navigationdrawerapp.model.MatchResultResponse
-
+import java.io.IOException
+import retrofit2.HttpException
 
 class LeagueDetailViewModel : ViewModel() {
 
@@ -42,34 +46,53 @@ class LeagueDetailViewModel : ViewModel() {
             .create(FootballApiService::class.java)
     }
 
-    private val _standings = MutableLiveData<List<TeamStanding>?>() //BURASI List<TeamStanding> OLDU
+    // Puan Durumu LiveData'ları
+    private val _standings = MutableLiveData<List<TeamStanding>?>()
     val standings: LiveData<List<TeamStanding>?> = _standings
 
+    // Fikstür LiveData'ları
+    private val _matchResults = MutableLiveData<List<MatchResult>?>()
+    val matchResults: LiveData<List<MatchResult>?> = _matchResults
+
+    // Gol Krallığı LiveData'ları (Eklendi)
+    private val _goalKings = MutableLiveData<List<GoalKing>?>()
+    val goalKings: LiveData<List<GoalKing>?> = _goalKings
+
+    // Ortak Yükleme ve Hata LiveData'ları
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
-    private val _matchResults = MutableLiveData<List<MatchResult>?>() // Burayı MatchResult? olarak güncelledim
-    val matchResults: LiveData<List<MatchResult>?> = _matchResults // Burayı MatchResult? olarak güncelledim
 
     fun fetchStandings(leagueKey: String) {
         _isLoading.value = true
-        _errorMessage.value = null
+        _errorMessage.value = null // Her yeni istekte hatayı sıfırla
 
         viewModelScope.launch {
             try {
                 val response = footballApiService.getLeagueStandings(leagueKey)
                 if (response.isSuccessful) {
-                    _standings.value = response.body()?.result //response.body()?.result zaten List<TeamStanding> olacak
+                    _standings.value = response.body()?.result
+                    if (response.body()?.result.isNullOrEmpty()) {
+                        _errorMessage.value = "Puan durumu verisi bulunamadı."
+                    }
                 } else {
                     val errorBody = response.errorBody()?.string()
                     _errorMessage.value = "Puan durumu çekilemedi: ${response.code()} - ${errorBody ?: "Bilinmeyen hata"}"
                     _standings.value = null
                 }
+            } catch (e: IOException) {
+                _errorMessage.value = "Ağ bağlantı hatası: ${e.localizedMessage}"
+                _standings.value = null
+                e.printStackTrace()
+            } catch (e: HttpException) {
+                _errorMessage.value = "API hatası: ${e.code()} - ${e.message()}"
+                _standings.value = null
+                e.printStackTrace()
             } catch (e: Exception) {
-                _errorMessage.value = "Hata oluştu: ${e.localizedMessage}"
+                _errorMessage.value = "Beklenmedik bir hata oluştu: ${e.localizedMessage}"
                 _standings.value = null
                 e.printStackTrace()
             } finally {
@@ -78,25 +101,83 @@ class LeagueDetailViewModel : ViewModel() {
         }
     }
 
-    // Fikstür verilerini çekecek yeni fonksiyon
     fun fetchMatchResults(leagueKey: String) {
         _isLoading.value = true
-        _errorMessage.value = null
+        _errorMessage.value = null // Her yeni istekte hatayı sıfırla
 
         viewModelScope.launch {
             try {
                 val response = footballApiService.getMatchResults(leagueKey)
                 if (response.isSuccessful) {
                     _matchResults.value = response.body()?.result
+                    if (response.body()?.result.isNullOrEmpty()) {
+                        _errorMessage.value = "Fikstür verisi bulunamadı."
+                    }
                 } else {
                     val errorBody = response.errorBody()?.string()
                     _errorMessage.value = "Fikstür çekilemedi: ${response.code()} - ${errorBody ?: "Bilinmeyen hata"}"
                     _matchResults.value = null
                 }
-            } catch (e: Exception) {
-                _errorMessage.value = "Hata oluştu: ${e.localizedMessage}"
+            } catch (e: IOException) {
+                _errorMessage.value = "Ağ bağlantı hatası: ${e.localizedMessage}"
                 _matchResults.value = null
                 e.printStackTrace()
+            } catch (e: HttpException) {
+                _errorMessage.value = "API hatası: ${e.code()} - ${e.message()}"
+                _matchResults.value = null
+                e.printStackTrace()
+            } catch (e: Exception) {
+                _errorMessage.value = "Beklenmedik bir hata oluştu: ${e.localizedMessage}"
+                _matchResults.value = null
+                e.printStackTrace()
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun fetchGoalKings(leagueKey: String) {
+        _isLoading.value = true
+        _errorMessage.value = null // Her yeni istekte eski hatayı temizle
+
+        viewModelScope.launch {
+            try {
+                val response = footballApiService.getGoalKings(leagueKey)
+                if (response.isSuccessful) {
+                    val goalKingResponse = response.body()
+                    Log.d("API_RESPONSE", "Goal Kings Raw Response: ${goalKingResponse.toString()}")
+
+                    if (goalKingResponse?.success == true && !goalKingResponse.result.isNullOrEmpty()) {
+                        _goalKings.value = goalKingResponse.result
+                        Log.d("LeagueDetailViewModel", "Gol krallığı verisi başarıyla çekildi: ${goalKingResponse.result.size} oyuncu.")
+                    } else {
+                        // success=false ise veya result boş/null ise hata mesajı göster
+                        _errorMessage.value = goalKingResponse?.message ?: "Gol krallığı verisi bulunamadı veya API tarafından desteklenmiyor."
+                        _goalKings.value = emptyList() // Boş liste gönder
+                        Log.e("LeagueDetailViewModel", "API'den gol krallığı boş veya başarısız geldi: ${goalKingResponse?.message}")
+                    }
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    _errorMessage.value = "Gol krallığı çekilemedi (HTTP ${response.code()}): ${errorBody ?: "Bilinmeyen hata"}"
+                    _goalKings.value = emptyList()
+                    Log.e("LeagueDetailViewModel", "API HTTP hata kodu: ${response.code()}, Hata mesajı: ${errorBody}")
+                }
+            } catch (e: IOException) {
+                _errorMessage.value = "Ağ bağlantı hatası. İnternet bağlantınızı kontrol edin: ${e.localizedMessage}"
+                _goalKings.value = emptyList()
+                e.printStackTrace()
+                Log.e("LeagueDetailViewModel", "Ağ bağlantı hatası: ${e.localizedMessage}", e)
+            } catch (e: HttpException) {
+                val errorBody = e.response()?.errorBody()?.string()
+                _errorMessage.value = "API hatası (${e.code()}): ${errorBody ?: e.message()}"
+                _goalKings.value = emptyList()
+                e.printStackTrace()
+                Log.e("LeagueDetailViewModel", "HTTP hatası: ${e.code()}, Mesaj: ${errorBody}", e)
+            } catch (e: Exception) {
+                _errorMessage.value = "Beklenmedik bir hata oluştu: ${e.localizedMessage}"
+                _goalKings.value = emptyList()
+                e.printStackTrace()
+                Log.e("LeagueDetailViewModel", "Genel hata: ${e.localizedMessage}", e)
             } finally {
                 _isLoading.value = false
             }

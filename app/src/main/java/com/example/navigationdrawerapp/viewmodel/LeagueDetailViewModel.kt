@@ -35,6 +35,26 @@ class LeagueDetailViewModel : ViewModel() {
             val request = requestBuilder.build()
             chain.proceed(request)
         }
+        .addInterceptor { chain ->
+            val request = chain.request() //Loglayarak match_resulttaki keylere erişme
+            val response = chain.proceed(request)
+            
+            // API yanıtını logla
+            if (request.url.toString().contains("football/results")) {
+                val responseBody = response.body
+                val responseBodyString = responseBody?.string()
+                Log.d("API_RAW_RESPONSE", "URL: ${request.url}")
+                Log.d("API_RAW_RESPONSE", "Response: $responseBodyString")
+                
+                // Response body'yi tekrar oluştur çünkü string() metodu body'yi tüketir
+                val newResponseBody = responseBodyString?.let { 
+                    okhttp3.ResponseBody.create(responseBody.contentType(), it) 
+                }
+                response.newBuilder().body(newResponseBody).build()
+            } else {
+                response
+            }
+        }
         .build()
 
     private val footballApiService: FootballApiService by lazy {
@@ -109,9 +129,20 @@ class LeagueDetailViewModel : ViewModel() {
             try {
                 val response = footballApiService.getMatchResults(leagueKey)
                 if (response.isSuccessful) {
-                    _matchResults.value = response.body()?.result
-                    if (response.body()?.result.isNullOrEmpty()) {
-                        _errorMessage.value = "Fikstür verisi bulunamadı."
+                    val matchResultResponse = response.body()
+                    Log.d("API_RESPONSE", "Match Results Raw Response: ${matchResultResponse.toString()}")
+                    
+                    if (matchResultResponse?.success == true && !matchResultResponse.result.isNullOrEmpty()) {
+                        _matchResults.value = matchResultResponse.result
+                        Log.d("LeagueDetailViewModel", "Fikstür verisi başarıyla çekildi: ${matchResultResponse.result.size} maç.")
+                        
+                        // İlk birkaç maçın skorlarını logla
+                        matchResultResponse.result.take(3).forEach { match ->
+                            Log.d("MATCH_SCORE_DEBUG", "Maç: ${match.homeTeam} vs ${match.awayTeam}, Skor: '${match.score}', Tarih: '${match.date}'")
+                        }
+                    } else {
+                        _errorMessage.value = matchResultResponse?.message ?: "Fikstür verisi bulunamadı."
+                        _matchResults.value = emptyList()
                     }
                 } else {
                     val errorBody = response.errorBody()?.string()

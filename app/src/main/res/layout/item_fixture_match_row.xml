@@ -21,22 +21,26 @@
         tools:text="Antalyaspor"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintWidth_percent="0.4"
+        app:layout_constraintWidth_percent="0.35"
         android:layout_marginEnd="8dp"/>
 
     <TextView
         android:id="@+id/tv_score"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:textStyle="bold"
+        android:gravity="center"
+        android:maxLines="2"
+        android:ellipsize="end"
         app:layout_constraintEnd_toStartOf="@+id/tv_away_team_name"
         app:layout_constraintStart_toEndOf="@+id/tv_home_team_name"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="2 - 1" />
+        app:layout_constraintWidth_percent="0.2"
+        tools:text="Henüz oynanmadı" />
 
     <TextView
         android:id="@+id/tv_away_team_name"
@@ -51,7 +55,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Trabzonspor"
         app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintWidth_percent="0.4"
+        app:layout_constraintWidth_percent="0.35"
         android:layout_marginStart="8dp"/>
 
     <TextView

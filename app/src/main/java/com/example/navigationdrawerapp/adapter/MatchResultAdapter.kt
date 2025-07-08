@@ -1,5 +1,6 @@
-package com.example.navigationdrawerapp.ui.adapter
+package com.example.navigationdrawerapp.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -25,10 +26,16 @@ class MatchResultAdapter(private var matchResults: List<MatchResult>) :
             tvHomeTeamName.text = match.homeTeam
             tvAwayTeamName.text = match.awayTeam
 
-            // Skorları ata
-            // MatchResult modelinizdeki "score" alanı "0 - 1" gibi string olarak geliyor.
-            // Eğer gelmezse veya boşsa "-" göster.
-            tvScore.text = match.score?.ifEmpty { "-" } ?: "-"
+            // Skorları ata ve debug log ekle
+            val scoreText = if (match.score.isNullOrEmpty()) {
+                "Sonuç yok"
+            } else {
+                match.score
+            }
+            tvScore.text = scoreText
+            
+            // Debug log ekle
+            Log.d("MATCH_RESULT_ADAPTER", "Position $position: ${match.homeTeam} vs ${match.awayTeam}, Score: '${match.score}', Displayed: '$scoreText'")
 
             // Tarihi formatla ve ata
             // API'den gelen format: "2025-05-30T17:00:00+03:00" (image_441604.png)

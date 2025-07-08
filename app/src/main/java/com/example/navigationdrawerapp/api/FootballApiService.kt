@@ -18,13 +18,19 @@ interface FootballApiService {
         @Query("data.league") leagueKey: String
     ): Response<StandingResponse> //Response<StandingResponse> döndürmeli
 
-    //Fikstür sonuçlarını çekmek için
+    //Gelecek maçları çekmek için (fikstür)
     //Endpoint: https://api.collectapi.com/football/results?data.league=super-lig
     @GET("football/results")
     suspend fun getMatchResults(
         @Query("data.league") leagueKey: String //Lig anahtarını query parametresi olarak gönderiyoruz
     ): Response<MatchResultResponse> //Beklenen yanıt tipi: MatchResultResponse objesi
 
+    //Geçmiş maçları çekmek için (sonuçlar)
+    //Endpoint: https://api.collectapi.com/football/fixtures?data.league=super-lig
+    @GET("football/fixtures")
+    suspend fun getPastMatchResults(
+        @Query("data.league") leagueKey: String //Lig anahtarını query parametresi olarak gönderiyoruz
+    ): Response<MatchResultResponse> //Beklenen yanıt tipi: MatchResultResponse objesi
 
     @GET("football/goalKings") // <-- BURAYI DÜZELTTİK!
     suspend fun getGoalKings(@Query("data.league") league: String): Response<GoalKingResponse> // <-- PARAMETRE ADINI DÜZELTTİK!

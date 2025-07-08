@@ -1,10 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
- <resources>
-        <!--dark theme -->
-        <color name="white">#2D2D2D</color>
-        <color name="black">#EAEAEA</color>
-        <color name="main_background">#2C3E50</color>   <!-- Soluk Gece Mavisi -->
-        <color name="secondary_text">#BDC3C7</color>    <!-- Bulut Grisi -->
-        <color name="accent">#F78C6B</color>            <!-- Pastel Mercan -->
+<resources>
+    <color name="white">#FFFFFFFF</color> <color name="black">#FF000000</color> <color name="main_background">#2C3E50</color>   <color name="secondary_text">#BDC3C7</color>    <color name="accent">#F78C6B</color>            <color name="bottom_nav_text_selected">@color/accent</color>
+    <color name="bottom_nav_active_indicator_color">@color/accent</color>
+    <color name="bottom_nav_icon_unselected">@color/secondary_text</color>
+    <color name="bottom_nav_text_unselected">@color/secondary_text</color>
+    <color name="bottom_nav_icon_selected">@color/accent</color>
 
-    </resources>
+    <color name="navbar_shadow">#40000000</color>
+    <color name="navbar_border">#FF3E5274</color>
+    <color name="navbar_ripple">#1AFFFFFF</color>
+
+    <color name="main_background_darker">#1A232F</color>
+
+    <color name="selected_tab_background">@color/accent</color>
+    <color name="selected_tab_text">@color/main_background</color>
+    <color name="unselected_tab_background">@android:color/transparent</color>
+    <color name="unselected_tab_text">@color/secondary_text</color>
+
+    <color name="text_on_accent_light">@color/black</color>
+    <color name="text_on_transparent_card_primary">@color/white</color>
+    <color name="text_on_transparent_card_secondary">@color/secondary_text</color>
+    <color name="text_accent_color">@color/accent</color>
+
+    <color name="card_background_light_transparent">#801F2C40</color>
+    <color name="card_border_light">#FF3E5274</color>
+
+    <color name="search_background_light_transparent">@color/card_background_light_transparent</color>
+    <color name="search_icon_tint_light">@color/white</color>
+
+</resources>

@@ -25,5 +25,13 @@
         <item name="colorOnSecondary">@color/secondary_text</item>
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
 
+
+
         <item name="colorSurface">@color/white</item> <item name="colorOnSurface">@color/black</item> <item name="colorOnSurfaceVariant">@color/secondary_text</item> <item name="android:colorBackground">@color/main_background</item> <item name="colorOnBackground">@color/black</item> <item name="colorError">#B00020</item> <item name="colorOnError">@color/white</item> </style>
+
+    <style name="Theme.YourAppName" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
 </resources>

@@ -30,5 +30,6 @@
 
     <color name="search_background_light_transparent">@color/card_background_light_transparent</color>
     <color name="search_icon_tint_light">@color/black</color>
+    <color name="colorNavbarBackground">#FFFFFF</color>
 
 </resources>

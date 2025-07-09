@@ -38,4 +38,7 @@
 
     <color name="colorNavbarBackground">#232F34</color>
 
-</resources>
+    <color name="positive_change_color">#4CAF50</color> <color name="negative_change_color">#F44336</color> <color name="neutral_change_color">@color/secondary_text</color>
+
+
+    </resources>

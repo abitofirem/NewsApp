@@ -82,8 +82,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_a -> {
-                    drawerLayout.openDrawer(GravityCompat.START)
-                    toolbar.title = getString(R.string.title_home)
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, AFragment())
+                        .commit()
                     true
                 }
                 R.id.navigation_b -> {

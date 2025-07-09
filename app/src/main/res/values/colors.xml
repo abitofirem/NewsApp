@@ -32,4 +32,6 @@
     <color name="search_icon_tint_light">@color/black</color>
     <color name="colorNavbarBackground">#FFFFFF</color>
 
+    <color name="positive_change_color">#4CAF50</color> <color name="negative_change_color">#F44336</color> <color name="neutral_change_color">@color/secondary_text</color>
+
 </resources>

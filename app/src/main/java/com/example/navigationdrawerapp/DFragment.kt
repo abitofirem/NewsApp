@@ -33,7 +33,7 @@ class DFragment : Fragment() {
     private lateinit var llSearchBar: LinearLayout
     private lateinit var actvCitySearch: MaterialAutoCompleteTextView
     private lateinit var ivSearchIconInBar: ImageView
-    private lateinit var recyclerViewForecast: RecyclerView // Haftalık tahminler RecyclerView'ı
+    private lateinit var recyclerViewForecast: RecyclerView //Haftalık tahminler RecyclerView'ı
     private lateinit var progressBar: ProgressBar
     private lateinit var tvErrorMessage: TextView
 

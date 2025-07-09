@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, CFragment())
                         .commit()
-                    setToolbarTitle(getString(R.string.title_news)) // BURADA DEĞİŞİKLİK
+                    setToolbarTitle(getString(R.string.title_news)) //BURADA DEĞİŞİKLİK
                     true
                 }
                 R.id.navigation_d -> {
@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             // Yan menüde ve alt menüde ilgili öğeyi seçili yapın
             navigationView.setCheckedItem(R.id.nav_c) //Eğer yan menünüzde nav_c varsa
             bottomNavigationView.selectedItemId = R.id.navigation_c //Eğer alt menünüzde bu id varsa
-            setToolbarTitle(getString(R.string.title_news)) // BURADA DEĞİŞİKLİK: Haberler başlığı
+            setToolbarTitle(getString(R.string.title_news)) //BURADA DEĞİŞİKLİK: Haberler başlığı
         }
     }
 

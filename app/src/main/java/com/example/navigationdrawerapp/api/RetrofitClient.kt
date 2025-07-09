@@ -41,4 +41,12 @@ object RetrofitClient {
     val footballApiService: FootballApiService by lazy {
         retrofit.create(FootballApiService::class.java)
     }
+
+    //WeatherApiService için yeni instance (BU EKLENDİ!)
+    val weatherApiService: WeatherApiService by lazy {
+        retrofit.create(WeatherApiService::class.java)
+    }
+
+
+
 }

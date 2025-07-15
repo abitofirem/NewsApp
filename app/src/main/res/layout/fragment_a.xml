@@ -211,6 +211,21 @@
             tools:listitem="@layout/item_cripto" />
 
         <TextView
+            android:id="@+id/tv_show_all_cripto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tümünü Göster >>"
+            android:textColor="@color/accent"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="end"
+            android:paddingEnd="16dp"
+            android:paddingBottom="16dp"
+            android:layout_marginTop="-16dp"
+            android:visibility="gone"/>
+
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Emtia Piyasası"

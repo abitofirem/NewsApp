@@ -1,6 +1,7 @@
 package com.example.navigationdrawerapp.api
 
 import com.example.navigationdrawerapp.model.BistResponse
+import com.example.navigationdrawerapp.model.CriptoResponse
 import com.example.navigationdrawerapp.model.CurrencyResponse
 import com.example.navigationdrawerapp.model.GoldResponse
 import com.example.navigationdrawerapp.model.SilverResponse
@@ -30,6 +31,10 @@ interface FinanceApiService {
     //Gümüş fiyatlarını çeken fonksiyon
     @GET("economy/silverPrice")
     suspend fun getSilverPrice(): Response<SilverResponse>
+
+    //Kripto bilgilerini çeken fonksiyon 
+    @GET("economy/cripto")
+    suspend fun getCriptoPrice(): Response<CriptoResponse>
 
 
 

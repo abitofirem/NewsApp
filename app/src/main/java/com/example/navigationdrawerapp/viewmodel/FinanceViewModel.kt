@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.navigationdrawerapp.api.FinanceApiService
 import com.example.navigationdrawerapp.model.BistResponse
+import com.example.navigationdrawerapp.model.CriptoResponse
 import com.example.navigationdrawerapp.model.CurrencyResponse
 import com.example.navigationdrawerapp.model.GoldResponse
 import com.example.navigationdrawerapp.model.SilverResponse
@@ -74,6 +75,10 @@ class FinanceViewModel : ViewModel() {
     private val _silverData = MutableLiveData<SilverResponse?>()
     val silverData: LiveData<SilverResponse?> = _silverData
 
+    //Kripto Paralar
+    private val _criptoData = MutableLiveData<CriptoResponse>()
+    val criptoData: LiveData<CriptoResponse> get() = _criptoData
+
 
     //BIST 100 verilerini çeken fonksiyon
     fun fetchBistData() {
@@ -87,7 +92,8 @@ class FinanceViewModel : ViewModel() {
                     _bistData.value = response.body()
                 } else {
                     val errorBody = response.errorBody()?.string()
-                    _errorMessage.value = "BIST verileri çekilemedi: ${response.code()} - $errorBody"
+                    _errorMessage.value =
+                        "BIST verileri çekilemedi: ${response.code()} - $errorBody"
                 }
             } catch (e: Exception) {
                 _errorMessage.value = "Hata oluştu: ${e.localizedMessage}"
@@ -110,7 +116,8 @@ class FinanceViewModel : ViewModel() {
                     _currencyData.value = response.body()
                 } else {
                     val errorBody = response.errorBody()?.string()
-                    _errorMessage.value = "Döviz verileri çekilemedi: ${response.code()} - $errorBody"
+                    _errorMessage.value =
+                        "Döviz verileri çekilemedi: ${response.code()} - $errorBody"
                 }
             } catch (e: Exception) {
                 _errorMessage.value = "Hata oluştu: ${e.localizedMessage}"
@@ -156,7 +163,27 @@ class FinanceViewModel : ViewModel() {
                 _isLoading.value = false
             }
         }
+
     }
 
 
+    //Kripto Para verilerini çeken fonksiyon
+    fun fetchCriptoPrice() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val response = apiService.getCriptoPrice()
+                if (response.isSuccessful) {
+                    _criptoData.value = response.body()
+                } else {
+                    _errorMessage.value = "Kripto verileri alınamadı: ${response.code()}"
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = "Hata: ${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
 }
+

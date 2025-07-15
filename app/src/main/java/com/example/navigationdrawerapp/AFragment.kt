@@ -9,6 +9,9 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.navigationdrawerapp.adapter.CriptoAdapter
 import com.example.navigationdrawerapp.adapter.CurrencyAdapter
 import com.example.navigationdrawerapp.adapter.PreciousMetalAdapter
 import com.example.navigationdrawerapp.model.BistResult
@@ -42,6 +45,12 @@ class AFragment : Fragment() {
     private lateinit var rvGoldSilver: androidx.recyclerview.widget.RecyclerView
     private lateinit var preciousMetalAdapter: PreciousMetalAdapter
 
+    //Kripto değişkenleri
+    private lateinit var rvCripto: androidx.recyclerview.widget.RecyclerView
+    private lateinit var criptoAdapter: CriptoAdapter
+    private lateinit var tvShowAllCripto: TextView //YENİ EKLENDİ
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +79,9 @@ class AFragment : Fragment() {
         financeViewModel.fetchGoldPrice()
         financeViewModel.fetchSilverPrice()
 
+        financeViewModel.fetchCriptoPrice()
+
+
         return view
     }
 
@@ -91,6 +103,16 @@ class AFragment : Fragment() {
         preciousMetalAdapter = PreciousMetalAdapter(emptyList())
         rvGoldSilver.adapter = preciousMetalAdapter
         rvGoldSilver.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
+
+
+        //Kripto Paralar RecyclerView
+        rvCripto = view.findViewById(R.id.rv_cripto)
+        criptoAdapter = CriptoAdapter()
+        rvCripto.adapter = criptoAdapter
+        rvCripto.layoutManager = LinearLayoutManager(context)
+        tvShowAllCripto = view.findViewById(R.id.tv_show_all_cripto) //YENİ EKLENDİ
+
+
     }
 
     //LiveData'ları gözlemleyen fonksiyon
@@ -108,7 +130,7 @@ class AFragment : Fragment() {
         financeViewModel.currencyData.observe(viewLifecycleOwner) { currencyResponse ->
             currencyResponse?.let {
                 currencyAdapter.updateData(it.result)
-                // YENİ GÜNCELLEME: 3'ten fazla eleman varsa butonu göster
+                //YENİ GÜNCELLEME: 3'ten fazla eleman varsa butonu göster
                 if (it.result.size > 3) {
                     tvShowAllCurrency.visibility = View.VISIBLE
                 }
@@ -127,11 +149,40 @@ class AFragment : Fragment() {
             }
         }
 
+
+        //Kripto Paralar Gözlemcisi
+        financeViewModel.criptoData.observe(viewLifecycleOwner) { criptoResponse ->
+            criptoResponse?.result?.let { criptoList ->
+                //Yalnızca ilk 3'ü göster
+                criptoAdapter.updateData(criptoList.take(3)) //BU SATIRI DÜZENLEME GEREKİYOR
+                //Eğer 3'ten fazla eleman varsa "Tümünü Göster"i görünür yap
+                if (criptoList.size > 3) {
+                    tvShowAllCripto.visibility = View.VISIBLE
+                } else {
+                    tvShowAllCripto.visibility = View.GONE
+                }
+            }
+        }
+
+
         //"Tümünü Göster" butonuna tıklama dinleyicisi
         tvShowAllCurrency.setOnClickListener {
             val isExpanded = tvShowAllCurrency.text.toString().startsWith("Tümünü Göster")
             currencyAdapter.setExpanded(isExpanded)
             tvShowAllCurrency.text = if (isExpanded) "<< Daha az göster" else "Tümünü Göster >>"
+        }
+
+        // YENİ EKLENDİ: Kripto Paralar için "Tümünü Göster" butonunun tıklama dinleyicisi
+        tvShowAllCripto.setOnClickListener {
+            val isExpanded = tvShowAllCripto.text.toString().startsWith("Tümünü Göster")
+            val criptoList = financeViewModel.criptoData.value?.result ?: emptyList()
+            if (isExpanded) {
+                criptoAdapter.updateData(criptoList) //Tüm listeyi göster
+                tvShowAllCripto.text = "<< Daha az göster"
+            } else {
+                criptoAdapter.updateData(criptoList.take(3)) //Sadece ilk 3'ü göster
+                tvShowAllCripto.text = "Tümünü Göster >>"
+            }
         }
 
 

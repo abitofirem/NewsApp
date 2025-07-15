@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -67,6 +69,16 @@ class DFragment : Fragment() {
         setupListeners()      //Click listener'ları ayarla
         setupObservers()      //LiveData gözlemcilerini ayarla
 
+
+        //Şehir listesini al ve AutoCompleteTextView için bir ArrayAdapter oluştur
+        val cities = resources.getStringArray(R.array.turkish_cities)
+        val adapter = ArrayAdapter<String>(
+            requireContext(),
+            android.R.layout.simple_dropdown_item_1line, // Varsayılan basit bir layout
+            cities
+        )
+        actvCitySearch.setAdapter(adapter)
+
         //Uygulama ilk açıldığında varsayılan bir şehir için hava durumu çek
         //Bu, ekranın başlangıçta boş kalmamasını sağlar.
         weatherViewModel.fetchWeatherData("Ankara")
@@ -109,21 +121,32 @@ class DFragment : Fragment() {
         recyclerViewForecast.adapter = weatherForecastAdapter
     }
 
-    //Kullanıcı etkileşimleri için listener'ları ayarlar
     private fun setupListeners() {
+        //1. Orijinal kod: Arama ikonuna tıklandığında çalışır
         ivSearchIconInBar.setOnClickListener {
             val city = actvCitySearch.text.toString().trim()
             if (city.isNotEmpty()) {
-                tvCityHeader.text = city //Şehir başlığını güncelle
-                weatherViewModel.fetchWeatherData(city) //Yeni şehre göre veri çek
-                //Klavyeyi gizle
-                val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                imm?.hideSoftInputFromWindow(view?.windowToken, 0)
-                actvCitySearch.clearFocus() // EditText'ten odağı kaldır
+                fetchAndDisplayWeather(city) // Ortak fonksiyona yönlendirildi
             } else {
                 Toast.makeText(context, "Lütfen bir şehir adı girin.", Toast.LENGTH_SHORT).show()
             }
         }
+
+        //2. Yeni eklenen kod: AutoCompleteTextView'den bir öğe seçildiğinde çalışır
+        actvCitySearch.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            val selectedCity = parent.getItemAtPosition(position).toString()
+            fetchAndDisplayWeather(selectedCity) //Ortak fonksiyona yönlendirildi
+        }
+    }
+
+    //3. Yeni, ortak yardımcı fonksiyon
+    private fun fetchAndDisplayWeather(city: String) {
+        tvCityHeader.text = city //Şehir başlığını güncelle
+        weatherViewModel.fetchWeatherData(city) //Yeni şehre göre veri çek
+        //Klavyeyi gizle
+        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        imm?.hideSoftInputFromWindow(view?.windowToken, 0)
+        actvCitySearch.clearFocus() //EditText'ten odağı kaldır
     }
 
     //LiveData'ları gözlemleyerek UI güncellemelerini yapar

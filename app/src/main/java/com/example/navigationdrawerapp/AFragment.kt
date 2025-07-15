@@ -9,19 +9,20 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.example.navigationdrawerapp.adapter.CurrencyAdapter
 import com.example.navigationdrawerapp.model.BistResult
 import com.example.navigationdrawerapp.viewmodel.FinanceViewModel
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
 
-
 class AFragment : Fragment() {
 
 
     private lateinit var financeViewModel: FinanceViewModel
 
-    //XML'deki UI elemanlarını buraya tanımlayın
+    //XML'deki UI elemanlarını buraya tanımladık.
+    //BIST
     private lateinit var tvBistCurrent: TextView
     private lateinit var tvBistChangeRate: TextView
     private lateinit var tvBistMin: TextView
@@ -30,7 +31,11 @@ class AFragment : Fragment() {
     private lateinit var mainProgressBar: ProgressBar
     private lateinit var mainErrorMessage: TextView
 
-    //... Diğer RecyclerView ve döviz dönüştürücü elemanları ileride eklenecek
+    //YENİ EKLEMELER(Currency)
+    private lateinit var rvAllCurrency: androidx.recyclerview.widget.RecyclerView
+    private lateinit var currencyAdapter: CurrencyAdapter
+    private lateinit var tvShowAllCurrency: TextView // YENİ EKLEME
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,8 +51,14 @@ class AFragment : Fragment() {
         initViews(view)
         setupObservers()
 
-        //Fragment ilk oluşturulduğunda BIST verilerini çek
+        //RecyclerView'i başlat
+        currencyAdapter = CurrencyAdapter(emptyList()) //Boş bir liste ile başlatıyoruz
+        rvAllCurrency.adapter = currencyAdapter
+        rvAllCurrency.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
+
+        //Hem BIST hem de döviz verilerini çek
         financeViewModel.fetchBistData()
+        financeViewModel.fetchAllCurrencyData()
 
         return view
     }
@@ -61,9 +72,12 @@ class AFragment : Fragment() {
         tvBistTime = view.findViewById(R.id.tv_bist_time)
         mainProgressBar = view.findViewById(R.id.main_progress_bar)
         mainErrorMessage = view.findViewById(R.id.main_error_message)
+
+        rvAllCurrency = view.findViewById(R.id.rv_all_currency)
+        tvShowAllCurrency = view.findViewById(R.id.tv_show_all_currency) // YENİ EKLEME
     }
 
-    // LiveData'ları gözlemleyen fonksiyon
+    //LiveData'ları gözlemleyen fonksiyon
     private fun setupObservers() {
         financeViewModel.bistData.observe(viewLifecycleOwner) { bistResponse ->
             bistResponse?.let {
@@ -73,6 +87,25 @@ class AFragment : Fragment() {
                 mainErrorMessage.visibility = View.VISIBLE
             }
         }
+
+        //DÖVİZ KURLARI GÖZLEMCİSİ
+        financeViewModel.currencyData.observe(viewLifecycleOwner) { currencyResponse ->
+            currencyResponse?.let {
+                currencyAdapter.updateData(it.result)
+                // YENİ GÜNCELLEME: 3'ten fazla eleman varsa butonu göster
+                if (it.result.size > 3) {
+                    tvShowAllCurrency.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        //YENİ EKLEME: "Tümünü Göster" butonuna tıklama dinleyicisi
+        tvShowAllCurrency.setOnClickListener {
+            val isExpanded = tvShowAllCurrency.text.toString().startsWith("Tümünü Göster")
+            currencyAdapter.setExpanded(isExpanded)
+            tvShowAllCurrency.text = if (isExpanded) "<< Daha az göster" else "Tümünü Göster >>"
+        }
+
 
         financeViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             mainProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE

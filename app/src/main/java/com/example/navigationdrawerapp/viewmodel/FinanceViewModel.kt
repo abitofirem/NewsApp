@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.navigationdrawerapp.api.FinanceApiService
 import com.example.navigationdrawerapp.model.BistResponse
+import com.example.navigationdrawerapp.model.CurrencyResponse
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -59,6 +60,11 @@ class FinanceViewModel : ViewModel() {
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
+
+    //DÖVİZ KURLARI İÇİN YENİ LİVEDATA DEĞİŞKENLERİ
+    private val _currencyData = MutableLiveData<CurrencyResponse?>()
+    val currencyData: LiveData<CurrencyResponse?> = _currencyData
+
     //BIST 100 verilerini çeken fonksiyon
     fun fetchBistData() {
         _isLoading.value = true
@@ -81,4 +87,30 @@ class FinanceViewModel : ViewModel() {
             }
         }
     }
+
+    //DÖVİZ KURLARI İÇİN YENİ FONKSİYON
+    fun fetchAllCurrencyData() {
+        _isLoading.value = true
+        _errorMessage.value = null
+
+        viewModelScope.launch {
+            try {
+                val response = apiService.getAllCurrencyData()
+                if (response.isSuccessful) {
+                    _currencyData.value = response.body()
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    _errorMessage.value = "Döviz verileri çekilemedi: ${response.code()} - $errorBody"
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = "Hata oluştu: ${e.localizedMessage}"
+                e.printStackTrace()
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+
+
 }

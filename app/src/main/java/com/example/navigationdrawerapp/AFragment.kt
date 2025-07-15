@@ -5,23 +5,126 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import com.example.navigationdrawerapp.model.BistResult
+import com.example.navigationdrawerapp.viewmodel.FinanceViewModel
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 
 
 class AFragment : Fragment() {
 
 
+    private lateinit var financeViewModel: FinanceViewModel
+
+    //XML'deki UI elemanlarını buraya tanımlayın
+    private lateinit var tvBistCurrent: TextView
+    private lateinit var tvBistChangeRate: TextView
+    private lateinit var tvBistMin: TextView
+    private lateinit var tvBistMax: TextView
+    private lateinit var tvBistTime: TextView
+    private lateinit var mainProgressBar: ProgressBar
+    private lateinit var mainErrorMessage: TextView
+
+    //... Diğer RecyclerView ve döviz dönüştürücü elemanları ileride eklenecek
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        //ViewModel'i başlat
+        financeViewModel = ViewModelProvider(this).get(FinanceViewModel::class.java)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_a, container, false)
+        val view = inflater.inflate(R.layout.fragment_a, container, false)
+        initViews(view)
+        setupObservers()
+
+        //Fragment ilk oluşturulduğunda BIST verilerini çek
+        financeViewModel.fetchBistData()
+
+        return view
     }
 
-
+    //UI elemanlarını bağlayan yardımcı fonksiyon
+    private fun initViews(view: View) {
+        tvBistCurrent = view.findViewById(R.id.tv_bist_current)
+        tvBistChangeRate = view.findViewById(R.id.tv_bist_change_rate)
+        tvBistMin = view.findViewById(R.id.tv_bist_min)
+        tvBistMax = view.findViewById(R.id.tv_bist_max)
+        tvBistTime = view.findViewById(R.id.tv_bist_time)
+        mainProgressBar = view.findViewById(R.id.main_progress_bar)
+        mainErrorMessage = view.findViewById(R.id.main_error_message)
     }
+
+    // LiveData'ları gözlemleyen fonksiyon
+    private fun setupObservers() {
+        financeViewModel.bistData.observe(viewLifecycleOwner) { bistResponse ->
+            bistResponse?.let {
+                updateBistUi(it.result)
+                mainErrorMessage.visibility = View.GONE
+            } ?: run {
+                mainErrorMessage.visibility = View.VISIBLE
+            }
+        }
+
+        financeViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            mainProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            if (isLoading) mainErrorMessage.visibility = View.GONE
+        }
+
+        financeViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            errorMessage?.let {
+                mainErrorMessage.text = it
+                mainErrorMessage.visibility = View.VISIBLE
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            } ?: run {
+                mainErrorMessage.visibility = View.GONE
+            }
+        }
+    }
+
+    //BIST UI'ını güncelleyen yardımcı fonksiyon
+    private fun updateBistUi(bistResults: List<BistResult>) {
+        if (bistResults.isNotEmpty()) {
+            val bistResult = bistResults[0] // Listenin ilk elemanını alıyoruz
+
+            //DecimalFormat kullanarak sayıları doğru formatta gösterdik
+            val decimalFormat = DecimalFormat("#,##0.00", DecimalFormatSymbols(Locale("tr", "TR")))
+
+            tvBistCurrent.text = decimalFormat.format(bistResult.current)
+            tvBistMin.text = "Min: ${decimalFormat.format(bistResult.min)}"
+            tvBistMax.text = "Max: ${decimalFormat.format(bistResult.max)}"
+            tvBistTime.text = bistResult.time
+
+            //Değişim oranını ve rengini ayarladık
+            val changeRate = bistResult.changerate
+            val changeRateFormatted = String.format(Locale.US, "%.2f%%", changeRate)
+            tvBistChangeRate.text = changeRateFormatted
+
+            if (changeRate > 0) {
+                tvBistChangeRate.setTextColor(
+                    resources.getColor(
+                        R.color.positive_change_color,
+                        null
+                    )
+                )
+            } else if (changeRate < 0) {
+                tvBistChangeRate.setTextColor(
+                    resources.getColor(
+                        R.color.negative_change_color,
+                        null
+                    )
+                )
+            } else {
+                tvBistChangeRate.setTextColor(resources.getColor(R.color.secondary_text, null))
+            }
+        }
+    }
+}

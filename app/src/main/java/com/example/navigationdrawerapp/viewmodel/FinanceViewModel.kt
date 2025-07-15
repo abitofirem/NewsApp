@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.navigationdrawerapp.api.FinanceApiService
 import com.example.navigationdrawerapp.model.BistResponse
 import com.example.navigationdrawerapp.model.CurrencyResponse
+import com.example.navigationdrawerapp.model.GoldResponse
+import com.example.navigationdrawerapp.model.SilverResponse
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -65,6 +67,14 @@ class FinanceViewModel : ViewModel() {
     private val _currencyData = MutableLiveData<CurrencyResponse?>()
     val currencyData: LiveData<CurrencyResponse?> = _currencyData
 
+    //Kıymetli Madenler LiveData'ları
+    private val _goldData = MutableLiveData<GoldResponse?>()
+    val goldData: LiveData<GoldResponse?> = _goldData
+
+    private val _silverData = MutableLiveData<SilverResponse?>()
+    val silverData: LiveData<SilverResponse?> = _silverData
+
+
     //BIST 100 verilerini çeken fonksiyon
     fun fetchBistData() {
         _isLoading.value = true
@@ -111,6 +121,42 @@ class FinanceViewModel : ViewModel() {
         }
     }
 
+    //Altın ve Gümüş verilerini çeken fonksiyonlar
+    fun fetchGoldPrice() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val response = apiService.getGoldPrice()
+                if (response.isSuccessful) {
+                    _goldData.value = response.body()
+                } else {
+                    _errorMessage.value = "Altın verileri alınamadı: ${response.code()}"
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = "Hata: ${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun fetchSilverPrice() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val response = apiService.getSilverPrice()
+                if (response.isSuccessful) {
+                    _silverData.value = response.body()
+                } else {
+                    _errorMessage.value = "Gümüş verileri alınamadı: ${response.code()}"
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = "Hata: ${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
 
 
 }

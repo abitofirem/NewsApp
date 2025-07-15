@@ -10,7 +10,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.navigationdrawerapp.adapter.CurrencyAdapter
+import com.example.navigationdrawerapp.adapter.PreciousMetalAdapter
 import com.example.navigationdrawerapp.model.BistResult
+import com.example.navigationdrawerapp.model.PreciousMetal
 import com.example.navigationdrawerapp.viewmodel.FinanceViewModel
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -31,10 +33,14 @@ class AFragment : Fragment() {
     private lateinit var mainProgressBar: ProgressBar
     private lateinit var mainErrorMessage: TextView
 
-    //YENİ EKLEMELER(Currency)
+    //Currency
     private lateinit var rvAllCurrency: androidx.recyclerview.widget.RecyclerView
     private lateinit var currencyAdapter: CurrencyAdapter
-    private lateinit var tvShowAllCurrency: TextView // YENİ EKLEME
+    private lateinit var tvShowAllCurrency: TextView
+
+    //Değerli Madenler
+    private lateinit var rvGoldSilver: androidx.recyclerview.widget.RecyclerView
+    private lateinit var preciousMetalAdapter: PreciousMetalAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +66,10 @@ class AFragment : Fragment() {
         financeViewModel.fetchBistData()
         financeViewModel.fetchAllCurrencyData()
 
+        //Altın ve gümüş verilerini çek
+        financeViewModel.fetchGoldPrice()
+        financeViewModel.fetchSilverPrice()
+
         return view
     }
 
@@ -74,7 +84,13 @@ class AFragment : Fragment() {
         mainErrorMessage = view.findViewById(R.id.main_error_message)
 
         rvAllCurrency = view.findViewById(R.id.rv_all_currency)
-        tvShowAllCurrency = view.findViewById(R.id.tv_show_all_currency) // YENİ EKLEME
+        tvShowAllCurrency = view.findViewById(R.id.tv_show_all_currency)
+
+
+        rvGoldSilver = view.findViewById(R.id.rv_gold_silver)
+        preciousMetalAdapter = PreciousMetalAdapter(emptyList())
+        rvGoldSilver.adapter = preciousMetalAdapter
+        rvGoldSilver.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
     }
 
     //LiveData'ları gözlemleyen fonksiyon
@@ -99,7 +115,19 @@ class AFragment : Fragment() {
             }
         }
 
-        //YENİ EKLEME: "Tümünü Göster" butonuna tıklama dinleyicisi
+        financeViewModel.goldData.observe(viewLifecycleOwner) { goldResponse ->
+            goldResponse?.let {
+                updatePreciousMetalsUi()
+            }
+        }
+
+        financeViewModel.silverData.observe(viewLifecycleOwner) { silverResponse ->
+            silverResponse?.let {
+                updatePreciousMetalsUi()
+            }
+        }
+
+        //"Tümünü Göster" butonuna tıklama dinleyicisi
         tvShowAllCurrency.setOnClickListener {
             val isExpanded = tvShowAllCurrency.text.toString().startsWith("Tümünü Göster")
             currencyAdapter.setExpanded(isExpanded)
@@ -160,4 +188,47 @@ class AFragment : Fragment() {
             }
         }
     }
+
+    private fun updatePreciousMetalsUi() {
+        val preciousMetalList = mutableListOf<PreciousMetal>()
+
+        // Altın verilerini ekle
+        financeViewModel.goldData.value?.result?.forEach { goldResult ->
+            if (goldResult.name == "Gram Altın" || goldResult.name == "ONS Altın") { // 'ONS Altın' olarak güncelledik
+                preciousMetalList.add(
+                    PreciousMetal(
+                        name = goldResult.name,
+                        buying = goldResult.buying.toString(),
+                        selling = goldResult.selling.toString(),
+                        rate = goldResult.rate // Rate bilgisini direkt atıyoruz
+                    )
+                )
+            }
+        }
+
+        // Gümüş verisini ekle
+        financeViewModel.silverData.value?.result?.let { silverResult ->
+            // Gümüş rate bilgisini String'den Double'a çeviriyoruz
+            val silverRate = try {
+                silverResult.rate.replace("%", "").replace(",", ".").trim().toDoubleOrNull()
+            } catch (e: Exception) {
+                null
+            }
+
+            preciousMetalList.add(
+                PreciousMetal(
+                    name = "Gümüş Fiyatı",
+                    buying = silverResult.buying.toString(),
+                    selling = silverResult.selling.toString(),
+                    rate = silverRate // Dönüştürülmüş rate'i atıyoruz
+                )
+            )
+        }
+
+        // Listeyi adapter'a gönder
+        if (preciousMetalList.isNotEmpty()) {
+            preciousMetalAdapter.updateData(preciousMetalList)
+        }
+    }
+
 }

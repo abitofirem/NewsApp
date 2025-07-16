@@ -4,11 +4,13 @@ import com.example.navigationdrawerapp.model.BistResponse
 import com.example.navigationdrawerapp.model.CriptoResponse
 import com.example.navigationdrawerapp.model.CurrencyResponse
 import com.example.navigationdrawerapp.model.EmtiaResponse
+import com.example.navigationdrawerapp.model.ExchangeResponse
 import com.example.navigationdrawerapp.model.GoldResponse
 import com.example.navigationdrawerapp.model.SilverResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Query
 
 interface FinanceApiService {
 
@@ -42,4 +44,12 @@ interface FinanceApiService {
     suspend fun getEmtiaData(): Response<EmtiaResponse>
 
 
+    //Para birimi dönüştürücü için
+    @GET("economy/exchange")
+    suspend fun convertCurrency(
+        @Query("base") baseCurrency: String,
+        @Query("to") toCurrency: String,
+        @Query("int") amount: String,
+        @Header("content-type") contentType: String = "application/json"
+    ): Response<ExchangeResponse>
 }

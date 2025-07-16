@@ -5,10 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.navigationdrawerapp.api.FinanceApiService
+import com.example.navigationdrawerapp.api.RetrofitClient
 import com.example.navigationdrawerapp.model.BistResponse
 import com.example.navigationdrawerapp.model.CriptoResponse
 import com.example.navigationdrawerapp.model.CurrencyResponse
 import com.example.navigationdrawerapp.model.EmtiaResponse
+import com.example.navigationdrawerapp.model.ExchangeResponse
 import com.example.navigationdrawerapp.model.GoldResponse
 import com.example.navigationdrawerapp.model.SilverResponse
 import kotlinx.coroutines.launch
@@ -83,6 +85,10 @@ class FinanceViewModel : ViewModel() {
     //Emtia
     private val _emtiaData = MutableLiveData<EmtiaResponse?>()
     val emtiaData: LiveData<EmtiaResponse?> get() = _emtiaData
+
+    //Dönüşüm için
+    private val _exchangeData = MutableLiveData<ExchangeResponse?>()
+    val exchangeData: LiveData<ExchangeResponse?> get() = _exchangeData
 
 
     //BIST 100 verilerini çeken fonksiyon
@@ -210,5 +216,40 @@ class FinanceViewModel : ViewModel() {
             }
         }
     }
-}
 
+
+    /**
+     * Para birimi dönüştürme işlemini gerçekleştirir.
+     *
+     * @param baseCurrency Dönüştürülecek ana para birimi kodu (örn: "USD").
+     * @param toCurrency Dönüştürülecek hedef para birimi kodu (örn: "TRY").
+     * @param amount Dönüştürülecek miktar.
+     */
+
+
+    fun convertCurrency(baseCurrency: String, toCurrency: String, amount: String) {
+        // Miktar boş veya sıfırsa işlemi yapma
+        if (amount.isNullOrEmpty() || amount.toDoubleOrNull() == 0.0) {
+            _exchangeData.value = null
+            return
+        }
+
+        viewModelScope.launch {
+            _isLoading.value = true
+            _errorMessage.value = null
+            try {
+                val response =
+                    apiService.convertCurrency(baseCurrency, toCurrency, amount)
+                if (response.isSuccessful) {
+                    _exchangeData.value = response.body()
+                } else {
+                    _errorMessage.value = "Dönüştürme işlemi başarısız: ${response.message()}"
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = "Hata: ${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+}

@@ -1,5 +1,6 @@
 package com.example.navigationdrawerapp
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -21,6 +22,8 @@ import com.example.navigationdrawerapp.viewmodel.FinanceViewModel
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
+import com.example.navigationdrawerapp.adapter.CurrencySelectionAdapter //Yeni import
+
 
 class AFragment : Fragment() {
 
@@ -57,6 +60,16 @@ class AFragment : Fragment() {
     private lateinit var emtiaAdapter: EmtiaAdapter
     private lateinit var tvShowAllEmtia: TextView //YENİ EKLENDİ
 
+
+    //Döviz Dönüştürücü
+    private lateinit var etAmountFrom: android.widget.EditText
+    private lateinit var btnFromCurrency: com.google.android.material.button.MaterialButton
+    private lateinit var btnToCurrency: com.google.android.material.button.MaterialButton
+    private lateinit var btnSwapCurrencies: android.widget.ImageButton
+    private lateinit var btnConvert: android.widget.Button
+    private lateinit var tvAmountTo: android.widget.TextView
+    private lateinit var tvRateFrom: android.widget.TextView
+    private lateinit var tvRateTo: android.widget.TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -132,6 +145,16 @@ class AFragment : Fragment() {
         tvShowAllEmtia = view.findViewById(R.id.tv_show_all_emtia)
 
 
+        //Döviz Dönüştürücü bileşenlerini bağla
+        etAmountFrom = view.findViewById(R.id.et_amount_from)
+        btnFromCurrency = view.findViewById(R.id.btn_from_currency)
+        btnToCurrency = view.findViewById(R.id.btn_to_currency)
+        btnSwapCurrencies = view.findViewById(R.id.btn_swap_currencies)
+        btnConvert = view.findViewById(R.id.btn_convert)
+        tvAmountTo = view.findViewById(R.id.tv_amount_to)
+        tvRateFrom = view.findViewById(R.id.tv_rate_from)
+        tvRateTo = view.findViewById(R.id.tv_rate_to)
+
     }
 
     //LiveData'ları gözlemleyen fonksiyon
@@ -199,6 +222,23 @@ class AFragment : Fragment() {
             }
         }
 
+        //Dönüştürme sonucu gözlemcisi
+        financeViewModel.exchangeData.observe(viewLifecycleOwner) { exchangeResponse ->
+            exchangeResponse?.let {
+                // Dönüşüm başarılıysa sonuçları göster
+                val data = it.result.data.firstOrNull()
+                if (data != null) {
+                    tvAmountTo.text = String.format("%.2f", data.calculated)
+                    tvRateFrom.text = "1 ${it.result.base} = ${data.rate} ${data.code}"
+                    tvRateTo.text = "1 ${data.code} = %.4f ${it.result.base}".format(1.0 / data.rate.toDouble())
+                }
+            }
+        }
+
+
+
+
+
 
         //"Tümünü Göster" butonuna tıklama dinleyicisi
         tvShowAllCurrency.setOnClickListener {
@@ -231,6 +271,33 @@ class AFragment : Fragment() {
                 emtiaAdapter.updateData(emtiaList.take(3)) // Sadece ilk 3'ü göster
                 tvShowAllEmtia.text = "Tümünü Göster >>"
             }
+        }
+
+
+
+        //"Dönüştür" butonu tıklama dinleyicisi
+        btnConvert.setOnClickListener {
+            performConversion() // Yeni oluşturduğumuz yardımcı fonksiyonu çağır
+        }
+
+
+        btnFromCurrency.setOnClickListener {
+            showCurrencySelectionDialog(true)
+        }
+
+        btnToCurrency.setOnClickListener {
+            showCurrencySelectionDialog(false)
+        }
+
+        //"Para birimlerini değiştir" butonu tıklama dinleyicisi
+        btnSwapCurrencies.setOnClickListener {
+            val tempFrom = btnFromCurrency.text
+            val tempTo = btnToCurrency.text
+            btnFromCurrency.text = tempTo
+            btnToCurrency.text = tempFrom
+
+            //Para birimleri değiştirildiğinde dönüşüm işlemini otomatik olarak tekrarla
+            performConversion()
         }
 
 
@@ -327,6 +394,55 @@ class AFragment : Fragment() {
         //Listeyi adapter'a gönder
         if (preciousMetalList.isNotEmpty()) {
             preciousMetalAdapter.updateData(preciousMetalList)
+        }
+    }
+
+
+    /**
+     * Para birimi seçim dialogunu gösterir.
+     * @param isFromButton true ise "btn_from_currency", false ise "btn_to_currency" butonu için.
+     */
+    private fun showCurrencySelectionDialog(isFromButton: Boolean) {
+        // `currencyData` zaten mevcut bir LiveData
+        val currencyList = financeViewModel.currencyData.value?.result ?: emptyList()
+
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_currency_selection, null)
+        val recyclerView = dialogView.findViewById<RecyclerView>(R.id.rv_currency_list)
+        val dialogAdapter = CurrencySelectionAdapter(currencyList)
+
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = dialogAdapter
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setTitle("Para Birimi Seç")
+            .setView(dialogView)
+            .create()
+
+        dialogAdapter.onItemClick = { selectedCurrency ->
+            if (isFromButton) {
+                btnFromCurrency.text = selectedCurrency.code
+            } else {
+                btnToCurrency.text = selectedCurrency.code // Burada `code` yerine `name` kullanıyoruz
+            }
+            dialog.dismiss()
+
+            // Seçim yapıldığında otomatik dönüşüm yap
+            performConversion()
+        }
+
+        dialog.show()
+    }
+
+    /**
+     * Dönüşüm işlemini gerçekleştirir ve UI'ı günceller.
+     */
+    private fun performConversion() {
+        val fromCurrency = btnFromCurrency.text.toString()
+        val toCurrency = btnToCurrency.text.toString()
+        val amount = etAmountFrom.text.toString()
+
+        if (amount.isNotEmpty() && fromCurrency.isNotEmpty() && toCurrency.isNotEmpty()) {
+            financeViewModel.convertCurrency(fromCurrency, toCurrency, amount)
         }
     }
 

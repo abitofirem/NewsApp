@@ -9,5 +9,7 @@ data class Currency(
     @SerializedName("buying")
     val buying: String,
     @SerializedName("selling")
-    val selling: String
+    val selling: String,
+    @SerializedName("code")
+    val code: String
 )

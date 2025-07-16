@@ -8,7 +8,7 @@
 
     <item
         android:id="@+id/navigation_a"
-        android:icon="@drawable/ic_menu"
+        android:icon="@drawable/ic_finance"
         android:title="@string/bottom_nav_a"
         app:showAsAction="ifRoom" />
 
@@ -32,7 +32,7 @@
 
     <item
         android:id="@+id/navigation_e"
-        android:icon="@drawable/ic_user"
+        android:icon="@drawable/ic_pharmacy"
         android:title="@string/bottom_nav_e"
         app:showAsAction="ifRoom" />
 

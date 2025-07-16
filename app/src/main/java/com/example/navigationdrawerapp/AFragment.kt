@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.navigationdrawerapp.adapter.CriptoAdapter
 import com.example.navigationdrawerapp.adapter.CurrencyAdapter
+import com.example.navigationdrawerapp.adapter.EmtiaAdapter
 import com.example.navigationdrawerapp.adapter.PreciousMetalAdapter
 import com.example.navigationdrawerapp.model.BistResult
 import com.example.navigationdrawerapp.model.PreciousMetal
@@ -51,6 +52,12 @@ class AFragment : Fragment() {
     private lateinit var tvShowAllCripto: TextView //YENİ EKLENDİ
 
 
+    //Emtia
+    private lateinit var rvEmtia: androidx.recyclerview.widget.RecyclerView
+    private lateinit var emtiaAdapter: EmtiaAdapter
+    private lateinit var tvShowAllEmtia: TextView //YENİ EKLENDİ
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +87,14 @@ class AFragment : Fragment() {
         financeViewModel.fetchSilverPrice()
 
         financeViewModel.fetchCriptoPrice()
+
+        //Emtia RecyclerView'ını başlat
+        emtiaAdapter = EmtiaAdapter(emptyList()) // Boş bir liste ile başlatıyoruz
+        rvEmtia.adapter = emtiaAdapter
+        rvEmtia.layoutManager = LinearLayoutManager(context)
+
+        //Emtia verilerini çek
+        financeViewModel.fetchEmtiaData()
 
 
         return view
@@ -111,6 +126,10 @@ class AFragment : Fragment() {
         rvCripto.adapter = criptoAdapter
         rvCripto.layoutManager = LinearLayoutManager(context)
         tvShowAllCripto = view.findViewById(R.id.tv_show_all_cripto) //YENİ EKLENDİ
+
+        //Emtia RecyclerView'ını bağla
+        rvEmtia = view.findViewById(R.id.rv_emtia)
+        tvShowAllEmtia = view.findViewById(R.id.tv_show_all_emtia)
 
 
     }
@@ -165,6 +184,22 @@ class AFragment : Fragment() {
         }
 
 
+        //Emtia verilerini gözlemcisi
+        financeViewModel.emtiaData.observe(viewLifecycleOwner) { emtiaResponse ->
+            emtiaResponse?.result?.let { emtiaList ->
+                //Sadece ilk 3'ü göster
+                emtiaAdapter.updateData(emtiaList.take(3))
+
+                //Eğer 3'ten fazla eleman varsa "Tümünü Göster"i görünür yap
+                if (emtiaList.size > 3) {
+                    tvShowAllEmtia.visibility = View.VISIBLE
+                } else {
+                    tvShowAllEmtia.visibility = View.GONE
+                }
+            }
+        }
+
+
         //"Tümünü Göster" butonuna tıklama dinleyicisi
         tvShowAllCurrency.setOnClickListener {
             val isExpanded = tvShowAllCurrency.text.toString().startsWith("Tümünü Göster")
@@ -172,7 +207,7 @@ class AFragment : Fragment() {
             tvShowAllCurrency.text = if (isExpanded) "<< Daha az göster" else "Tümünü Göster >>"
         }
 
-        // YENİ EKLENDİ: Kripto Paralar için "Tümünü Göster" butonunun tıklama dinleyicisi
+        //Kripto Paralar için "Tümünü Göster" butonunun tıklama dinleyicisi
         tvShowAllCripto.setOnClickListener {
             val isExpanded = tvShowAllCripto.text.toString().startsWith("Tümünü Göster")
             val criptoList = financeViewModel.criptoData.value?.result ?: emptyList()
@@ -182,6 +217,19 @@ class AFragment : Fragment() {
             } else {
                 criptoAdapter.updateData(criptoList.take(3)) //Sadece ilk 3'ü göster
                 tvShowAllCripto.text = "Tümünü Göster >>"
+            }
+        }
+
+        //Emtia için "Tümünü Göster" butonunun tıklama dinleyicisi
+        tvShowAllEmtia.setOnClickListener {
+            val isExpanded = tvShowAllEmtia.text.toString().startsWith("Tümünü Göster")
+            val emtiaList = financeViewModel.emtiaData.value?.result ?: emptyList()
+            if (isExpanded) {
+                emtiaAdapter.updateData(emtiaList) // Tüm listeyi göster
+                tvShowAllEmtia.text = "<< Daha az göster"
+            } else {
+                emtiaAdapter.updateData(emtiaList.take(3)) // Sadece ilk 3'ü göster
+                tvShowAllEmtia.text = "Tümünü Göster >>"
             }
         }
 
@@ -205,7 +253,7 @@ class AFragment : Fragment() {
     //BIST UI'ını güncelleyen yardımcı fonksiyon
     private fun updateBistUi(bistResults: List<BistResult>) {
         if (bistResults.isNotEmpty()) {
-            val bistResult = bistResults[0] // Listenin ilk elemanını alıyoruz
+            val bistResult = bistResults[0] //Listenin ilk elemanını alıyoruz
 
             //DecimalFormat kullanarak sayıları doğru formatta gösterdik
             val decimalFormat = DecimalFormat("#,##0.00", DecimalFormatSymbols(Locale("tr", "TR")))
@@ -243,23 +291,23 @@ class AFragment : Fragment() {
     private fun updatePreciousMetalsUi() {
         val preciousMetalList = mutableListOf<PreciousMetal>()
 
-        // Altın verilerini ekle
+        //Altın verilerini ekle
         financeViewModel.goldData.value?.result?.forEach { goldResult ->
-            if (goldResult.name == "Gram Altın" || goldResult.name == "ONS Altın") { // 'ONS Altın' olarak güncelledik
+            if (goldResult.name == "Gram Altın" || goldResult.name == "ONS Altın") { //'ONS Altın' olarak güncelledik
                 preciousMetalList.add(
                     PreciousMetal(
                         name = goldResult.name,
                         buying = goldResult.buying.toString(),
                         selling = goldResult.selling.toString(),
-                        rate = goldResult.rate // Rate bilgisini direkt atıyoruz
+                        rate = goldResult.rate //Rate bilgisini direkt atıyoruz
                     )
                 )
             }
         }
 
-        // Gümüş verisini ekle
+        //Gümüş verisini ekle
         financeViewModel.silverData.value?.result?.let { silverResult ->
-            // Gümüş rate bilgisini String'den Double'a çeviriyoruz
+            //Gümüş rate bilgisini String'den Double'a çeviriyoruz
             val silverRate = try {
                 silverResult.rate.replace("%", "").replace(",", ".").trim().toDoubleOrNull()
             } catch (e: Exception) {
@@ -276,7 +324,7 @@ class AFragment : Fragment() {
             )
         }
 
-        // Listeyi adapter'a gönder
+        //Listeyi adapter'a gönder
         if (preciousMetalList.isNotEmpty()) {
             preciousMetalAdapter.updateData(preciousMetalList)
         }

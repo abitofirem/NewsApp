@@ -3,6 +3,7 @@ package com.example.navigationdrawerapp.api
 import com.example.navigationdrawerapp.model.BistResponse
 import com.example.navigationdrawerapp.model.CriptoResponse
 import com.example.navigationdrawerapp.model.CurrencyResponse
+import com.example.navigationdrawerapp.model.EmtiaResponse
 import com.example.navigationdrawerapp.model.GoldResponse
 import com.example.navigationdrawerapp.model.SilverResponse
 import retrofit2.Response
@@ -32,10 +33,13 @@ interface FinanceApiService {
     @GET("economy/silverPrice")
     suspend fun getSilverPrice(): Response<SilverResponse>
 
-    //Kripto bilgilerini çeken fonksiyon 
+    //Kripto bilgilerini çeken fonksiyon
     @GET("economy/cripto")
     suspend fun getCriptoPrice(): Response<CriptoResponse>
 
+    //Emtia için
+    @GET("economy/emtia")
+    suspend fun getEmtiaData(): Response<EmtiaResponse>
 
 
 }

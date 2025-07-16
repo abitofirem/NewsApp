@@ -8,6 +8,7 @@ import com.example.navigationdrawerapp.api.FinanceApiService
 import com.example.navigationdrawerapp.model.BistResponse
 import com.example.navigationdrawerapp.model.CriptoResponse
 import com.example.navigationdrawerapp.model.CurrencyResponse
+import com.example.navigationdrawerapp.model.EmtiaResponse
 import com.example.navigationdrawerapp.model.GoldResponse
 import com.example.navigationdrawerapp.model.SilverResponse
 import kotlinx.coroutines.launch
@@ -78,6 +79,10 @@ class FinanceViewModel : ViewModel() {
     //Kripto Paralar
     private val _criptoData = MutableLiveData<CriptoResponse>()
     val criptoData: LiveData<CriptoResponse> get() = _criptoData
+
+    //Emtia
+    private val _emtiaData = MutableLiveData<EmtiaResponse?>()
+    val emtiaData: LiveData<EmtiaResponse?> get() = _emtiaData
 
 
     //BIST 100 verilerini çeken fonksiyon
@@ -177,6 +182,26 @@ class FinanceViewModel : ViewModel() {
                     _criptoData.value = response.body()
                 } else {
                     _errorMessage.value = "Kripto verileri alınamadı: ${response.code()}"
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = "Hata: ${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    //Emtia verilerini çeken fonksiyon
+    fun fetchEmtiaData() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _errorMessage.value = null
+            try {
+                val response = apiService.getEmtiaData()
+                if (response.isSuccessful) {
+                    _emtiaData.value = response.body()
+                } else {
+                    _errorMessage.value = "Emtia verileri yüklenemedi: ${response.message()}"
                 }
             } catch (e: Exception) {
                 _errorMessage.value = "Hata: ${e.message}"

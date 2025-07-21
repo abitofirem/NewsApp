@@ -34,4 +34,15 @@
 
     <color name="positive_change_color">#4CAF50</color> <color name="negative_change_color">#F44336</color> <color name="neutral_change_color">@color/secondary_text</color>
 
+
+
+
+    <color name="pharmacy_card_background">@color/card_background_light_transparent</color>
+    <color name="pharmacy_name_text">@color/text_on_transparent_card_primary</color>
+    <color name="pharmacy_detail_label">@color/text_on_transparent_card_primary</color>
+    <color name="pharmacy_detail_value">@color/text_on_transparent_card_secondary</color>
+    <color name="back_button_background">@color/card_background_light_transparent</color>
+    <color name="back_button_text">@color/text_on_transparent_card_primary</color>
+    <color name="toolbar_title_color">@color/text_on_transparent_card_primary</color>
+
 </resources>

@@ -51,6 +51,25 @@
     </string-array>
 
 
+    <string name="pharmacy_screen_title">Nöbetçi Eczaneler</string>
+    <string name="city_selection_label">İl Seçimi *</string>
+    <string name="select_city_hint">Bir il seçin</string>
+    <string name="city_selection_description">İl seçimi için açılır liste</string>
+    <string name="district_selection_label">İlçe Seçimi</string>
+    <string name="select_district_hint">Bir ilçe seçin</string>
+    <string name="district_selection_description">İlçe seçimi için açılır liste</string>
+    <string name="search_button_text">SORGULA</string>
+
+    <string name="back_to_pharmacy_search">Nöbetçi Eczane Sorgulama</string>
+    <string name="pharmacy_info_title">Eczane Bilgileri</string>
+    <string name="pharmacy_label">ECZANE</string>
+    <string name="pharmacy_city_label">İl: </string>
+    <string name="pharmacy_district_label">İlçe: </string>
+    <string name="pharmacy_phone_label">Telefon Numarası: </string>
+    <string name="pharmacy_address_label">Adres: </string>
+    <string name="show_on_map_button">HARİTADA GÖSTER</string>
+
+
     <string-array name="turkish_cities">
         <item>Adana</item>
         <item>Adıyaman</item>

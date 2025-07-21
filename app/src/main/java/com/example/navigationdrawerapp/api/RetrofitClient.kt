@@ -5,6 +5,8 @@ import retrofit2.Retrofit
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
+import com.example.navigationdrawerapp.api.PharmacyApiService //ApiService'in olduğu yola dikkat!
+
 
 object RetrofitClient {
 
@@ -47,6 +49,10 @@ object RetrofitClient {
         retrofit.create(WeatherApiService::class.java)
     }
 
+    //PharmacyApiService için yeni instance
+    val pharmacyApiService: PharmacyApiService by lazy {
+        retrofit.create(PharmacyApiService::class.java)
+    }
 
 
 }

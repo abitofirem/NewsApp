@@ -42,4 +42,23 @@
         <string name="search_icon_description">Search icon</string>
         <string name="favorite_star_description">Favorite star</string>
 
+    <string name="pharmacy_screen_title">On-Duty Pharmacies</string>
+    <string name="city_selection_label">City Selection *</string>
+    <string name="select_city_hint">Select a city</string>
+    <string name="city_selection_description">Dropdown list for city selection</string>
+    <string name="district_selection_label">District Selection</string>
+    <string name="select_district_hint">Select a district</string>
+    <string name="district_selection_description">Dropdown list for district selection</string>
+    <string name="search_button_text">SEARCH</string>
+
+    <string name="back_to_pharmacy_search">On-Duty Pharmacy Search</string>
+    <string name="pharmacy_info_title">Pharmacy Information</string>
+    <string name="pharmacy_label">PHARMACY</string>
+    <string name="pharmacy_city_label">City: </string>
+    <string name="pharmacy_district_label">District: </string>
+    <string name="pharmacy_phone_label">Phone Number: </string>
+    <string name="pharmacy_address_label">Address: </string>
+    <string name="show_on_map_button">SHOW ON MAP</string>
+
+
 </resources>

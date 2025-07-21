@@ -43,7 +43,7 @@
             android:layout_width="160dp"
             android:layout_height="160dp"
             android:layout_marginTop="24dp"
-            android:contentDescription="Hava durumu ikonu"
+            android:contentDescription="@string/weather_icon_description"
             android:scaleType="fitCenter"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

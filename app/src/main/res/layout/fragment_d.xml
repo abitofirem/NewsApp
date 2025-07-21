@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/headerbkg"
-        android:contentDescription="Arka Plan" />
+        android:contentDescription="@string/weather_background_description" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -64,7 +64,7 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:completionThreshold="1"
-                android:hint="Şehir adını yazın..."
+                android:hint="@string/weather_search_city_hint"
                 android:inputType="textCapWords"
                 android:minHeight="48dp"
                 android:padding="8dp"
@@ -77,7 +77,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_search"
-                android:contentDescription="Şehir Ara"
+                android:contentDescription="@string/weather_search_city_description"
                 app:tint="@color/text_on_transparent_card_primary"
                 android:layout_marginStart="8dp" />
         </LinearLayout>
@@ -130,7 +130,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:visibility="gone"
-            tools:text="Hava durumu bilgisi alınamadı." />
+            tools:text="@string/weather_data_error" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

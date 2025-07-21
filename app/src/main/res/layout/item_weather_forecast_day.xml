@@ -37,7 +37,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_day_small"
             android:scaleType="fitCenter"
             tools:src="@tools:sample/avatars"
-            android:contentDescription="Hava durumu ikonu" />
+            android:contentDescription="@string/weather_icon_description" />
 
         <TextView
             android:id="@+id/tv_min_degree_small"

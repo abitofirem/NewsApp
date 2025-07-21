@@ -242,34 +242,44 @@ class AFragment : Fragment() {
 
         //"Tümünü Göster" butonuna tıklama dinleyicisi
         tvShowAllCurrency.setOnClickListener {
-            val isExpanded = tvShowAllCurrency.text.toString().startsWith("Tümünü Göster")
-            currencyAdapter.setExpanded(isExpanded)
-            tvShowAllCurrency.text = if (isExpanded) "<< Daha az göster" else "Tümünü Göster >>"
+            val isCurrentlyExpanded = currencyAdapter.isExpanded
+            currencyAdapter.setExpanded(!isCurrentlyExpanded)
+            tvShowAllCurrency.text = if (!isCurrentlyExpanded) {
+                getString(R.string.finance_show_less)
+            } else {
+                getString(R.string.finance_show_all)
+            }
         }
 
         //Kripto Paralar için "Tümünü Göster" butonunun tıklama dinleyicisi
         tvShowAllCripto.setOnClickListener {
-            val isExpanded = tvShowAllCripto.text.toString().startsWith("Tümünü Göster")
+            val currentText = tvShowAllCripto.text.toString()
+            val showAllText = getString(R.string.finance_show_all)
+            val isExpanded = currentText == showAllText
+
             val criptoList = financeViewModel.criptoData.value?.result ?: emptyList()
             if (isExpanded) {
                 criptoAdapter.updateData(criptoList) //Tüm listeyi göster
-                tvShowAllCripto.text = "<< Daha az göster"
+                tvShowAllCripto.text = getString(R.string.finance_show_less)
             } else {
                 criptoAdapter.updateData(criptoList.take(3)) //Sadece ilk 3'ü göster
-                tvShowAllCripto.text = "Tümünü Göster >>"
+                tvShowAllCripto.text = showAllText
             }
         }
 
         //Emtia için "Tümünü Göster" butonunun tıklama dinleyicisi
         tvShowAllEmtia.setOnClickListener {
-            val isExpanded = tvShowAllEmtia.text.toString().startsWith("Tümünü Göster")
+            val currentText = tvShowAllEmtia.text.toString()
+            val showAllText = getString(R.string.finance_show_all)
+            val isExpanded = currentText == showAllText
+            
             val emtiaList = financeViewModel.emtiaData.value?.result ?: emptyList()
             if (isExpanded) {
                 emtiaAdapter.updateData(emtiaList) // Tüm listeyi göster
-                tvShowAllEmtia.text = "<< Daha az göster"
+                tvShowAllEmtia.text = getString(R.string.finance_show_less)
             } else {
                 emtiaAdapter.updateData(emtiaList.take(3)) // Sadece ilk 3'ü göster
-                tvShowAllEmtia.text = "Tümünü Göster >>"
+                tvShowAllEmtia.text = showAllText
             }
         }
 

@@ -89,7 +89,7 @@ class PharmacyListFragment : Fragment() {
                 pharmacyRecyclerView.visibility = View.GONE
                 if (errorMessageTextView.visibility != View.VISIBLE) {
                     //Eğer zaten bir hata mesajı görünmüyorsa, "veri bulunamadı" mesajını göster
-                    errorMessageTextView.text = "Seçilen konumda nöbetçi eczane bulunamadı."
+                    errorMessageTextView.text = getString(R.string.no_pharmacy_found)
                     errorMessageTextView.visibility = View.VISIBLE
                 }
             } else {
@@ -99,12 +99,12 @@ class PharmacyListFragment : Fragment() {
                 errorMessageTextView.visibility = View.GONE // Hata mesajını gizle
 
                 //Başlık metnini dinamik olarak ayarla
-
+                val pharmaciesOnDutyText = getString(R.string.pharmacies_on_duty)
                 //BAŞLIK METNİ DEĞİŞİKLİĞİ BURADA
                 val titleText = if (!selectedDistrict.isNullOrBlank()) {
-                    "${selectedCity} - ${selectedDistrict}\nNöbetçi Eczaneler" //İl-İlçe alt alta
+                    "$selectedCity - $selectedDistrict\n$pharmaciesOnDutyText" //İl-İlçe alt alta
                 } else {
-                    "${selectedCity}\nNöbetçi Eczaneler" //Sadece il için
+                    "$selectedCity\n$pharmaciesOnDutyText" //Sadece il için
                 }
                 tvPharmacyInfoTitle.text = titleText
             }
@@ -148,7 +148,7 @@ class PharmacyListFragment : Fragment() {
             viewModel.fetchDutyPharmacies(city, selectedDistrict)
         } ?: run {
             //Eğer şehir bilgisi gelmediyse hata göster (Bu durum pek olmamalı)
-            val errorMsg = "Şehir bilgisi eksik. Lütfen geri dönüp şehir seçin."
+            val errorMsg = getString(R.string.missing_city_info)
             errorMessageTextView.text = errorMsg
             errorMessageTextView.visibility = View.VISIBLE
             pharmacyRecyclerView.visibility = View.GONE
@@ -176,14 +176,15 @@ class PharmacyListFragment : Fragment() {
                     startActivity(mapIntent)
                 } else {
                     // Eğer hiçbir harita uygulaması bulunamazsa
-                    Toast.makeText(context, "Harita uygulaması bulunamadı.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.map_app_not_found), Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 Log.e("PharmacyListFragment", "Harita açılırken hata oluştu: ${e.message}")
-                Toast.makeText(context, "Harita açılamadı: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                val errorMessage = getString(R.string.map_could_not_open, e.localizedMessage)
+                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
             }
         } else {
-            Toast.makeText(context, "Eczane konumu mevcut değil.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.pharmacy_location_not_available), Toast.LENGTH_SHORT).show()
         }
     }
 

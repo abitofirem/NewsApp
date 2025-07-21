@@ -28,7 +28,8 @@ class EmtiaAdapter(private var emtiaList: List<EmtiaResult>) :
         val emtia = emtiaList[position]
 
         holder.tvEmtiaName.text = emtia.text
-        holder.tvEmtiaSelling.text = "Satış: ${String.format("%.2f USD", emtia.selling)}"
+        val context = holder.itemView.context
+        holder.tvEmtiaSelling.text = "${context.getString(R.string.finance_selling)}: ${String.format("%.2f USD", emtia.selling)}"
 
         //Değişim oranına göre rengi ayarla
         val rate = emtia.rate

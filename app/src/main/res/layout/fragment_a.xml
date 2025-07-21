@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_background"
+    android:background="?attr/android:colorBackground"
     tools:context=".AFragment">
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,8 +15,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Finans Piyasaları"
-            android:textColor="@color/text_on_transparent_card_primary"
+            android:text="@string/finance_markets_title"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="28sp"
             android:textStyle="bold"
             android:layout_marginBottom="24dp"
@@ -37,7 +37,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
             android:textColor="@android:color/holo_red_dark"
-            android:text="Veriler yüklenemedi. Lütfen tekrar deneyin."
+            android:text="@string/finance_data_load_error"
             android:visibility="gone" />
 
 
@@ -47,7 +47,7 @@
             android:layout_marginBottom="20dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="8dp"
-            app:cardBackgroundColor="@color/card_background_light_transparent"
+            app:cardBackgroundColor="?attr/colorSurface"
             app:cardUseCompatPadding="true">
 
             <LinearLayout
@@ -59,8 +59,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="BIST 100 Endeksi"
-                    android:textColor="@color/text_on_transparent_card_primary"
+                    android:text="@string/finance_bist_100_index"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -75,7 +75,7 @@
                         android:id="@+id/tv_bist_current"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/text_on_transparent_card_primary"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="28sp"
                         android:textStyle="bold"
                         tools:text="108.841" />
@@ -135,8 +135,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Döviz Kurları"
-            android:textColor="@color/text_on_transparent_card_primary"
+            android:text="@string/finance_exchange_rates"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="22sp"
             android:textStyle="bold"
             android:layout_marginTop="16dp"
@@ -157,8 +157,8 @@
             android:id="@+id/tv_show_all_currency"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tümünü Göster >>"
-            android:textColor="@color/accent"
+            android:text="@string/finance_show_all"
+            android:textColor="?attr/colorSecondary"
             android:textSize="16sp"
             android:textStyle="bold"
             android:gravity="end"
@@ -170,8 +170,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kıymetli Madenler"
-            android:textColor="@color/text_on_transparent_card_primary"
+            android:text="@string/finance_precious_metals"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="22sp"
             android:textStyle="bold"
             android:layout_marginTop="16dp"
@@ -192,8 +192,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kripto Paralar"
-            android:textColor="@color/text_on_transparent_card_primary"
+            android:text="@string/finance_crypto_currencies"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="22sp"
             android:textStyle="bold"
             android:layout_marginTop="16dp"
@@ -214,8 +214,8 @@
             android:id="@+id/tv_show_all_cripto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tümünü Göster >>"
-            android:textColor="@color/accent"
+            android:text="@string/finance_show_all"
+            android:textColor="?attr/colorSecondary"
             android:textSize="16sp"
             android:textStyle="bold"
             android:gravity="end"
@@ -228,8 +228,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Emtia Piyasası"
-            android:textColor="@color/text_on_transparent_card_primary"
+            android:text="@string/finance_commodities"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="22sp"
             android:textStyle="bold"
             android:layout_marginTop="16dp"
@@ -250,8 +250,8 @@
             android:id="@+id/tv_show_all_emtia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tümünü Göster >>"
-            android:textColor="@color/accent"
+            android:text="@string/finance_show_all"
+            android:textColor="?attr/colorSecondary"
             android:textSize="16sp"
             android:textStyle="bold"
             android:gravity="end"
@@ -263,8 +263,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Döviz Dönüştürücü"
-            android:textColor="@color/text_on_transparent_card_primary"
+            android:text="@string/finance_currency_converter_title"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="22sp"
             android:textStyle="bold"
             android:layout_marginTop="16dp"
@@ -277,7 +277,7 @@
             android:layout_marginBottom="20dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="8dp"
-            app:cardBackgroundColor="@color/card_background_light_transparent"
+            app:cardBackgroundColor="?attr/colorSurface"
             app:cardUseCompatPadding="true">
 
             <LinearLayout
@@ -289,8 +289,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Para Birimi Dönüştürücü"
-                    android:textColor="@color/text_on_transparent_card_primary"
+                    android:text="@string/finance_currency_converter_subtitle"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="12dp"/>
@@ -308,10 +308,10 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:text="USD"
+                        android:text="@string/finance_usd_default"
                         android:textAllCaps="false"
-                        android:textColor="@color/text_on_transparent_card_primary"
-                        app:strokeColor="@color/secondary_text"
+                        android:textColor="?attr/colorOnSurface"
+                        app:strokeColor="?attr/colorOnSurfaceVariant"
                         app:cornerRadius="12dp"
                         android:layout_marginEnd="8dp"/>
 
@@ -321,8 +321,8 @@
                         android:layout_height="48dp"
                         android:background="@drawable/circular_accent_background"
                         android:src="@drawable/ic_swap_horiz"
-                        app:tint="@color/text_on_accent_light"
-                        android:contentDescription="Para birimlerini değiştir"/>
+                        app:tint="?attr/colorOnSecondary"
+                        android:contentDescription="@string/finance_swap_currencies_description"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_to_currency"
@@ -330,10 +330,10 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:text="TRY"
+                        android:text="@string/finance_try_default"
                         android:textAllCaps="false"
-                        android:textColor="@color/text_on_transparent_card_primary"
-                        app:strokeColor="@color/secondary_text"
+                        android:textColor="?attr/colorOnSurface"
+                        app:strokeColor="?attr/colorOnSurfaceVariant"
                         app:cornerRadius="12dp"
                         android:layout_marginStart="8dp"/>
                 </LinearLayout>
@@ -351,11 +351,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
-                        android:hint="Miktar"
+                        android:hint="@string/finance_amount_hint"
                         android:inputType="numberDecimal"
                         android:minHeight="48dp"
-                        android:textColor="@color/text_on_transparent_card_primary"
-                        android:textColorHint="@color/secondary_text"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textColorHint="?attr/colorOnSurfaceVariant"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         tools:text="100" />
@@ -402,9 +402,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Dönüştür"
-                    android:backgroundTint="@color/accent"
-                    android:textColor="@color/text_on_accent_light"
+                    android:text="@string/finance_convert_button"
+                    android:backgroundTint="?attr/colorSecondary"
+                    android:textColor="?attr/colorOnSecondary"
                     app:cornerRadius="12dp"
                     android:paddingVertical="12dp"
                     android:textSize="16sp"

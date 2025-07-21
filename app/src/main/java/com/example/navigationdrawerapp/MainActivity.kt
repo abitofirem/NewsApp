@@ -89,34 +89,35 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, AFragment())
                         .commit()
+                    setToolbarTitle(getString(R.string.bottom_nav_a)) // Finans
                     true
                 }
                 R.id.navigation_b -> {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, BFragment())
                         .commit()
-                    toolbar.title = getString(R.string.title_settings)
+                    setToolbarTitle(getString(R.string.bottom_nav_b)) // Futbol
                     true
                 }
                 R.id.navigation_c -> {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, CFragment())
                         .commit()
-                    setToolbarTitle(getString(R.string.title_news)) //BURADA DEĞİŞİKLİK
+                    setToolbarTitle(getString(R.string.bottom_nav_c)) // Haberler
                     true
                 }
                 R.id.navigation_d -> {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, DFragment())
                         .commit()
-                    toolbar.title = getString(R.string.title_about)
+                    setToolbarTitle(getString(R.string.bottom_nav_d)) // Hava
                     true
                 }
                 R.id.navigation_e -> {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, EFragment())
                         .commit()
-                    toolbar.title = getString(R.string.title_logout)
+                    setToolbarTitle(getString(R.string.bottom_nav_e)) // Eczane
                     true
                 }
                 else -> false
@@ -141,7 +142,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             // Yan menüde ve alt menüde ilgili öğeyi seçili yapın
             navigationView.setCheckedItem(R.id.nav_c) //Eğer yan menünüzde nav_c varsa
             bottomNavigationView.selectedItemId = R.id.navigation_c //Eğer alt menünüzde bu id varsa
-            setToolbarTitle(getString(R.string.title_news)) //BURADA DEĞİŞİKLİK: Haberler başlığı
+            setToolbarTitle(getString(R.string.bottom_nav_c)) //BURADA DEĞİŞİKLİK: Haberler başlığı
         }
     }
 
@@ -154,31 +155,31 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.nav_a -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, HomeFragment())
+                    .replace(R.id.fragment_container, CFragment())
                     .commit()
-                toolbar.title = getString(R.string.title_home)
+                setToolbarTitle(getString(R.string.bottom_nav_c))
             }
             R.id.nav_b -> {
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, SettingsFragment())
                     .commit()
-                toolbar.title = getString(R.string.title_settings)
+                setToolbarTitle(getString(R.string.nav_settings))
             }
             R.id.nav_c -> {
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, ShareFragment())
                     .commit()
-                toolbar.title = getString(R.string.title_share)
+                setToolbarTitle(getString(R.string.nav_share))
             }
             R.id.nav_d -> {
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, AboutFragment())
                     .commit()
-                toolbar.title = getString(R.string.title_about)
+                setToolbarTitle(getString(R.string.nav_about))
             }
             R.id.nav_e -> {
                 Toast.makeText(this, "Logout!", Toast.LENGTH_SHORT).show()
-                toolbar.title = getString(R.string.title_logout)
+                setToolbarTitle(getString(R.string.nav_logout))
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)

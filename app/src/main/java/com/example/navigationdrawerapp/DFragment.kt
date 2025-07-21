@@ -196,13 +196,13 @@ class DFragment : Fragment() {
     private fun updateMainWeatherCard(forecast: WeatherForecast) {
         //"Bugün" veya gün adını belirle
         val todayDate = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date())
-        tvDayToday.text = if (forecast.date == todayDate) "Bugün" else SimpleDateFormat("EEEE", Locale("tr", "TR")).format(SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).parse(forecast.date))
+        tvDayToday.text = if (forecast.date == todayDate) getString(R.string.weather_today) else SimpleDateFormat("EEEE", Locale.getDefault()).format(SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).parse(forecast.date))
 
         //Tarihi formatla
         try {
             val inputFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
             val date = inputFormat.parse(forecast.date)
-            val outputFormat = SimpleDateFormat("d MMMM, EEEE", Locale("tr", "TR"))
+            val outputFormat = SimpleDateFormat("d MMMM, EEEE", Locale.getDefault())
             tvDateToday.text = date?.let { outputFormat.format(it) } ?: forecast.date
         } catch (e: Exception) {
             tvDateToday.text = forecast.date // Hata olursa ham tarihi göster
@@ -214,9 +214,9 @@ class DFragment : Fragment() {
         tvDescriptionToday.text = forecast.description.replaceFirstChar { char ->
             if (char.isLowerCase()) char.titlecase() else char.toString()
         }
-        tvMinDegreeTodayDetails.text = "Min: ${forecast.min.toDouble().toInt()}°C"
-        tvMaxDegreeTodayDetails.text = "Max: ${forecast.max.toDouble().toInt()}°C"
-        tvHumidityTodayDetails.text = "Nem: ${forecast.humidity.toDouble().toInt()}%"
+        tvMinDegreeTodayDetails.text = "${getString(R.string.weather_min)}: ${forecast.min.toDouble().toInt()}°C"
+        tvMaxDegreeTodayDetails.text = "${getString(R.string.weather_max)}: ${forecast.max.toDouble().toInt()}°C"
+        tvHumidityTodayDetails.text = "${getString(R.string.weather_humidity)}: ${forecast.humidity.toDouble().toInt()}%"
 
         // Hava durumu ikonunu yükle
         Glide.with(this)

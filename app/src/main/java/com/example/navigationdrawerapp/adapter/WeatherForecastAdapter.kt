@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.navigationdrawerapp.R
 import com.example.navigationdrawerapp.model.WeatherForecast
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 //Adaptörün constructor'ına bir lambda fonksiyonu (onItemClick) ekliyoruz.
 class WeatherForecastAdapter(
@@ -39,7 +41,16 @@ class WeatherForecastAdapter(
                 onItemClick(forecast) //Tıklanan öğeyi lambda aracılığıyla dışarıya bildiriyoruz
             }
 
-            tvDaySmall.text = forecast.day
+            // Tarih metninden gün ismini hesapla ve ata
+            try {
+                val inputFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+                val date = inputFormat.parse(forecast.date)
+                val outputFormat = SimpleDateFormat("EEEE", Locale.getDefault())
+                tvDaySmall.text = date?.let { outputFormat.format(it) } ?: forecast.day
+            } catch (e: Exception) {
+                tvDaySmall.text = forecast.day // Hata olursa modeldeki ham veriyi kullan
+            }
+
             tvMinDegreeSmall.text = "${forecast.degree.toDouble().toInt()}°C"
 
             Glide.with(itemView.context)
@@ -51,7 +62,7 @@ class WeatherForecastAdapter(
 
 class WeatherForecastDiffCallback : DiffUtil.ItemCallback<WeatherForecast>() {
     override fun areItemsTheSame(oldItem: WeatherForecast, newItem: WeatherForecast): Boolean {
-        return oldItem.date == newItem.date && oldItem.day == newItem.day
+        return oldItem.date == newItem.date
     }
 
     override fun areContentsTheSame(oldItem: WeatherForecast, newItem: WeatherForecast): Boolean {

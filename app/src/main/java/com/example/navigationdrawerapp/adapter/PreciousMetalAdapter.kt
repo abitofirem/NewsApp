@@ -35,10 +35,11 @@ class PreciousMetalAdapter(private var preciousMetalList: List<PreciousMetal>) :
         val decimalFormat = DecimalFormat("#,##0.00", DecimalFormatSymbols(Locale("tr", "TR")))
 
         holder.nameTextView.text = metal.name
+        val context = holder.itemView.context
 
         //Alış fiyatı boş değilse göster
         if (metal.buying.isNotEmpty() && metal.buying != "-") {
-            holder.buyingTextView.text = "Alış: ${decimalFormat.format(metal.buying.toDouble())}"
+            holder.buyingTextView.text = "${context.getString(R.string.finance_buying)}: ${decimalFormat.format(metal.buying.toDouble())}"
             holder.buyingTextView.visibility = View.VISIBLE
         } else {
             holder.buyingTextView.visibility = View.GONE
@@ -46,7 +47,7 @@ class PreciousMetalAdapter(private var preciousMetalList: List<PreciousMetal>) :
 
         //Satış fiyatı boş değilse göster
         if (metal.selling.isNotEmpty() && metal.selling != "-") {
-            holder.sellingTextView.text = "Satış: ${decimalFormat.format(metal.selling.toDouble())}"
+            holder.sellingTextView.text = "${context.getString(R.string.finance_selling)}: ${decimalFormat.format(metal.selling.toDouble())}"
             holder.sellingTextView.visibility = View.VISIBLE
         } else {
             holder.sellingTextView.visibility = View.GONE

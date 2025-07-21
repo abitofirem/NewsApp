@@ -8,10 +8,9 @@
     <!-- Navigation Menu Items -->
     <string name="nav_home">Ana Sayfa</string>
     <string name="nav_settings">Ayarlar</string>
-    <string name="nav_share">Paylaş</string>
+    <string name="nav_share">Kaydedilenler</string>
     <string name="nav_about">Hakkında</string>
     <string name="nav_logout">Çıkış Yap</string>
-
 
     <!-- Bottom Navigation Items -->
     <string name="bottom_nav_a">Finans</string>
@@ -23,26 +22,44 @@
     <!-- Fragment Titles -->
     <string name="title_home">Ana Sayfa</string>
     <string name="title_settings">Ayarlar</string>
-    <string name="title_share">Paylaş</string>
+    <string name="title_share">Kaydedilenler</string>
     <string name="title_about">Hakkında</string>
     <string name="title_logout">Çıkış Yap</string>
+    <string name="title_news">Haberler</string>
 
     <!-- Settings Fragment -->
     <string name="settings_title">Ayarlar</string>
-    <string name="title_news" translatable="false">Haberler</string>
     <string name="dark_theme">Koyu Tema</string>
     <string name="light_theme">Açık Tema</string>
     <string name="language">Dil</string>
     <string name="turkish">Türkçe</string>
-    <string name="english">English</string>
+    <string name="english">İngilizce</string>
     <string name="theme_icon_desc">Tema Simgesi</string>
     <string name="language_icon_desc">Dil Simgesi</string>
 
-    <string name="search_hint" tools:ignore="MissingTranslation">Ara...</string>
-    <string name="leagues_title" tools:ignore="MissingTranslation">Ligler</string>
-    <string name="search_icon_description" tools:ignore="MissingTranslation">Arama ikonu</string>
-    <string name="favorite_star_description" tools:ignore="MissingTranslation">Favori yıldızı</string>
+    <!-- Search & Common -->
+    <string name="search_hint">Ara...</string>
+    <string name="leagues_title">Ligler</string>
+    <string name="search_icon_description">Arama ikonu</string>
+    <string name="favorite_star_description">Favori yıldızı</string>
 
+    <!-- Football (Leagues) -->
+    <string name="standings">Puan Durumu</string>
+    <string name="fixtures">Fikstür</string>
+    <string name="stats">İstatistik</string>
+
+    <!-- Weather -->
+    <string name="weather_background_description">Arka Plan</string>
+    <string name="weather_search_city_hint">Şehir adını yazın...</string>
+    <string name="weather_search_city_description">Şehir Ara</string>
+    <string name="weather_data_error">Hava durumu bilgisi alınamadı.</string>
+    <string name="weather_today">Bugün</string>
+    <string name="weather_icon_description">Hava durumu ikonu</string>
+    <string name="weather_min">Min</string>
+    <string name="weather_max">Max</string>
+    <string name="weather_humidity">Nem</string>
+
+    <!-- Fixture/Weeks -->
     <string-array name="week_options">
         <item>1. Hafta</item>
         <item>2. Hafta</item>
@@ -50,7 +67,7 @@
         <item>38. Hafta</item>
     </string-array>
 
-
+    <!-- Pharmacy -->
     <string name="pharmacy_screen_title">Nöbetçi Eczaneler</string>
     <string name="city_selection_label">İl Seçimi *</string>
     <string name="select_city_hint">Bir il seçin</string>
@@ -59,15 +76,59 @@
     <string name="select_district_hint">Bir ilçe seçin</string>
     <string name="district_selection_description">İlçe seçimi için açılır liste</string>
     <string name="search_button_text">SORGULA</string>
-
     <string name="back_to_pharmacy_search">Nöbetçi Eczane Sorgulama</string>
     <string name="pharmacy_info_title">Eczane Bilgileri</string>
     <string name="pharmacy_label">ECZANE</string>
-    <string name="pharmacy_city_label">İl: </string>
-    <string name="pharmacy_district_label">İlçe: </string>
-    <string name="pharmacy_phone_label">Telefon Numarası: </string>
-    <string name="pharmacy_address_label">Adres: </string>
+    <string name="pharmacy_city_label">İl:</string>
+    <string name="pharmacy_district_label">İlçe:</string>
+    <string name="pharmacy_phone_label">Telefon Numarası:</string>
+    <string name="pharmacy_address_label">Adres:</string>
     <string name="show_on_map_button">HARİTADA GÖSTER</string>
+    <string name="pharmacy_expand_collapse_description">Genişlet/Daralt</string>
+
+    <string name="pharmacies_on_duty">Nöbetçi Eczaneler</string>
+    <string name="no_pharmacy_found">Seçilen konumda nöbetçi eczane bulunamadı.</string>
+    <string name="missing_city_info">Şehir bilgisi eksik. Lütfen geri dönüp şehir seçin.</string>
+    <string name="map_app_not_found">Harita uygulaması bulunamadı.</string>
+    <string name="map_could_not_open">Harita açılamadı: %1$s</string>
+    <string name="pharmacy_location_not_available">Eczane konumu mevcut değil.</string>
+
+    <!-- Finance Fragment (AFragment) -->
+    <string name="finance_markets_title">Finans Piyasaları</string>
+    <string name="finance_data_load_error">Veriler yüklenemedi. Lütfen tekrar deneyin.</string>
+    <string name="finance_bist_100_index">BIST 100 Endeksi</string>
+    <string name="finance_exchange_rates">Döviz Kurları</string>
+    <string name="finance_show_all">Tümünü Göster >></string>
+    <string name="finance_show_less">Daha Az Göster &lt;&lt;</string>
+    <string name="finance_precious_metals">Kıymetli Madenler</string>
+    <string name="finance_crypto_currencies">Kripto Paralar</string>
+    <string name="finance_commodities">Emtia Piyasası</string>
+    <string name="finance_currency_converter_title">Döviz Dönüştürücü</string>
+    <string name="finance_currency_converter_subtitle">Para Birimi Dönüştürücü</string>
+    <string name="finance_swap_currencies_description">Para birimlerini değiştir</string>
+    <string name="finance_amount_hint">Miktar</string>
+    <string name="finance_convert_button">Dönüştür</string>
+    <string name="finance_usd_default">USD</string>
+    <string name="finance_try_default">TRY</string>
+    <string name="currency_converter_title">Döviz Çevirici</string>
+
+    <!-- Finance Item Labels -->
+    <string name="finance_buying">Alış</string>
+    <string name="finance_selling">Satış</string>
+    <string name="finance_update_time">Güncellenme</string>
+
+    <string name="about_app_description">
+        NewsApp, size kapsamlı bilgiye tek bir yerden erişim imkanı sunar.
+        Güncel haberler, futbol liglerinin son durumu, anlık finans piyasaları verileri,
+        detaylı hava durumu bilgileri ve nöbetçi eczaneler gibi birçok farklı kategoriye
+        kolayca ulaşabilirsiniz. İhtiyacınız olan her bilgiye hızlı ve pratik erişim için tasarlanmıştır.
+    </string>
+
+    <string name="about_version_label">Versiyon: 1.0.0</string>
+    <string name="about_title">Uygulama Hakkında</string>
+    <string name="about_developer_title">Geliştirici</string>
+    <string name="about_developer_name">İrem Yalçın</string>
+    <string name="about_copyright">© 2025 NewsApp. Tüm Hakları Saklıdır.</string>
 
 
     <string-array name="turkish_cities">

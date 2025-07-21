@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView // Geri butonu için MaterialCardView importu
 import com.example.navigationdrawerapp.adapter.PharmacyAdapter // PharmacyAdapter'ı import et!
 import com.example.navigationdrawerapp.viewmodel.PharmacyViewModel // PharmacyViewModel'ı import et!
+import com.example.navigationdrawerapp.model.Pharmacy // Pharmacy modelini import et!
 
 //EFragment'tan gelecek argümanlar için sabit anahtarlar
 private const val ARG_CITY = "city"
@@ -76,7 +77,7 @@ class PharmacyListFragment : Fragment() {
             //Örneğin, harita uygulamasını açabiliriz
             Toast.makeText(context, "${pharmacy.name} adresine gidiliyor...", Toast.LENGTH_SHORT).show()
             //Harita açma fonksiyonu burada çağrılabilir
-            openMapForPharmacy(pharmacy.loc) //Pharmacy modelindeki 'loc' alanı enlem/boylam içeriyor
+            openMapForPharmacy(pharmacy) //Pharmacy modelindeki 'loc' alanı enlem/boylam içeriyor
         }
         pharmacyRecyclerView.layoutManager = LinearLayoutManager(context)
         pharmacyRecyclerView.adapter = pharmacyAdapter
@@ -154,26 +155,26 @@ class PharmacyListFragment : Fragment() {
     }
 
     //Harita uygulamasını açmak için yardımcı fonksiyon
-    private fun openMapForPharmacy(location: String) {
+    private fun openMapForPharmacy(pharmacy: Pharmacy) { // Parametre olarak tüm Pharmacy nesnesini alıyoruz
+        val location = pharmacy.loc.replace(" ", "") // Konumdaki boşlukları kaldır
+        val pharmacyName = pharmacy.name // Eczane adını al
+
         //'loc' formatı "latitude,longitude" olmalı
         if (location.isNotBlank()) {
             try {
-                //URI formatı: "geo:latitude,longitude?z=zoom"
-                //Veya Google Maps için "geo:0,0?q=latitude,longitude(Label)"
-                val gmmIntentUri = android.net.Uri.parse("geo:$location?q=$location(Eczane)")
+                // Konumu ve etiketi içeren bir URI oluştur
+                val gmmIntentUri = android.net.Uri.parse("geo:0,0?q=$location($pharmacyName)")
+
+                // DEBUG: Oluşturulan URI'ı Logcat'e yazdıralım
+                Log.d("PharmacyListFragment", "Oluşturulan Harita URI: $gmmIntentUri")
+
                 val mapIntent = android.content.Intent(android.content.Intent.ACTION_VIEW, gmmIntentUri)
-                mapIntent.setPackage("com.google.android.apps.maps") //Sadece Google Haritalar'ı kullanmak
+
                 if (mapIntent.resolveActivity(requireActivity().packageManager) != null) {
                     startActivity(mapIntent)
                 } else {
-                    //Google Haritalar yüklü değilse, herhangi bir harita uygulamasını kullan
-                    val genericMapUri = android.net.Uri.parse("geo:$location")
-                    val genericMapIntent = android.content.Intent(android.content.Intent.ACTION_VIEW, genericMapUri)
-                    if (genericMapIntent.resolveActivity(requireActivity().packageManager) != null) {
-                        startActivity(genericMapIntent)
-                    } else {
-                        Toast.makeText(context, "Harita uygulaması bulunamadı.", Toast.LENGTH_SHORT).show()
-                    }
+                    // Eğer hiçbir harita uygulaması bulunamazsa
+                    Toast.makeText(context, "Harita uygulaması bulunamadı.", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 Log.e("PharmacyListFragment", "Harita açılırken hata oluştu: ${e.message}")
@@ -183,7 +184,6 @@ class PharmacyListFragment : Fragment() {
             Toast.makeText(context, "Eczane konumu mevcut değil.", Toast.LENGTH_SHORT).show()
         }
     }
-
 
     //Bu factory metodu, EFragment'tan PharmacyListFragment'ı oluştururken
     //argümanları güvenli bir şekilde geçirmek için kullanılır.

@@ -30,4 +30,12 @@
         </activity>
     </application>
 
+    <!-- Harita uygulamalarını sorgulamak için gerekli izin. (Android 11 ve üzeri için) -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="geo" />
+        </intent>
+    </queries>
+
 </manifest>

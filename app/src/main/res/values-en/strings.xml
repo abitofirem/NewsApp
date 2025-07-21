@@ -13,11 +13,11 @@
     <string name="nav_logout">Logout</string>
     
     <!-- Bottom Navigation Items -->
-    <string name="bottom_nav_a">A</string>
+    <string name="bottom_nav_a">Finance</string>
     <string name="bottom_nav_b">Football</string>
     <string name="bottom_nav_c">News</string>
-    <string name="bottom_nav_d">Forecast</string>
-    <string name="bottom_nav_e">E</string>
+    <string name="bottom_nav_d">Weather</string>
+    <string name="bottom_nav_e">Pharmacy</string>
     
     <!-- Fragment Titles -->
     <string name="title_home">Home</string>

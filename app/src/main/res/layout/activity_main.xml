@@ -43,7 +43,7 @@
             android:elevation="8dp"
             app:itemIconTint="@color/navbar_item_color_selector"
             app:itemTextColor="@color/navbar_item_color_selector"
-            app:labelVisibilityMode="labeled"
+            app:labelVisibilityMode="selected"
             app:menu="@menu/navbar_menu" />
 
 

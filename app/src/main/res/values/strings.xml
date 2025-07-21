@@ -14,11 +14,11 @@
 
 
     <!-- Bottom Navigation Items -->
-    <string name="bottom_nav_a">A</string>
+    <string name="bottom_nav_a">Finans</string>
     <string name="bottom_nav_b">Futbol</string>
     <string name="bottom_nav_c">Haberler</string>
-    <string name="bottom_nav_d">Hava Durumu</string>
-    <string name="bottom_nav_e">E</string>
+    <string name="bottom_nav_d">Hava</string>
+    <string name="bottom_nav_e">Eczane</string>
 
     <!-- Fragment Titles -->
     <string name="title_home">Ana Sayfa</string>

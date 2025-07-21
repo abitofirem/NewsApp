@@ -47,5 +47,5 @@
     <color name="card_bg">#FFFFFF</color>
     <color name="searchbar_bg">#F5F5F5</color>
     <color name="primary_text">#000000</color>
-
+    <color name="drawer_background_color">#FDF2E8</color>
 </resources>

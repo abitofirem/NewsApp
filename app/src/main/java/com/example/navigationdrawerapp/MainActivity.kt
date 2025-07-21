@@ -51,6 +51,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Kaydedilen temayı yükle ve uygula (setContentView'dan ÖNCE)
+        loadAndApplyTheme()
+
         setContentView(R.layout.activity_main)
 
 

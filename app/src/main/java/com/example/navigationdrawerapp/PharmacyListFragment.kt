@@ -99,10 +99,12 @@ class PharmacyListFragment : Fragment() {
                 errorMessageTextView.visibility = View.GONE // Hata mesajını gizle
 
                 //Başlık metnini dinamik olarak ayarla
+
+                //BAŞLIK METNİ DEĞİŞİKLİĞİ BURADA
                 val titleText = if (!selectedDistrict.isNullOrBlank()) {
-                    "${selectedCity} - ${selectedDistrict} Nöbetçi Eczaneleri"
+                    "${selectedCity} - ${selectedDistrict}\nNöbetçi Eczaneler" //İl-İlçe alt alta
                 } else {
-                    "${selectedCity} Nöbetçi Eczaneleri"
+                    "${selectedCity}\nNöbetçi Eczaneler" //Sadece il için
                 }
                 tvPharmacyInfoTitle.text = titleText
             }

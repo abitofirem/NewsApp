@@ -1,7 +1,7 @@
 package com.example.navigationdrawerapp // Paket yolunuzu kontrol edin ve gerekirse düzenleyin
 
 import android.os.Bundle
-import android.util.Log // Debug için Logcat'e çıktı basmak için
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +16,24 @@ class EFragment : Fragment() {
     private lateinit var actvCitySelection: AutoCompleteTextView
     private lateinit var actvDistrictSelection: AutoCompleteTextView
     private lateinit var btnSearchPharmacies: Button
+
+    //Şehir ve ilçe verileri (sabitleri burada tutmak daha iyi)
+    private val cities = listOf("Ankara", "İstanbul", "İzmir", "Adana", "Antalya", "Bursa")
+    private val ankaraDistricts = listOf("Çankaya", "Keçiören", "Yenimahalle", "Mamak", "Etimesgut", "Sincan", "Gölbaşı", "Polatlı")
+    private val istanbulDistricts = listOf("Kadıköy", "Beşiktaş", "Şişli", "Fatih", "Üsküdar", "Maltepe", "Ataşehir", "Bakırköy")
+    private val izmirDistricts = listOf("Konak", "Bornova", "Karşıyaka", "Buca", "Çiğli", "Seferihisar")
+    private val adanaDistricts = listOf("Seyhan", "Yüreğir", "Çukurova", "Sarıçam")
+    private val antalyaDistricts = listOf("Muratpaşa", "Kepez", "Konyaaltı", "Alanya")
+    private val bursaDistricts = listOf("Osmangazi", "Nilüfer", "Yıldırım", "İnegöl")
+
+    //Seçili şehir ve ilçeyi hatırlamak için değişkenler
+    private var lastSelectedCity: String? = null
+    private var lastSelectedDistrict: String? = null
+
+    //Adaptörleri sınıf seviyesinde tutalım ki onResume'da tekrar kullanabilelim
+    private lateinit var cityAdapter: ArrayAdapter<String>
+    private lateinit var districtAdapter: ArrayAdapter<String>
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,41 +51,32 @@ class EFragment : Fragment() {
         actvDistrictSelection = view.findViewById(R.id.actv_district_selection)
         btnSearchPharmacies = view.findViewById(R.id.btn_search_pharmacies)
 
-        //Şehir Verilerini Ayarla (Örnek veriler)
-        val cities = listOf("Ankara", "İstanbul", "İzmir", "Adana", "Antalya", "Bursa") // Daha fazla şehir ekleyebilirsin
-        val cityAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, cities)
+        //Şehir adaptörünü başlat ve ata
+        cityAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, cities)
         actvCitySelection.setAdapter(cityAdapter)
 
-        //İlçe seçimi için dinamik liste yükleme mekanizması (Örnek veriler)
-        val ankaraDistricts = listOf("Çankaya", "Keçiören", "Yenimahalle", "Mamak", "Etimesgut", "Sincan", "Gölbaşı", "Polatlı")
-        val istanbulDistricts = listOf("Kadıköy", "Beşiktaş", "Şişli", "Fatih", "Üsküdar", "Maltepe", "Ataşehir", "Bakırköy")
-        val izmirDistricts = listOf("Konak", "Bornova", "Karşıyaka", "Buca", "Çiğli", "Seferihisar")
-        val adanaDistricts = listOf("Seyhan", "Yüreğir", "Çukurova", "Sarıçam")
-        val antalyaDistricts = listOf("Muratpaşa", "Kepez", "Konyaaltı", "Alanya")
-        val bursaDistricts = listOf("Osmangazi", "Nilüfer", "Yıldırım", "İnegöl")
-
-
-        var districtAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, emptyList<String>())
+        //İlçe adaptörünü başlangıçta boş olarak başlat ve ata
+        districtAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, emptyList<String>())
         actvDistrictSelection.setAdapter(districtAdapter)
 
+
         //Şehir seçimi değiştiğinde ilçe listesini güncelle
-        actvCitySelection.setOnItemClickListener { parent, view, position, id ->
+        actvCitySelection.setOnItemClickListener { parent, _, position, _ ->
             val selectedCityItem = parent.getItemAtPosition(position).toString()
-            Log.d("EFragment", "Seçilen Şehir: $selectedCityItem") //Debug için
-            val districtsForSelectedCity = when (selectedCityItem) {
-                "Ankara" -> ankaraDistricts
-                "İstanbul" -> istanbulDistricts
-                "İzmir" -> izmirDistricts
-                "Adana" -> adanaDistricts
-                "Antalya" -> antalyaDistricts
-                "Bursa" -> bursaDistricts
-                else -> emptyList() // Diğer şehirler için boş
-            }
-            districtAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, districtsForSelectedCity)
-            actvDistrictSelection.setAdapter(districtAdapter)
+            Log.d("EFragment", "Seçilen Şehir: $selectedCityItem")
+            lastSelectedCity = selectedCityItem //Seçimi kaydet
+            lastSelectedDistrict = null //Yeni şehirde ilçe sıfırlanmalı
+            updateDistrictAdapter(selectedCityItem) //İlçe adaptörünü güncelle
             actvDistrictSelection.setText("", false) //İlçe seçimini sıfırla
             actvDistrictSelection.clearFocus() //Klavyeyi kapatmak için focusu kaldır
         }
+
+        //İlçe seçimi yapıldığında kaydet
+        actvDistrictSelection.setOnItemClickListener { parent, _, position, _ ->
+            lastSelectedDistrict = parent.getItemAtPosition(position).toString()
+            Log.d("EFragment", "Seçilen İlçe: $lastSelectedDistrict")
+        }
+
 
         //Arama butonuna tıklama dinleyicisi
         btnSearchPharmacies.setOnClickListener {
@@ -76,10 +85,10 @@ class EFragment : Fragment() {
 
             if (selectedCity.isEmpty()) {
                 Toast.makeText(context, "Lütfen bir şehir seçin.", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener // Fonksiyondan çık
+                return@setOnClickListener //Fonksiyondan çık
             }
 
-            Log.d("EFragment", "Arama butonu tıklandı. Şehir: $selectedCity, İlçe: $selectedDistrict") // Debug için
+            Log.d("EFragment", "Arama butonu tıklandı. Şehir: $selectedCity, İlçe: $selectedDistrict")
 
             //PharmacyListFragment'ın newInstance metodunu kullanarak fragment'ı oluştur
             //ve şehir/ilçe bilgilerini aktar
@@ -90,13 +99,44 @@ class EFragment : Fragment() {
             )
 
             //Fragment'ı R.id.fragment_container'a yükle
-            //BFragment'taki manuel geçişle aynı mantık
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, pharmacyListFragment) //MainActivity'deki ana container'ınızın ID'si
                 .addToBackStack(null) //Geri tuşu ile EFragment'a dönebilmek için
                 .commit()
 
-            Log.d("EFragment", "PharmacyListFragment'a geçiş başlatıldı.") //Debug için
+            Log.d("EFragment", "PharmacyListFragment'a geçiş başlatıldı.")
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        //AutoCompleteTextView'nun filtresini temizlemek ve tüm şehirleri göstermek için adaptörü yeniden ata.
+        cityAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, cities)
+        actvCitySelection.setAdapter(cityAdapter)
+        //Alanları temizle
+        actvCitySelection.setText("", false)
+        actvDistrictSelection.setText("", false)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        lastSelectedCity = null
+        lastSelectedDistrict = null
+    }
+
+    //İlçe adaptörünü güncelleyen yardımcı fonksiyon
+    private fun updateDistrictAdapter(city: String) {
+        val districtsForSelectedCity = when (city) {
+            "Ankara" -> ankaraDistricts
+            "İstanbul" -> istanbulDistricts
+            "İzmir" -> izmirDistricts
+            "Adana" -> adanaDistricts
+            "Antalya" -> antalyaDistricts
+            "Bursa" -> bursaDistricts
+            else -> emptyList() //Diğer şehirler için boş
+        }
+        districtAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, districtsForSelectedCity)
+        actvDistrictSelection.setAdapter(districtAdapter)
+    }
+
 }

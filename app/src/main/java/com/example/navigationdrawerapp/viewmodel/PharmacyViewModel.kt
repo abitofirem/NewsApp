@@ -27,6 +27,11 @@ class PharmacyViewModel : ViewModel() {
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
+    fun clearData() {
+        _pharmacies.value = emptyList()
+        _errorMessage.value = null
+    }
+
     //Belirtilen şehir ve isteğe bağlı olarak ilçe için nöbetçi eczaneleri getirir.
     fun fetchDutyPharmacies(city: String?, district: String?) {
         //Eğer zaten yükleniyorsa, tekrar istek gönderme

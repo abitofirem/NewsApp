@@ -205,14 +205,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      */
     fun applyAppTheme(isDarkTheme: Boolean) {
         if (isDarkTheme) {
-            // Koyu Tema modunu ayarla
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
-            // Açık Tema modunu ayarla
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
-        // Temayı uygulamak için Activity'yi yeniden oluştur
-        recreate()
+        // Temayı uygulamak için Activity'yi yeniden oluştur (küçük bir gecikmeyle)
+        window.decorView.post {
+            recreate()
+        }
     }
 
     /**

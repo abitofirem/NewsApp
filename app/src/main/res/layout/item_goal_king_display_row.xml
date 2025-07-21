@@ -6,13 +6,13 @@
     android:layout_height="wrap_content"
     android:paddingVertical="8dp"
     android:paddingHorizontal="16dp"
-    android:background="@android:color/white">
+    android:background="@color/card_bg">
 
     <TextView
         android:id="@+id/tv_player_rank"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
+        android:textColor="@color/primary_text"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -36,7 +36,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textColor="@android:color/black"
+        android:textColor="@color/primary_text"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@id/iv_player_photo"
         app:layout_constraintEnd_toStartOf="@id/tv_player_goals"
@@ -48,7 +48,7 @@
         android:id="@+id/tv_player_goals"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
+        android:textColor="@color/primary_text"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

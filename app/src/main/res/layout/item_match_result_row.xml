@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/card_bg"
     android:paddingVertical="8dp"
     android:paddingHorizontal="16dp">
 
@@ -12,7 +13,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="end"
-        android:textColor="@color/black"
+        android:textColor="@color/primary_text"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/tv_score"
@@ -30,27 +31,29 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:textColor="@color/black"
+        android:textColor="@color/primary_text"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/tv_away_team_name"
         app:layout_constraintStart_toEndOf="@+id/tv_home_team_name"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="2 - 1" /> <TextView
-    android:id="@+id/tv_away_team_name"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:gravity="start"
-    android:textColor="@color/black"
-    android:textSize="16sp"
-    android:textStyle="bold"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toEndOf="@+id/tv_score"
-    app:layout_constraintTop_toTopOf="parent"
-    tools:text="Trabzonspor"
-    app:layout_constraintHorizontal_bias="1"
-    app:layout_constraintWidth_percent="0.4"
-    android:layout_marginStart="8dp"/>
+        tools:text="2 - 1" />
+
+    <TextView
+        android:id="@+id/tv_away_team_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:textColor="@color/primary_text"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_score"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Trabzonspor"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintWidth_percent="0.4"
+        android:layout_marginStart="8dp"/>
 
     <TextView
         android:id="@+id/tv_match_date"
@@ -63,4 +66,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_score"
-        tools:text="30 Mayıs 2025 Cuma 17:00" /> </androidx.constraintlayout.widget.ConstraintLayout>
+        tools:text="30 Mayıs 2025 Cuma 17:00" />
+</androidx.constraintlayout.widget.ConstraintLayout>

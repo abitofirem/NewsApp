@@ -44,5 +44,8 @@
     <color name="back_button_background">@color/card_background_light_transparent</color>
     <color name="back_button_text">@color/text_on_transparent_card_primary</color>
     <color name="toolbar_title_color">@color/text_on_transparent_card_primary</color>
+    <color name="card_bg">#FFFFFF</color>
+    <color name="searchbar_bg">#F5F5F5</color>
+    <color name="primary_text">#000000</color>
 
 </resources>

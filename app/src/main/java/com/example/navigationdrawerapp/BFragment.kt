@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 // import androidx.navigation.fragment.findNavController // BU SATIRI SİLİNDİ!
@@ -40,6 +41,25 @@ class BFragment : Fragment() {
         setupRecyclerView()
         observeViewModel()
         viewModel.fetchLeagues()
+
+        // Arama kutusu ve ikonunu bağla
+        binding.ivSearchIcon.setOnClickListener {
+            val query = binding.etSearch.text.toString()
+            leagueAdapter.filter(query)
+        }
+
+        // Klavyeden arama tuşuna basınca da filtrele
+        binding.etSearch.setOnEditorActionListener { v, actionId, event ->
+            val query = binding.etSearch.text.toString()
+            leagueAdapter.filter(query)
+            false
+        }
+
+        // Yazdıkça anlık filtreleme (isteğe bağlı, kaldırılabilir)
+        binding.etSearch.addTextChangedListener {
+            val query = it?.toString() ?: ""
+            leagueAdapter.filter(query)
+        }
     }
 
     private fun setupRecyclerView() {

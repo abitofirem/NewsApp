@@ -130,6 +130,7 @@
     <string name="about_developer_name">İrem Yalçın</string>
     <string name="about_copyright">© 2025 NewsApp. Tüm Hakları Saklıdır.</string>
 
+    <string name="save_icon_description">Haberi kaydet</string>
 
     <string-array name="turkish_cities">
         <item>Adana</item>

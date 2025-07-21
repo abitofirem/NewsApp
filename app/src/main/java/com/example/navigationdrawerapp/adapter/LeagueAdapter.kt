@@ -10,9 +10,11 @@ import com.example.navigationdrawerapp.model.League //League modelini import ett
 
 // Lig listesini RecyclerView'da göstermek için adaptör
 class LeagueAdapter(
-    private var leagueList: List<League>, //Lig listesi (başlangıçta boş veya null olabilir)
+    private var leagueList: List<League>, // Şu an ekranda gösterilen liste
     private val onItemClick: (League) -> Unit //Lig öğesine tıklandığında çalışacak lambda
 ) : RecyclerView.Adapter<LeagueAdapter.LeagueViewHolder>() {
+
+    private var fullLeagueList: List<League> = leagueList // Tüm liglerin tam kopyası (filtre için)
 
     //Her bir lig öğesinin görünümlerini tutan ViewHolder
     //View Binding'i kullanarak View'lara daha güvenli erişim sağlıyoruz
@@ -59,6 +61,17 @@ class LeagueAdapter(
     //Yeni lig listesi geldiğinde adaptörü güncellemek için metod
     fun updateLeagues(newLeagueList: List<League>) {
         this.leagueList = newLeagueList
-        notifyDataSetChanged() //RecyclerView'ı yeniden çiz (Basit bir çözüm, DiffUtil daha performanslıdır)
+        this.fullLeagueList = newLeagueList // Tam listeyi de güncelle
+        notifyDataSetChanged()
+    }
+
+    // Arama için filtreleme fonksiyonu
+    fun filter(query: String) {
+        leagueList = if (query.isBlank()) {
+            fullLeagueList
+        } else {
+            fullLeagueList.filter { it.leagueName.contains(query, ignoreCase = true) }
+        }
+        notifyDataSetChanged()
     }
 }

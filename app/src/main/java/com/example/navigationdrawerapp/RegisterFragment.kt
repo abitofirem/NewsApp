@@ -1,59 +1,203 @@
 package com.example.navigationdrawerapp
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import com.example.navigationdrawerapp.databinding.FragmentRegisterBinding //View Binding için
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [RegisterFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class RegisterFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private var _binding: FragmentRegisterBinding? = null
+    private val binding get() = _binding!!
+
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var googleSignInClient: GoogleSignInClient
+
+    //Google Sign-In için sabit bir request kodu
+    companion object {
+        private const val RC_SIGN_IN = 9001
+        private const val TAG = "RegisterFragment" //Logcat için TAG
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
+        //Firebase Auth ve Google Sign-In istemcisini başlat
+        firebaseAuth = FirebaseAuth.getInstance()
+
+        //Google Sign-In seçeneklerini yapılandır
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id)) //Google Services Json'dan gelir
+            .requestEmail()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_register, container, false)
+    ): View {
+        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment RegisterFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            RegisterFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        //Kayıt Ol butonu tıklama dinleyicisi
+        binding.registerButton.setOnClickListener {
+            registerUser()
+        }
+
+        //Google ile Kayıt Ol butonu tıklama dinleyicisi
+        binding.googleSigninButtonRegister.setOnClickListener {
+            signInWithGoogle()
+        }
+
+        //Zaten hesabınız var mı? metni tıklama dinleyicisi
+        binding.loginNowText.setOnClickListener {
+            // LoginFragment'a geçiş yap
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, LoginFragment())
+                .addToBackStack(null) //Geri tuşu ile RegisterFragment'a dönebilmek için
+                .commit()
+        }
+    }
+
+    //E-posta ve şifre ile kullanıcı kaydı
+    private fun registerUser() {
+        val name = binding.nameEditText.text.toString().trim()
+        val email = binding.emailRegisterEditText.text.toString().trim()
+        val password = binding.passwordRegisterEditText.text.toString().trim()
+
+        //Giriş doğrulamaları
+        if (name.isEmpty()) {
+            binding.nameInputLayout.error = "Ad Soyad boş bırakılamaz"
+            binding.nameEditText.requestFocus()
+            return
+        }
+        if (email.isEmpty()) {
+            binding.emailRegisterInputLayout.error = "E-posta boş bırakılamaz"
+            binding.emailRegisterEditText.requestFocus()
+            return
+        }
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            binding.emailRegisterInputLayout.error = "Geçerli bir e-posta adresi girin"
+            binding.emailRegisterEditText.requestFocus()
+            return
+        }
+        if (password.isEmpty()) {
+            binding.passwordRegisterInputLayout.error = "Şifre boş bırakılamaz"
+            binding.passwordRegisterEditText.requestFocus()
+            return
+        }
+        if (password.length < 6) {
+            binding.passwordRegisterInputLayout.error = "Şifre en az 6 karakter olmalı"
+            binding.passwordRegisterEditText.requestFocus()
+            return
+        }
+
+        //Firebase ile yeni kullanıcı oluşturma
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    //Kayıt başarılı, kullanıcı bilgisini güncelleyelim (isteğe bağlı)
+                    val user = firebaseAuth.currentUser
+                    user?.updateProfile(
+                        com.google.firebase.auth.UserProfileChangeRequest.Builder()
+                            .setDisplayName(name)
+                            .build()
+                    )?.addOnCompleteListener { profileUpdateTask ->
+                        if (profileUpdateTask.isSuccessful) {
+                            Log.d(TAG, "Kullanıcı adı başarıyla ayarlandı.")
+                        } else {
+                            Log.w(TAG, "Kullanıcı adı ayarlanamadı", profileUpdateTask.exception)
+                        }
+                    }
+
+                    Toast.makeText(requireContext(), "Kayıt başarılı!", Toast.LENGTH_SHORT).show()
+
+                    //Başarılı kayıt sonrası ana ekrana veya HomeFragment'a yönlendirme
+                    //Mevcut tüm fragmentları back stack'ten temizleyip yeni fragment'ı yüklüyoruz
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, HomeFragment()) //HomeFragment'ı yüklüyoruz
+                        .commit() //addToBackStack kullanmıyoruz çünkü geri tuşu ile tekrar kayıt/giriş ekranına dönmek istemeyiz.
+
+                } else {
+                    //Kayıt başarısız
+                    Log.w(TAG, "createUserWithEmail:failure", task.exception)
+                    Toast.makeText(requireContext(), "Kayıt başarısız: ${task.exception?.message}",
+                        Toast.LENGTH_LONG).show()
                 }
             }
+    }
+
+    //Google ile giriş başlatma
+    private fun signInWithGoogle() {
+        val signInIntent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+
+    //Google giriş sonucu
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        //Google Sign In sonucunu işleme
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                //Google Sign In başarılı, Firebase ile kimlik doğrula
+                val account = task.getResult(ApiException::class.java)!!
+                Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
+                firebaseAuthWithGoogle(account.idToken!!)
+            } catch (e: ApiException) {
+                //Google Sign In başarısız oldu
+                Log.w(TAG, "Google sign in failed", e)
+                Toast.makeText(requireContext(), "Google ile giriş başarısız: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    //Firebase ile Google kimlik doğrulama
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        firebaseAuth.signInWithCredential(credential)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    //Firebase Auth başarılı
+                    val user = firebaseAuth.currentUser
+                    Toast.makeText(requireContext(), "Google ile giriş başarılı! Hoş geldiniz, ${user?.displayName}", Toast.LENGTH_SHORT).show()
+
+                    //Başarılı giriş sonrası ana ekrana veya HomeFragment'a yönlendirme
+                    //Mevcut tüm fragmentları back stack'ten temizleyip yeni fragment'ı yüklüyoruz
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, HomeFragment()) // HomeFragment'ı yüklüyoruz
+                        .commit() // addToBackStack kullanmıyoruz çünkü geri tuşu ile tekrar kayıt/giriş ekranına dönmek istemeyiz.
+
+                } else {
+                    //Firebase Auth başarısız
+                    Toast.makeText(requireContext(), "Google ile giriş başarısız: ${task.exception?.message}",
+                        Toast.LENGTH_LONG).show()
+                    Log.w(TAG, "Firebase Auth with Google failed", task.exception)
+                }
+            }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null //Bellek sızıntısını önlemek için binding'i temizle
     }
 }

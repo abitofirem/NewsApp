@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.google.gms.google.services) //Firebase Google Services Plugin'i etkinleştir
 
 }
 
@@ -44,23 +43,7 @@ android {
 
 dependencies {
 
-    // ***** Firebase Bağımlılıkları *****
-    // Firebase BoM (Bill of Materials) - Firebase kütüphanelerinin uyumlu sürümlerini sağlar
-    // BU SATIRI BAĞIMLILIKLARIN EN ÜSTÜNE EKLEYİN!
-    implementation(platform(libs.firebase.bom))
 
-    // Firebase Core (Genellikle Analytics ile birlikte gelir)
-    implementation(libs.firebase.analytics)
-
-    // Firebase Authentication
-    implementation("com.google.firebase:firebase-auth-ktx")
-
-    // Google Sign-In (Eğer Google ile giriş kullanacaksanız)
-    // Firebase BoM ile yönetildiğinden sürüm belirtilmez.
-    implementation(libs.play.services.auth)
-
-    // Firebase Firestore (Veritabanı kullanacaksanız)
-    implementation("com.google.firebase:firebase-firestore-ktx")
 
 
     implementation(libs.androidx.navigation.fragment.ktx)//navdrawer için
@@ -91,7 +74,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.firebase.auth)
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)

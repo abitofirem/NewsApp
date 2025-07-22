@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    // Add the Google services Gradle plugin
+
 }
 
 android {
@@ -109,4 +111,6 @@ dependencies {
 
     //Kotlin standart kütüphanesi (genellikle varsayılan olarak eklenir ama kontrol etmende fayda var)
     implementation(kotlin("stdlib"))
+
+
 }

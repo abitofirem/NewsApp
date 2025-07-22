@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "120920611853",
+    "project_id": "newsapp-7be4d",
+    "storage_bucket": "newsapp-7be4d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:120920611853:android:46404905a16608c438c944",
+        "android_client_info": {
+          "package_name": "com.example.navigationdrawerapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxEhLHb8T-CGuYg5LAaDpN5UiBtKKjHQU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.navigationdrawerapp.Haber
 import com.example.navigationdrawerapp.R
+import com.google.firebase.auth.FirebaseAuth
 
 // RecyclerView için verileri bağlayacak adaptör
 class HaberAdapter(
@@ -46,6 +47,11 @@ class HaberAdapter(
             .placeholder(R.drawable.placeholder_image) // Resim yüklenene kadar göster
             .error(R.drawable.error_image) // Hata olursa göster
             .into(holder.imageView)
+
+        // Kaydet butonunun görünürlüğü
+        val isLoggedIn = FirebaseAuth.getInstance().currentUser != null
+        val saveNewsView = holder.itemView.findViewById<ImageView>(R.id.iv_save_news)
+        saveNewsView.visibility = if (isLoggedIn) View.VISIBLE else View.GONE
 
         //Haber öğesine tıklama olayını ayarla
         holder.itemView.setOnClickListener {

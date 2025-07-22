@@ -15,6 +15,8 @@ import com.example.navigationdrawerapp.ui.fragments.BFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.Locale
+import com.google.firebase.auth.FirebaseAuth
+import android.widget.TextView
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -49,6 +51,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
     //--- Dil Ayarları İçin Eklemeler SONU ---
 
+    fun refreshMenus() {
+        val navigationView: NavigationView = findViewById(R.id.nav_view)
+        navigationView.menu.clear()
+        navigationView.inflateMenu(R.menu.nav_menu)
+        updateNavigationMenu()
+
+        val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_navigation)
+        bottomNavigationView.menu.clear()
+        bottomNavigationView.inflateMenu(R.menu.navbar_menu)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
@@ -71,15 +84,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
 
-        toolbar = findViewById(R.id.toolbar) // Bu satır yeterli
+        toolbar = findViewById(R.id.toolbar) //Bu satır yeterli
         setSupportActionBar(toolbar)
         toolbar.title = "" // Toolbar başlığını boş yap
 
         drawerLayout = findViewById(R.id.drawer_layout)
-        // val toolbar: Toolbar = findViewById(R.id.toolbar) // Bu satırı silin
-        // setSupportActionBar(toolbar) // Bu setSupportActionBar da gereksiz, yukarıdaki yeterli
 
         val navigationView: NavigationView = findViewById(R.id.nav_view)
+        val headerView = navigationView.getHeaderView(0)
+        val tvUserName = headerView.findViewById<TextView>(R.id.tvUserName)
+        val tvUserEmail = headerView.findViewById<TextView>(R.id.tvUserEmail)
+
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            tvUserName.text = user.displayName ?: "Kullanıcı"
+            tvUserEmail.text = user.email ?: ""
+        } else {
+            tvUserName.text = "Misafir"
+            tvUserEmail.text = ""
+        }
+
         navigationView.setNavigationItemSelectedListener(this)
 
         bottomNavigationView = findViewById(R.id.bottom_navigation)
@@ -89,35 +113,35 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, AFragment())
                         .commit()
-                    setToolbarTitle(getString(R.string.bottom_nav_a)) // Finans
+                    setToolbarTitle(getString(R.string.bottom_nav_a)) //Finans
                     true
                 }
                 R.id.navigation_b -> {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, BFragment())
                         .commit()
-                    setToolbarTitle(getString(R.string.bottom_nav_b)) // Futbol
+                    setToolbarTitle(getString(R.string.bottom_nav_b)) //Futbol
                     true
                 }
                 R.id.navigation_c -> {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, CFragment())
                         .commit()
-                    setToolbarTitle(getString(R.string.bottom_nav_c)) // Haberler
+                    setToolbarTitle(getString(R.string.bottom_nav_c)) //Haberler
                     true
                 }
                 R.id.navigation_d -> {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, DFragment())
                         .commit()
-                    setToolbarTitle(getString(R.string.bottom_nav_d)) // Hava
+                    setToolbarTitle(getString(R.string.bottom_nav_d)) //Hava
                     true
                 }
                 R.id.navigation_e -> {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, EFragment())
                         .commit()
-                    setToolbarTitle(getString(R.string.bottom_nav_e)) // Eczane
+                    setToolbarTitle(getString(R.string.bottom_nav_e)) //Eczane
                     true
                 }
                 else -> false
@@ -135,15 +159,38 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         if (savedInstanceState == null) {
-            // Uygulama ilk açıldığında Haber Listesini (FragmentC) göster
+            //Uygulama ilk açıldığında Haber Listesini (FragmentC) göster
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, CFragment()) // BURADA DEĞİŞİKLİK
                 .commit()
-            // Yan menüde ve alt menüde ilgili öğeyi seçili yapın
+            //Yan menüde ve alt menüde ilgili öğeyi seçili yapın
             navigationView.setCheckedItem(R.id.nav_c) //Eğer yan menünüzde nav_c varsa
             bottomNavigationView.selectedItemId = R.id.navigation_c //Eğer alt menünüzde bu id varsa
             setToolbarTitle(getString(R.string.bottom_nav_c)) //BURADA DEĞİŞİKLİK: Haberler başlığı
         }
+
+        val menu = navigationView.menu
+
+        val isLoggedIn = FirebaseAuth.getInstance().currentUser != null
+
+        //Kaydedilenler (nav_c) sadece giriş yaptıysa görünsün
+        menu.findItem(R.id.nav_c)?.isVisible = isLoggedIn
+
+        //Çıkış Yap (nav_e) giriş yaptıysa "Çıkış Yap", yapmadıysa "Giriş Yap" olarak değişsin
+        val logoutItem = menu.findItem(R.id.nav_e)
+        if (isLoggedIn) {
+            logoutItem.title = getString(R.string.nav_logout)
+            logoutItem.setIcon(R.drawable.nav_logout)
+        } else {
+            logoutItem.title = getString(R.string.nav_login)
+            logoutItem.setIcon(R.drawable.ic_login)
+        }
+        refreshMenus() // Menüleri ve başlıkları güncelle
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshMenus() // Dil değişikliğinden sonra menü başlıklarını güncelle
     }
 
     //Bu, fragment'ların MainActivity'deki Toolbar'ın başlığını dinamik olarak değiştirebilmesi için bir yardımcı metottur.
@@ -178,8 +225,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 setToolbarTitle(getString(R.string.nav_about))
             }
             R.id.nav_e -> {
-                Toast.makeText(this, "Logout!", Toast.LENGTH_SHORT).show()
-                setToolbarTitle(getString(R.string.nav_logout))
+                if (FirebaseAuth.getInstance().currentUser != null) {
+                    //Çıkış yap
+                    FirebaseAuth.getInstance().signOut()
+                    updateNavigationMenu()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, CFragment())
+                        .commit()
+                } else {
+                    //Giriş ekranına yönlendir
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, LoginFragment())
+                        .commit()
+                }
+                drawerLayout.closeDrawer(GravityCompat.START)
+                return true
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
@@ -193,10 +253,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // BURASI EKLENDİ/DEĞİŞTİRİLDİ: Fragment yığınını kontrol etme
         else if (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStack()
-            // Not: Geri dönülen fragment'ın başlığını dinamik olarak ayarlamak daha karmaşık olabilir.
-            // Şimdilik varsayılan bir başlık ayarlayabilir veya bu kısmı boş bırakabilirsiniz.
-            // Eğer fragment'lar kendi başlıklarını setToolbarTitle ile ayarlıyorsa,
-            // buraya özel bir şey eklemeniz gerekmeyebilir.
+            //Not: Geri dönülen fragment'ın başlığını dinamik olarak ayarlamak daha karmaşık olabilir.
+
             setToolbarTitle(getString(R.string.app_name)) // Uygulama adını varsayılana ayarlarız
         }
         else {
@@ -214,7 +272,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
-        // Temayı uygulamak için Activity'yi yeniden oluştur (küçük bir gecikmeyle)
+        //Temayı uygulamak için Activity'yi yeniden oluştur (küçük bir gecikmeyle)
         window.decorView.post {
             recreate()
         }
@@ -225,12 +283,44 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      */
     private fun loadAndApplyTheme() {
         val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        val isDarkThemeEnabled = sharedPref.getBoolean("is_dark_theme", false) // Varsayılan: açık tema
+        val isDarkThemeEnabled = sharedPref.getBoolean("is_dark_theme", false) //Varsayılan: açık tema
 
         if (isDarkThemeEnabled) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+    }
+
+    fun updateNavigationMenu() {
+        val navigationView: NavigationView = findViewById(R.id.nav_view)
+        val menu = navigationView.menu
+        val isLoggedIn = FirebaseAuth.getInstance().currentUser != null
+
+        // Kaydedilenler (nav_c) sadece giriş yaptıysa görünsün
+        menu.findItem(R.id.nav_c)?.isVisible = isLoggedIn
+
+        // Çıkış Yap (nav_e) giriş yaptıysa "Çıkış Yap", yapmadıysa "Giriş Yap" olarak değişsin
+        val logoutItem = menu.findItem(R.id.nav_e)
+        if (isLoggedIn) {
+            logoutItem.title = getString(R.string.nav_logout)
+            logoutItem.setIcon(R.drawable.nav_logout)
+        } else {
+            logoutItem.title = getString(R.string.nav_login)
+            logoutItem.setIcon(R.drawable.ic_login)
+        }
+
+        // Header güncelle
+        val headerView = navigationView.getHeaderView(0)
+        val tvUserName = headerView.findViewById<TextView>(R.id.tvUserName)
+        val tvUserEmail = headerView.findViewById<TextView>(R.id.tvUserEmail)
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            tvUserName.text = user.displayName ?: "Kullanıcı"
+            tvUserEmail.text = user.email ?: ""
+        } else {
+            tvUserName.text = "Misafir"
+            tvUserEmail.text = ""
         }
     }
 }

@@ -128,12 +128,10 @@ class RegisterFragment : Fragment() {
                     }
 
                     Toast.makeText(requireContext(), "Kayıt başarılı!", Toast.LENGTH_SHORT).show()
-
-                    //Başarılı kayıt sonrası ana ekrana veya HomeFragment'a yönlendirme
-                    //Mevcut tüm fragmentları back stack'ten temizleyip yeni fragment'ı yüklüyoruz
+                    (requireActivity() as? MainActivity)?.updateNavigationMenu()
                     parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, HomeFragment()) //HomeFragment'ı yüklüyoruz
-                        .commit() //addToBackStack kullanmıyoruz çünkü geri tuşu ile tekrar kayıt/giriş ekranına dönmek istemeyiz.
+                        .replace(R.id.fragment_container, CFragment())
+                        .commit()
 
                 } else {
                     //Kayıt başarısız
@@ -180,12 +178,10 @@ class RegisterFragment : Fragment() {
                     //Firebase Auth başarılı
                     val user = firebaseAuth.currentUser
                     Toast.makeText(requireContext(), "Google ile giriş başarılı! Hoş geldiniz, ${user?.displayName}", Toast.LENGTH_SHORT).show()
-
-                    //Başarılı giriş sonrası ana ekrana veya HomeFragment'a yönlendirme
-                    //Mevcut tüm fragmentları back stack'ten temizleyip yeni fragment'ı yüklüyoruz
+                    (requireActivity() as? MainActivity)?.updateNavigationMenu()
                     parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, HomeFragment()) // HomeFragment'ı yüklüyoruz
-                        .commit() // addToBackStack kullanmıyoruz çünkü geri tuşu ile tekrar kayıt/giriş ekranına dönmek istemeyiz.
+                        .replace(R.id.fragment_container, CFragment())
+                        .commit()
 
                 } else {
                     //Firebase Auth başarısız

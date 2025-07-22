@@ -11,6 +11,7 @@
     <string name="nav_share">Kaydedilenler</string>
     <string name="nav_about">Hakkında</string>
     <string name="nav_logout">Çıkış Yap</string>
+    <string name="nav_login">Giriş Yap</string>
 
     <!-- Bottom Navigation Items -->
     <string name="bottom_nav_a">Finans</string>

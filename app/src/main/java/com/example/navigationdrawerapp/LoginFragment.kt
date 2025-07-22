@@ -137,12 +137,10 @@ class LoginFragment : Fragment() {
                     Log.d(TAG, "signInWithEmail:success") //Logcat'e başarı mesajı yaz
                     val user = firebaseAuth.currentUser //Giriş yapan kullanıcının bilgilerini al
                     Toast.makeText(requireContext(), "Giriş başarılı! Hoş geldiniz, ${user?.email}", Toast.LENGTH_SHORT).show()
-
-                    //Başarılı giriş sonrası HomeFragment'a yönlendirme.
-                    //Back stack'i temizleyerek kullanıcı geri tuşuna bastığında tekrar giriş/kayıt ekranına dönmesini engelleriz.
+                    (requireActivity() as? MainActivity)?.updateNavigationMenu()
                     parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, HomeFragment()) //HomeFragment'ı yükle
-                        .commit() //addToBackStack kullanmıyoruz
+                        .replace(R.id.fragment_container, CFragment())
+                        .commit()
 
 
 
@@ -196,11 +194,9 @@ class LoginFragment : Fragment() {
                     //Firebase Kimlik Doğrulama başarılı
                     val user = firebaseAuth.currentUser
                     Toast.makeText(requireContext(), "Google ile giriş başarılı! Hoş geldiniz, ${user?.displayName ?: user?.email}", Toast.LENGTH_SHORT).show()
-
-                    //Başarılı giriş sonrası HomeFragment'a yönlendirme.
-                    //Back stack'i temizleyerek kullanıcı geri tuşuna bastığında tekrar giriş/kayıt ekranına dönmesini engelleriz.
+                    (requireActivity() as? MainActivity)?.updateNavigationMenu()
                     parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, HomeFragment())
+                        .replace(R.id.fragment_container, CFragment())
                         .commit()
 
                 } else {

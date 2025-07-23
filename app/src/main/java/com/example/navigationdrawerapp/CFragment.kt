@@ -67,7 +67,7 @@ class CFragment : Fragment() {
     private fun setupRecyclerView() {
 
         //Adaptörü boş bir liste ile başlatıyoruz, çünkü veriler ViewModel'den gelecek
-        haberAdapter = HaberAdapter(emptyList()) { haber ->
+        haberAdapter = HaberAdapter(emptyList(), { haber ->
             //Haber öğesine tıklandığında NewsDetailFragment'ı aç
             val detailFragment = NewsDetailFragment().apply {
                 arguments = Bundle().apply {
@@ -85,7 +85,7 @@ class CFragment : Fragment() {
                 .replace(R.id.fragment_container, detailFragment)
                 .addToBackStack(null) // Geri tuşuyla listeye dönmek için
                 .commit()
-        }
+        })
 
         binding.recyclerViewHaberler.apply {
             layoutManager = LinearLayoutManager(context)

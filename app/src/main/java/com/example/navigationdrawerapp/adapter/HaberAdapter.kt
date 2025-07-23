@@ -15,7 +15,8 @@ import android.widget.Toast
 // RecyclerView için verileri bağlayacak adaptör
 class HaberAdapter(
     private var haberList: List<Haber>, //Mutable list olarak tanımladık ki updateNews ile değiştirebilelim
-    private val onItemClick: (Haber) -> Unit //Tıklama için lambda fonksiyonu
+    private val onItemClick: (Haber) -> Unit, //Tıklama için lambda fonksiyonu
+    private val onRemovedFromSaved: (() -> Unit)? = null // EKLENDİ: Silme sonrası callback
 ) : RecyclerView.Adapter<HaberAdapter.HaberViewHolder>() {
 
     //Haber öğesi tıklama için arayüz (opsiyonel, lambda kullanıldığı için çok zorunlu değil ama iyi bir pratik)
@@ -79,6 +80,7 @@ class HaberAdapter(
                     savedRef.delete().addOnSuccessListener {
                         savedSet.remove(uniqueKey)
                         notifyItemChanged(position)
+                        onRemovedFromSaved?.invoke() // EKLENDİ: Silme sonrası callback
                     }
                 } else {
                     val newsData = hashMapOf(

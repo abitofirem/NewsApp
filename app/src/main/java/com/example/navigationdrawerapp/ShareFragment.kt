@@ -32,7 +32,7 @@ class ShareFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        haberAdapter = HaberAdapter(haberList) { /* tıklama işlemi */ }
+        haberAdapter = HaberAdapter(haberList, { /* tıklama işlemi */ }) { loadSavedNews() }
         binding.recyclerViewKaydedilenler.adapter = haberAdapter
         binding.recyclerViewKaydedilenler.layoutManager = LinearLayoutManager(requireContext())
 
@@ -52,6 +52,9 @@ class ShareFragment : Fragment() {
                         doc.toObject(Haber::class.java)
                     }
                     haberAdapter.updateNews(savedNewsList)
+                    // EKLENDİ: Kaydedilenlerin key'lerini adapter'a ilet
+                    val savedKeys = savedNewsList.map { it.haberUrl.hashCode().toString() }.toSet()
+                    haberAdapter.setSavedSet(savedKeys)
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(context, "Kaydedilenler yüklenemedi: ${e.message}", Toast.LENGTH_SHORT).show()

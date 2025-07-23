@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.navigationdrawerapp.adapter.HaberAdapter
 import com.example.navigationdrawerapp.databinding.FragmentCBinding
 import com.example.navigationdrawerapp.viewmodel.NewsViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class CFragment : Fragment() {
@@ -41,6 +43,20 @@ class CFragment : Fragment() {
         setupRecyclerView()
 
         observeViewModel() //ViewModel'i gözlemlemeye başla
+
+        // Firestore'dan kaydedilen haber url'lerini çek
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            val db = FirebaseFirestore.getInstance()
+            db.collection("users").document(user.uid).collection("savedNews")
+                .get()
+                .addOnSuccessListener { result ->
+                    fun urlToKey(url: String): String = url.hashCode().toString()
+                    val savedUrls = result.documents.mapNotNull { it.getString("haberUrl") }
+                    val savedKeys = savedUrls.map { urlToKey(it) }.toSet()
+                    haberAdapter.setSavedSet(savedKeys)
+                }
+        }
     }
 
     override fun onResume() {

@@ -37,6 +37,16 @@ class HaberAdapter(
         return HaberViewHolder(view)
     }
 
+    private fun urlToKey(url: String): String = url.hashCode().toString()
+
+    private val savedSet = mutableSetOf<String>()
+
+    fun setSavedSet(urls: Set<String>) {
+        savedSet.clear()
+        savedSet.addAll(urls)
+        notifyDataSetChanged()
+    }
+
     //ViewHolder'a veri bağlandığında çağrılır
     override fun onBindViewHolder(holder: HaberViewHolder, position: Int) {
         val haber = haberList[position]
@@ -55,44 +65,33 @@ class HaberAdapter(
         val saveNewsView = holder.itemView.findViewById<ImageView>(R.id.iv_save_news)
         saveNewsView.visibility = if (isLoggedIn) View.VISIBLE else View.GONE
 
+        val uniqueKey = urlToKey(haber.haberUrl)
+        val isSaved = savedSet.contains(uniqueKey)
+        saveNewsView.setImageResource(if (isSaved) R.drawable.ic_save_filled else R.drawable.ic_save)
+
         if (isLoggedIn) {
             val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
             val db = FirebaseFirestore.getInstance()
-            val savedRef = db.collection("users").document(userId).collection("savedNews").document(haber.id)
-
-            //Firestore'dan kaydedilmiş mi kontrol et
-            savedRef.get().addOnSuccessListener { document ->
-                val isSaved = document.exists()
-                saveNewsView.setImageResource(if (isSaved) R.drawable.ic_save_filled else R.drawable.ic_save)
-            }
+            val savedRef = db.collection("users").document(userId).collection("savedNews").document(uniqueKey)
 
             saveNewsView.setOnClickListener {
-                savedRef.get().addOnSuccessListener { document ->
-                    val isSaved = document.exists()
-                    if (isSaved) {
-                        // Kaydedilmişse çıkar
-                        savedRef.delete().addOnSuccessListener {
-                            saveNewsView.setImageResource(R.drawable.ic_save)
-                            Toast.makeText(holder.itemView.context, "Kaydedilenlerden çıkarıldı", Toast.LENGTH_SHORT).show()
-                        }.addOnFailureListener {
-                            Toast.makeText(holder.itemView.context, "Silinemedi: ${it.message}", Toast.LENGTH_SHORT).show()
-                        }
-                    } else {
-                        // Kaydet
-                        val newsData = hashMapOf(
-                            "id" to haber.id,
-                            "baslik" to haber.baslik,
-                            "icerik" to haber.icerik,
-                            "gorselUrl" to haber.gorselUrl,
-                            "haberUrl" to haber.haberUrl,
-                            "kaynak" to haber.kaynak
-                        )
-                        savedRef.set(newsData).addOnSuccessListener {
-                            saveNewsView.setImageResource(R.drawable.ic_save_filled)
-                            Toast.makeText(holder.itemView.context, "Kaydedildi!", Toast.LENGTH_SHORT).show()
-                        }.addOnFailureListener {
-                            Toast.makeText(holder.itemView.context, "Kaydedilemedi: ${it.message}", Toast.LENGTH_SHORT).show()
-                        }
+                if (isSaved) {
+                    savedRef.delete().addOnSuccessListener {
+                        savedSet.remove(uniqueKey)
+                        notifyItemChanged(position)
+                    }
+                } else {
+                    val newsData = hashMapOf(
+                        "id" to haber.id,
+                        "baslik" to haber.baslik,
+                        "icerik" to haber.icerik,
+                        "gorselUrl" to haber.gorselUrl,
+                        "haberUrl" to haber.haberUrl,
+                        "kaynak" to haber.kaynak
+                    )
+                    savedRef.set(newsData).addOnSuccessListener {
+                        savedSet.add(uniqueKey)
+                        notifyItemChanged(position)
                     }
                 }
             }

@@ -10,6 +10,7 @@ import com.example.navigationdrawerapp.model.League //League modelini import ett
 import com.google.firebase.auth.FirebaseAuth
 import android.view.View
 import android.util.Log
+import com.google.firebase.firestore.FirebaseFirestore
 
 // Lig listesini RecyclerView'da göstermek için adaptör
 class LeagueAdapter(
@@ -34,8 +35,6 @@ class LeagueAdapter(
 
     override fun onBindViewHolder(holder: LeagueViewHolder, position: Int) {
         val league = leagueList[position] //Mevcut lig objesini al
-        val isFavorite = favoriteSet.contains(league.leagueKey)
-        Log.d("LEAGUE_ADAPTER", "onBindViewHolder: ${league.leagueKey} isFavorite=$isFavorite")
         holder.binding.apply {
             tvLeagueName.text = league.leagueName //Lig adını TextView'a bağla
 
@@ -51,6 +50,7 @@ class LeagueAdapter(
 
             //Favori yıldızını yönet (şimdilik her zaman dış hatlı yıldız)
             // Favori durumu kontrolü
+            val isFavorite = favoriteSet.contains(league.leagueKey)
             if (isFavorite) {
                 ivFavoriteStar.setImageResource(R.drawable.ic_star_filled)
             } else {
@@ -65,14 +65,23 @@ class LeagueAdapter(
             ivFavoriteStar.visibility = if (isLoggedIn) View.VISIBLE else View.GONE
 
             ivFavoriteStar.setOnClickListener {
+                val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return@setOnClickListener
+                val db = FirebaseFirestore.getInstance()
+                val favRef = db.collection("users").document(userId).collection("favoriteLeagues").document(league.leagueKey)
+
                 if (isFavorite) {
-                    favoriteSet.remove(league.leagueKey)
-                    Log.d("LEAGUE_ADAPTER", "Removed: ${league.leagueKey}")
+                    favRef.delete().addOnSuccessListener {
+                        favoriteSet.remove(league.leagueKey)
+                        leagueList = leagueList.sortedByDescending { favoriteSet.contains(it.leagueKey) }
+                        notifyDataSetChanged()
+                    }
                 } else {
-                    favoriteSet.add(league.leagueKey)
-                    Log.d("LEAGUE_ADAPTER", "Added: ${league.leagueKey}")
+                    favRef.set(mapOf("leagueKey" to league.leagueKey)).addOnSuccessListener {
+                        favoriteSet.add(league.leagueKey)
+                        leagueList = leagueList.sortedByDescending { favoriteSet.contains(it.leagueKey) }
+                        notifyDataSetChanged()
+                    }
                 }
-                notifyItemChanged(position)
             }
 
             //Tüm CardView öğesine tıklama dinleyicisi ekle (item_league.xml'deki root view)
@@ -88,8 +97,12 @@ class LeagueAdapter(
 
     //Yeni lig listesi geldiğinde adaptörü güncellemek için metod
     fun updateLeagues(newLeagueList: List<League>) {
-        this.leagueList = newLeagueList
-        this.fullLeagueList = newLeagueList // Tam listeyi de güncelle
+        this.leagueList = if (favoriteSet.isNotEmpty()) {
+            newLeagueList.sortedByDescending { favoriteSet.contains(it.leagueKey) }
+        } else {
+            newLeagueList
+        }
+        this.fullLeagueList = this.leagueList
         notifyDataSetChanged()
     }
 
@@ -100,6 +113,13 @@ class LeagueAdapter(
         } else {
             fullLeagueList.filter { it.leagueName.contains(query, ignoreCase = true) }
         }
+        notifyDataSetChanged()
+    }
+
+    fun setFavoriteSet(favSet: Set<String>) {
+        favoriteSet.clear()
+        favoriteSet.addAll(favSet)
+        leagueList = leagueList.sortedByDescending { favoriteSet.contains(it.leagueKey) }
         notifyDataSetChanged()
     }
 }

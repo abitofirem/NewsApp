@@ -15,6 +15,8 @@ import com.example.navigationdrawerapp.adapter.LeagueAdapter
 import com.example.navigationdrawerapp.databinding.FragmentBBinding // BFragment'ın layout'u için View Binding
 import com.example.navigationdrawerapp.ui.LeagueDetailFragment // LeagueDetailFragment'ı import et!
 import com.example.navigationdrawerapp.ui.viewmodel.LeagueViewModel // LeagueViewModel'ı import ettik
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class BFragment : Fragment() {
@@ -41,6 +43,18 @@ class BFragment : Fragment() {
         setupRecyclerView()
         observeViewModel()
         viewModel.fetchLeagues()
+
+        // Firestore'dan favori ligleri çek
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            val db = FirebaseFirestore.getInstance()
+            db.collection("users").document(user.uid).collection("favoriteLeagues")
+                .get()
+                .addOnSuccessListener { result ->
+                    val favSet = result.documents.mapNotNull { it.id }.toSet()
+                    leagueAdapter.setFavoriteSet(favSet)
+                }
+        }
 
         // Arama kutusu ve ikonunu bağla
         binding.ivSearchIcon.setOnClickListener {

@@ -9,6 +9,8 @@ import com.bumptech.glide.Glide
 import com.example.navigationdrawerapp.Haber
 import com.example.navigationdrawerapp.R
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import android.widget.Toast
 
 // RecyclerView için verileri bağlayacak adaptör
 class HaberAdapter(
@@ -16,12 +18,12 @@ class HaberAdapter(
     private val onItemClick: (Haber) -> Unit //Tıklama için lambda fonksiyonu
 ) : RecyclerView.Adapter<HaberAdapter.HaberViewHolder>() {
 
-    // Haber öğesi tıklama için arayüz (opsiyonel, lambda kullanıldığı için çok zorunlu değil ama iyi bir pratik)
+    //Haber öğesi tıklama için arayüz (opsiyonel, lambda kullanıldığı için çok zorunlu değil ama iyi bir pratik)
     interface OnItemClickListener {
         fun onItemClick(haber: Haber)
     }
 
-    // Her bir haber öğesinin görünümlerini tutar
+    //Her bir haber öğesinin görünümlerini tutar
     class HaberViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView: ImageView = itemView.findViewById(R.id.haberImageView)
         val baslikTextView: TextView = itemView.findViewById(R.id.haberBaslikTextView)
@@ -41,21 +43,66 @@ class HaberAdapter(
         holder.baslikTextView.text = haber.baslik
         holder.icerikTextView.text = haber.icerik
 
-        // Glide ile görsel yükleme
+        //Glide ile görsel yükleme
         Glide.with(holder.itemView.context)
             .load(haber.gorselUrl)
             .placeholder(R.drawable.placeholder_image) // Resim yüklenene kadar göster
             .error(R.drawable.error_image) // Hata olursa göster
             .into(holder.imageView)
 
-        // Kaydet butonunun görünürlüğü
+        //Kaydet butonunun görünürlüğü
         val isLoggedIn = FirebaseAuth.getInstance().currentUser != null
         val saveNewsView = holder.itemView.findViewById<ImageView>(R.id.iv_save_news)
         saveNewsView.visibility = if (isLoggedIn) View.VISIBLE else View.GONE
 
+        if (isLoggedIn) {
+            val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+            val db = FirebaseFirestore.getInstance()
+            val savedRef = db.collection("users").document(userId).collection("savedNews").document(haber.id)
+
+            //Firestore'dan kaydedilmiş mi kontrol et
+            savedRef.get().addOnSuccessListener { document ->
+                val isSaved = document.exists()
+                saveNewsView.setImageResource(if (isSaved) R.drawable.ic_save_filled else R.drawable.ic_save)
+            }
+
+            saveNewsView.setOnClickListener {
+                savedRef.get().addOnSuccessListener { document ->
+                    val isSaved = document.exists()
+                    if (isSaved) {
+                        // Kaydedilmişse çıkar
+                        savedRef.delete().addOnSuccessListener {
+                            saveNewsView.setImageResource(R.drawable.ic_save)
+                            Toast.makeText(holder.itemView.context, "Kaydedilenlerden çıkarıldı", Toast.LENGTH_SHORT).show()
+                        }.addOnFailureListener {
+                            Toast.makeText(holder.itemView.context, "Silinemedi: ${it.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        // Kaydet
+                        val newsData = hashMapOf(
+                            "id" to haber.id,
+                            "baslik" to haber.baslik,
+                            "icerik" to haber.icerik,
+                            "gorselUrl" to haber.gorselUrl,
+                            "haberUrl" to haber.haberUrl,
+                            "kaynak" to haber.kaynak
+                        )
+                        savedRef.set(newsData).addOnSuccessListener {
+                            saveNewsView.setImageResource(R.drawable.ic_save_filled)
+                            Toast.makeText(holder.itemView.context, "Kaydedildi!", Toast.LENGTH_SHORT).show()
+                        }.addOnFailureListener {
+                            Toast.makeText(holder.itemView.context, "Kaydedilemedi: ${it.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+        } else {
+            saveNewsView.setOnClickListener(null)
+        }
+
         //Haber öğesine tıklama olayını ayarla
         holder.itemView.setOnClickListener {
-            onItemClick(haber) // Dışarıdan gelen lambda fonksiyonunu çağır
+            onItemClick(haber) //Dışarıdan gelen lambda fonksiyonunu çağır
         }
     }
 

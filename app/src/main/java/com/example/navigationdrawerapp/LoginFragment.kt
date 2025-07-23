@@ -16,6 +16,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions //GoogleSignIn
 import com.google.android.gms.common.api.ApiException //GoogleSignIn hatalarını yakalamak için
 import com.google.firebase.auth.FirebaseAuth //Firebase kimlik doğrulama API'si
 import com.google.firebase.auth.GoogleAuthProvider //Google kimlik bilgilerini Firebase için dönüştürmek için
+import android.app.AlertDialog
+import android.widget.EditText
+import android.widget.Button
+import android.widget.TextView
 
 class LoginFragment : Fragment() {
 
@@ -89,12 +93,7 @@ class LoginFragment : Fragment() {
         //"Şifrenizi mi unuttunuz?" metnine tıklama dinleyicisi (isteğe bağlı).
         //Şu an sadece bir Toast mesajı gösteriyor, ancak buraya şifre sıfırlama Fragment'ı eklenebilir.
         binding.forgotPasswordText.setOnClickListener {
-            Toast.makeText(requireContext(), "Şifre sıfırlama ekranı açılacak (Henüz implemente edilmedi)", Toast.LENGTH_SHORT).show()
-            // Örnek:
-            // parentFragmentManager.beginTransaction()
-            //     .replace(R.id.fragment_container, ForgotPasswordFragment())
-            //     .addToBackStack(null)
-            //     .commit()
+            showForgotPasswordDialog()
         }
     }
 
@@ -206,6 +205,38 @@ class LoginFragment : Fragment() {
                     Log.w(TAG, "Firebase Auth with Google failed", task.exception)
                 }
             }
+    }
+
+    // Şifremi unuttum dialog ve sıfırlama fonksiyonu
+    private fun showForgotPasswordDialog() {
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_forgot_password, null)
+        val emailEditText = dialogView.findViewById<EditText>(R.id.etForgotPasswordEmail)
+        val btnSend = dialogView.findViewById<Button>(R.id.btnForgotPasswordSend)
+        val btnCancel = dialogView.findViewById<Button>(R.id.btnForgotPasswordCancel)
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+
+        btnSend.setOnClickListener {
+            val email = emailEditText.text.toString().trim()
+            if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                Toast.makeText(requireContext(), "Geçerli bir e-posta adresi girin", Toast.LENGTH_SHORT).show()
+            } else {
+                FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Toast.makeText(requireContext(), "Şifre sıfırlama bağlantısı e-posta adresinize gönderildi.", Toast.LENGTH_LONG).show()
+                        } else {
+                            Toast.makeText(requireContext(), "Hata: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                        }
+                        dialog.dismiss()
+                    }
+            }
+        }
+        btnCancel.setOnClickListener { dialog.dismiss() }
+        dialog.show()
     }
 
     //Fragment'ın görünümü yok edildiğinde çağrılan metod.

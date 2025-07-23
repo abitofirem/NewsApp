@@ -217,4 +217,38 @@
         <item>Zonguldak</item>
     </string-array>
 
+    <!-- Login -->
+    <string name="login_welcome">Tekrar Hoş Geldiniz!</string>
+    <string name="login_subtitle">Giriş yapmak için bilgilerinizi girin</string>
+    <string name="login_email_hint">E-posta</string>
+    <string name="login_password_hint">Şifre</string>
+    <string name="login_forgot_password">Şifrenizi mi unuttunuz?</string>
+    <string name="login_button">Giriş Yap</string>
+    <string name="login_or">VEYA</string>
+    <string name="login_google">Google ile Giriş Yap</string>
+    <string name="login_no_account">Hesabınız yok mu?</string>
+    <string name="login_register_now">Şimdi Kayıt Ol!</string>
+
+    <!-- Register -->
+    <string name="register_title">Yeni Hesap Oluşturun</string>
+    <string name="register_subtitle">Kişiselleştirilmiş deneyim için katılın</string>
+    <string name="register_name_hint">Ad Soyad</string>
+    <string name="register_email_hint">E-posta</string>
+    <string name="register_password_hint">Şifre</string>
+    <string name="register_button">Kayıt Ol</string>
+    <string name="register_or">VEYA</string>
+    <string name="register_google">Google ile Kayıt Ol</string>
+    <string name="register_have_account">Zaten hesabınız var mı?</string>
+    <string name="register_login_now">Şimdi Giriş Yap!</string>
+
+    <!-- Forgot Password Dialog -->
+    <string name="forgot_password_title">Şifre Sıfırlama</string>
+    <string name="forgot_password_message">Şifre sıfırlama bağlantısı göndermek için e-posta adresinizi girin:</string>
+    <string name="forgot_password_email_hint">E-posta adresiniz</string>
+    <string name="forgot_password_send">Gönder</string>
+    <string name="forgot_password_cancel">İptal</string>
+    <string name="forgot_password_success">Şifre sıfırlama bağlantısı e-posta adresinize gönderildi.</string>
+    <string name="forgot_password_error">Hata: %1$s</string>
+    <string name="forgot_password_invalid_email">Geçerli bir e-posta adresi girin</string>
+
 </resources>

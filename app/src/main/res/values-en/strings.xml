@@ -134,4 +134,39 @@
 
     <string name="save_icon_description">Save news</string>
 
+
+
+    <string name="login_welcome">Welcome Back!</string>
+    <string name="login_subtitle">Enter your information to log in</string>
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_forgot_password">Forgot your password?</string>
+    <string name="login_button">Login</string>
+    <string name="login_or">OR</string>
+    <string name="login_google">Sign in with Google</string>
+    <string name="login_no_account">Don\'t have an account?</string>
+    <string name="login_register_now">Register Now!</string>
+
+    <string name="register_title">Create a New Account</string>
+    <string name="register_subtitle">Join for a personalized experience</string>
+    <string name="register_name_hint">Full Name</string>
+    <string name="register_email_hint">Email</string>
+    <string name="register_password_hint">Password</string>
+    <string name="register_button">Register</string>
+    <string name="register_or">OR</string>
+    <string name="register_google">Sign up with Google</string>
+    <string name="register_have_account">Already have an account?</string>
+    <string name="register_login_now">Login Now!</string>
+
+    <!-- Forgot Password Dialog -->
+    <string name="forgot_password_title">Password Reset</string>
+    <string name="forgot_password_message">Enter your email address to receive a password reset link:</string>
+    <string name="forgot_password_email_hint">Your email address</string>
+    <string name="forgot_password_send">Send</string>
+    <string name="forgot_password_cancel">Cancel</string>
+    <string name="forgot_password_success">A password reset link has been sent to your email address.</string>
+    <string name="forgot_password_error">Error: %1$s</string>
+    <string name="forgot_password_invalid_email">Please enter a valid email address</string>
+
+
 </resources>

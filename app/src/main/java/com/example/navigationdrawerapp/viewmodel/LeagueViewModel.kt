@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.navigationdrawerapp.model.League
 import com.example.navigationdrawerapp.api.FootballApiService // import et!
+import com.example.navigationdrawerapp.api.RetrofitClient
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -14,31 +15,10 @@ import java.util.concurrent.TimeUnit
 
 class LeagueViewModel : ViewModel() {
 
-    // API Key ve Base URL'i buraya da kopyala
-    private val API_KEY = "2gmUrMjHzi3aQLY6FYXbhE:078zdz0PXeIEbP5VbRNstp"
-    private val BASE_URL = "https://api.collectapi.com/"
+    private val footballApiService: FootballApiService = RetrofitClient.footballApiService // <-- Burayı değiştirdik
 
-    private val okHttpClient = OkHttpClient.Builder()
-        .readTimeout(30, TimeUnit.SECONDS)
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .addInterceptor { chain ->
-            val original = chain.request()
-            val requestBuilder = original.newBuilder()
-                .header("Content-Type", "application/json")
-                .header("Authorization", "apikey $API_KEY")
-            val request = requestBuilder.build()
-            chain.proceed(request)
-        }
-        .build()
 
-    private val footballApiService: FootballApiService by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(FootballApiService::class.java)
-    }
+
 
     private val _leagues = MutableLiveData<List<League>?>()
     val leagues: LiveData<List<League>?> = _leagues

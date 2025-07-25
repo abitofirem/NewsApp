@@ -7,64 +7,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.navigationdrawerapp.model.TeamStanding
 import com.example.navigationdrawerapp.api.FootballApiService
+import com.example.navigationdrawerapp.api.RetrofitClient
 import com.example.navigationdrawerapp.model.GoalKing
 import com.example.navigationdrawerapp.model.GoalKingResponse // Eklendi
 import com.example.navigationdrawerapp.model.MatchResult
-import com.example.navigationdrawerapp.model.MatchResultResponse
 import kotlinx.coroutines.launch
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import okhttp3.OkHttpClient
-import java.util.concurrent.TimeUnit
+
 import java.io.IOException
 import retrofit2.HttpException
 
 class LeagueDetailViewModel : ViewModel() {
 
-    private val API_KEY = "2gmUrMjHzi3aQLY6FYXbhE:078zdz0PXeIEbP5VbRNstp"
-    private val BASE_URL = "https://api.collectapi.com/"
 
-    private val okHttpClient = OkHttpClient.Builder()
-        .readTimeout(30, TimeUnit.SECONDS)
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .addInterceptor { chain ->
-            val original = chain.request()
-            val requestBuilder = original.newBuilder()
-                .header("Content-Type", "application/json")
-                .header("Authorization", "apikey $API_KEY")
-            val request = requestBuilder.build()
-            chain.proceed(request)
-        }
-        .addInterceptor { chain ->
-            val request = chain.request() //Loglayarak match_resulttaki keylere erişme
-            val response = chain.proceed(request)
-            
-            // API yanıtını logla
-            if (request.url.toString().contains("football/results")) {
-                val responseBody = response.body
-                val responseBodyString = responseBody?.string()
-                Log.d("API_RAW_RESPONSE", "URL: ${request.url}")
-                Log.d("API_RAW_RESPONSE", "Response: $responseBodyString")
-                
-                // Response body'yi tekrar oluştur çünkü string() metodu body'yi tüketir
-                val newResponseBody = responseBodyString?.let { 
-                    okhttp3.ResponseBody.create(responseBody.contentType(), it) 
-                }
-                response.newBuilder().body(newResponseBody).build()
-            } else {
-                response
-            }
-        }
-        .build()
+    private val footballApiService: FootballApiService = RetrofitClient.footballApiService // <-- Burayı değiştirdik
 
-    private val footballApiService: FootballApiService by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(FootballApiService::class.java)
-    }
 
     // Puan Durumu LiveData'ları
     private val _standings = MutableLiveData<List<TeamStanding>?>()

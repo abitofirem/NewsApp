@@ -1,8 +1,9 @@
+import java.util.Properties // Bu satır doğru bir şekilde eklenmiş olmalı!
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.gms.google-services")
-
 }
 
 android {
@@ -11,8 +12,9 @@ android {
 
     buildFeatures {
         viewBinding = true
-    }
+        buildConfig = true // <-- BU SATIRI EKLEDİK
 
+    }
 
     defaultConfig {
         applicationId = "com.example.navigationdrawerapp"
@@ -33,6 +35,49 @@ android {
             )
         }
     }
+
+    flavorDimensions += "api"
+
+    productFlavors {
+        create("dev") {
+            dimension = "api"
+            // local.properties'ten API anahtarlarını okur
+            // Import edildiği için 'java.util.' öneki olmadan 'Properties' kullanıyoruz.
+            val properties = Properties() // <-- Burası düzeltildi!
+            val propertiesFile = rootProject.file("local.properties")
+            if (propertiesFile.exists()) {
+                propertiesFile.inputStream().use { input ->
+                    properties.load(input)
+                }
+            } else {
+                println("UYARI: local.properties dosyası bulunamadı. API anahtarları eksik olabilir.")
+            }
+
+            buildConfigField("String", "NEWS_API_KEY", properties.getProperty("NEWS_API_KEY", "\"\""))
+            buildConfigField("String", "PHARMACY_API_KEY", properties.getProperty("PHARMACY_API_KEY", "\"\""))
+            buildConfigField("String", "FINANCE_API_KEY", properties.getProperty("FINANCE_API_KEY", "\"\""))
+            buildConfigField("String", "FOOTBALL_API_KEY", properties.getProperty("FOOTBALL_API_KEY", "\"\""))
+            buildConfigField("String", "WEATHER_API_KEY", properties.getProperty("WEATHER_API_KEY", "\"\""))
+        }
+        create("prod") {
+            dimension = "api"
+            val properties = Properties() // <-- Burası da düzeltildi!
+            val propertiesFile = rootProject.file("local.properties")
+            if (propertiesFile.exists()) {
+                propertiesFile.inputStream().use { input ->
+                    properties.load(input)
+                }
+            } else {
+                println("UYARI: local.properties dosyası bulunamadı. API anahtarları eksik olabilir.")
+            }
+            buildConfigField("String", "NEWS_API_KEY", properties.getProperty("NEWS_API_KEY", "\"\""))
+            buildConfigField("String", "PHARMACY_API_KEY", properties.getProperty("PHARMACY_API_KEY", "\"\""))
+            buildConfigField("String", "FINANCE_API_KEY", properties.getProperty("FINANCE_API_KEY", "\"\""))
+            buildConfigField("String", "FOOTBALL_API_KEY", properties.getProperty("FOOTBALL_API_KEY", "\"\""))
+            buildConfigField("String", "WEATHER_API_KEY", properties.getProperty("WEATHER_API_KEY", "\"\""))
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -43,35 +88,23 @@ android {
 }
 
 dependencies {
-
     implementation(platform("com.google.firebase:firebase-bom:33.16.0"))
     implementation("com.google.firebase:firebase-analytics")
 
-    implementation("com.google.android.gms:play-services-auth:21.2.0") // <-- En son sürümü kullanın
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
 
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.circleimageview)
 
-    implementation(libs.androidx.navigation.fragment.ktx)//navdrawer için
-    implementation(libs.androidx.navigation.ui.ktx) //navdrawer için
-    implementation(libs.circleimageview) //circle image kullanımı için
+    implementation(libs.material)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.navigation.fragment.ktx.v277)
+    implementation(libs.androidx.navigation.ui.ktx.v277)
 
-    //Bu 2 fragmenti bottomnavbar özelleştirmesi için kullandım
-    implementation(libs.material) // En son sürümü kullanın
-    //Kotlin için fragmentları kullanıyorsanız,
-    implementation(libs.androidx.fragment.ktx) // En son sürümü kullanın implementation(libs.androidx.fragment.ktx.v180) // En son sürümü kullanın
-    // Navigasyon bileşenleri için (eğer kullanıyorsanız)
-    implementation(libs.androidx.navigation.fragment.ktx.v277) // En son sürümü kullanın
-    implementation(libs.androidx.navigation.ui.ktx.v277) // En son sürümü kullanın
-
-
-    // RecyclerView
     implementation(libs.androidx.recyclerview)
-
-    // CardView
     implementation(libs.androidx.cardview)
-
-    // Fragment KTX
     implementation(libs.androidx.fragment.ktx.v162)
-
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -87,44 +120,26 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    //Retrofit (API istekleri için)
     implementation(libs.retrofit)
-
-    //Gson Converter (JSON'ı Kotlin nesnelerine dönüştürmek için)
     implementation(libs.converter.gson)
-
-    //OkHttp Logging Interceptor (ağ trafiğini Logcat'te görmek için)
     implementation(libs.logging.interceptor)
 
-    //Kotlin Coroutines (Asenkron işlemler için)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
 
-    //Android Architecture Components - ViewModel ve LiveData
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.fragment.ktx) // by viewModels() için
+    implementation(libs.androidx.fragment.ktx)
 
-    //Glide (Görsel yükleme)
     implementation(libs.glide)
     annotationProcessor(libs.compiler)
 
-    //Navigation Component
     implementation(libs.androidx.navigation.fragment.ktx.v291)
     implementation(libs.androidx.navigation.ui.ktx.v291)
 
-    //Lifecycle ViewModel KTX (gerekliyse)
     implementation(libs.androidx.lifecycle.viewmodel.ktx.v270)
     implementation(libs.androidx.lifecycle.livedata.ktx.v270)
 
-    //Gson kütüphanesi (LeagueViewModel'da caching için)
     implementation(libs.gson)
-
-    //Kotlin standart kütüphanesi (genellikle varsayılan olarak eklenir ama kontrol etmende fayda var)
     implementation(kotlin("stdlib"))
-
-
-
-
-
 }

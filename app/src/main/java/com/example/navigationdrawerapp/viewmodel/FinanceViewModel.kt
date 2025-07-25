@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.navigationdrawerapp.BuildConfig // Eklendi: BuildConfig'den API anahtarını almak için
 import com.example.navigationdrawerapp.api.FinanceApiService
 import com.example.navigationdrawerapp.api.RetrofitClient
 import com.example.navigationdrawerapp.model.BistResponse
@@ -14,47 +15,14 @@ import com.example.navigationdrawerapp.model.ExchangeResponse
 import com.example.navigationdrawerapp.model.GoldResponse
 import com.example.navigationdrawerapp.model.SilverResponse
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
+
 
 class FinanceViewModel : ViewModel() {
 
 
-    //API key için
-    private val API_KEY = "apikey 1He3fTb1Yz28ySCsfPnGhT:1p4LcRShJjq1eDw90XE0M1"
-    private val BASE_URL = "https://api.collectapi.com/"
 
-    //API çağrılarını yönetecek Retrofit servisi
-    private val apiService: FinanceApiService by lazy {
-        val loggingInterceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY //Ağ isteklerinin loglarını görmek için
-        }
+    private val apiService: FinanceApiService = RetrofitClient.financeApiService // <-- Burayı değiştirdik
 
-        val client = OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-            .addInterceptor { chain ->
-                val original = chain.request()
-                val requestBuilder = original.newBuilder()
-                    .header("content-type", "application/json")
-                    .header("authorization", API_KEY)
-                val request = requestBuilder.build()
-                chain.proceed(request)
-            }
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .build()
-
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(FinanceApiService::class.java)
-    }
 
     //LiveData'lar
     private val _bistData = MutableLiveData<BistResponse?>()
@@ -65,7 +33,6 @@ class FinanceViewModel : ViewModel() {
 
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
-
 
     //DÖVİZ KURLARI İÇİN YENİ LİVEDATA DEĞİŞKENLERİ
     private val _currencyData = MutableLiveData<CurrencyResponse?>()
@@ -90,12 +57,10 @@ class FinanceViewModel : ViewModel() {
     private val _exchangeData = MutableLiveData<ExchangeResponse?>()
     val exchangeData: LiveData<ExchangeResponse?> get() = _exchangeData
 
-
-    //BIST 100 verilerini çeken fonksiyon
+    // BIST 100 verilerini çeken fonksiyon (Değişiklik yok)
     fun fetchBistData() {
         _isLoading.value = true
         _errorMessage.value = null
-
         viewModelScope.launch {
             try {
                 val response = apiService.getBistData()
@@ -115,11 +80,10 @@ class FinanceViewModel : ViewModel() {
         }
     }
 
-    //DÖVİZ KURLARI İÇİN YENİ FONKSİYON
+    // DÖVİZ KURLARI İÇİN YENİ FONKSİYON (Değişiklik yok)
     fun fetchAllCurrencyData() {
         _isLoading.value = true
         _errorMessage.value = null
-
         viewModelScope.launch {
             try {
                 val response = apiService.getAllCurrencyData()
@@ -139,7 +103,7 @@ class FinanceViewModel : ViewModel() {
         }
     }
 
-    //Altın ve Gümüş verilerini çeken fonksiyonlar
+    // Altın ve Gümüş verilerini çeken fonksiyonlar (Değişiklik yok)
     fun fetchGoldPrice() {
         viewModelScope.launch {
             _isLoading.value = true
@@ -174,11 +138,9 @@ class FinanceViewModel : ViewModel() {
                 _isLoading.value = false
             }
         }
-
     }
 
-
-    //Kripto Para verilerini çeken fonksiyon
+    // Kripto Para verilerini çeken fonksiyon (Değişiklik yok)
     fun fetchCriptoPrice() {
         viewModelScope.launch {
             _isLoading.value = true
@@ -197,7 +159,7 @@ class FinanceViewModel : ViewModel() {
         }
     }
 
-    //Emtia verilerini çeken fonksiyon
+    // Emtia verilerini çeken fonksiyon (Değişiklik yok)
     fun fetchEmtiaData() {
         viewModelScope.launch {
             _isLoading.value = true
@@ -217,29 +179,17 @@ class FinanceViewModel : ViewModel() {
         }
     }
 
-
-    /**
-     * Para birimi dönüştürme işlemini gerçekleştirir.
-     *
-     * @param baseCurrency Dönüştürülecek ana para birimi kodu (örn: "USD").
-     * @param toCurrency Dönüştürülecek hedef para birimi kodu (örn: "TRY").
-     * @param amount Dönüştürülecek miktar.
-     */
-
-
+    // Para birimi dönüştürme işlemi (Değişiklik yok)
     fun convertCurrency(baseCurrency: String, toCurrency: String, amount: String) {
-        // Miktar boş veya sıfırsa işlemi yapma
         if (amount.isNullOrEmpty() || amount.toDoubleOrNull() == 0.0) {
             _exchangeData.value = null
             return
         }
-
         viewModelScope.launch {
             _isLoading.value = true
             _errorMessage.value = null
             try {
-                val response =
-                    apiService.convertCurrency(baseCurrency, toCurrency, amount)
+                val response = apiService.convertCurrency(baseCurrency, toCurrency, amount)
                 if (response.isSuccessful) {
                     _exchangeData.value = response.body()
                 } else {

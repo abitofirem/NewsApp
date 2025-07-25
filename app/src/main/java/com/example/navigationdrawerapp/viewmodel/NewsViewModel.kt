@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope // Coroutine Scope için
 import com.example.navigationdrawerapp.Haber
 import com.example.navigationdrawerapp.api.RetrofitClient // Retrofit istemcimizi import edin

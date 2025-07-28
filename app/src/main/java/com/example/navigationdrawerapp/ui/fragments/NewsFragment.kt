@@ -12,14 +12,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.navigationdrawerapp.MainActivity
 import com.example.navigationdrawerapp.R
 import com.example.navigationdrawerapp.adapter.NewsAdapter
-import com.example.navigationdrawerapp.databinding.FragmentCBinding
+import com.example.navigationdrawerapp.databinding.FragmentNewsBinding
 import com.example.navigationdrawerapp.viewmodel.NewsViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 
-class CFragment : Fragment() {
-    private var _binding: FragmentCBinding? = null
+class NewsFragment : Fragment() {
+    private var _binding: FragmentNewsBinding? = null
     private val binding get() = _binding!!
 
     //NewsViewModel'i oluşturun (Fragment KTX'in viewModels delegesi ile)
@@ -31,7 +31,7 @@ class CFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCBinding.inflate(inflater, container, false)
+        _binding = FragmentNewsBinding.inflate(inflater, container, false)
         return binding.root
     }
 

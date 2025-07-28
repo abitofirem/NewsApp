@@ -26,7 +26,7 @@ import java.util.Locale
 import com.example.navigationdrawerapp.adapter.CurrencySelectionAdapter //Yeni import
 
 
-class AFragment : Fragment() {
+class FinanceFragment : Fragment() {
 
 
     private lateinit var financeViewModel: FinanceViewModel
@@ -83,7 +83,7 @@ class AFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_a, container, false)
+        val view = inflater.inflate(R.layout.fragment_finance, container, false)
         initViews(view)
         setupObservers()
 

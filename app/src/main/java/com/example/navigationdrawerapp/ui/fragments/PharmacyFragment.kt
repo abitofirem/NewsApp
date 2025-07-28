@@ -12,7 +12,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.navigationdrawerapp.R
 
-class EFragment : Fragment() {
+class PharmacyFragment : Fragment() {
 
     private lateinit var actvCitySelection: AutoCompleteTextView
     private lateinit var actvDistrictSelection: AutoCompleteTextView
@@ -41,7 +41,7 @@ class EFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         //fragment_e.xml layout'unu şişir
-        return inflater.inflate(R.layout.fragment_e, container, false)
+        return inflater.inflate(R.layout.fragment_pharmacy, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

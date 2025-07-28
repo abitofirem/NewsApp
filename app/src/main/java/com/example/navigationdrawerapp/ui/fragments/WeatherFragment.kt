@@ -27,7 +27,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class DFragment : Fragment() {
+class WeatherFragment : Fragment() {
 
     private lateinit var weatherViewModel: WeatherViewModel
 
@@ -64,7 +64,7 @@ class DFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_d, container, false)
+        val view = inflater.inflate(R.layout.fragment_weather, container, false)
         initViews(view)        //UI elemanlarını initialize et
         setupRecyclerView()   //RecyclerView'ı ayarla (burada adapter'ı başlatıyoruz)
         setupListeners()      //Click listener'ları ayarla

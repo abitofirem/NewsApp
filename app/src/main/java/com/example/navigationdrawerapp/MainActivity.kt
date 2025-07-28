@@ -16,7 +16,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.Locale
 import com.google.firebase.auth.FirebaseAuth
 import android.widget.TextView
-import com.example.navigationdrawerapp.ui.fragments.BFragment
+import com.example.navigationdrawerapp.ui.fragments.FootballFragment
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -111,35 +111,35 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             when (item.itemId) {
                 R.id.navigation_a -> {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, AFragment())
+                        .replace(R.id.fragment_container, FinanceFragment())
                         .commit()
                     setToolbarTitle(getString(R.string.bottom_nav_a)) //Finans
                     true
                 }
                 R.id.navigation_b -> {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, BFragment())
+                        .replace(R.id.fragment_container, FootballFragment())
                         .commit()
                     setToolbarTitle(getString(R.string.bottom_nav_b)) //Futbol
                     true
                 }
                 R.id.navigation_c -> {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, CFragment())
+                        .replace(R.id.fragment_container, NewsFragment())
                         .commit()
                     setToolbarTitle(getString(R.string.bottom_nav_c)) //Haberler
                     true
                 }
                 R.id.navigation_d -> {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, DFragment())
+                        .replace(R.id.fragment_container, WeatherFragment())
                         .commit()
                     setToolbarTitle(getString(R.string.bottom_nav_d)) //Hava
                     true
                 }
                 R.id.navigation_e -> {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, EFragment())
+                        .replace(R.id.fragment_container, PharmacyFragment())
                         .commit()
                     setToolbarTitle(getString(R.string.bottom_nav_e)) //Eczane
                     true
@@ -161,7 +161,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (savedInstanceState == null) {
             //Uygulama ilk açıldığında Haber Listesini (FragmentC) göster
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, CFragment()) // BURADA DEĞİŞİKLİK
+                .replace(R.id.fragment_container, NewsFragment()) // BURADA DEĞİŞİKLİK
                 .commit()
             //Yan menüde ve alt menüde ilgili öğeyi seçili yapın
             navigationView.setCheckedItem(R.id.nav_c) //Eğer yan menünüzde nav_c varsa
@@ -202,7 +202,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.nav_a -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, CFragment())
+                    .replace(R.id.fragment_container, NewsFragment())
                     .commit()
                 setToolbarTitle(getString(R.string.bottom_nav_c))
             }
@@ -230,7 +230,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     FirebaseAuth.getInstance().signOut()
                     updateNavigationMenu()
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, CFragment())
+                        .replace(R.id.fragment_container, NewsFragment())
                         .commit()
                 } else {
                     //Giriş ekranına yönlendir

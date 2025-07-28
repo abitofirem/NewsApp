@@ -10,20 +10,19 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-// import androidx.navigation.fragment.findNavController // BU SATIRI SİLİNDİ!
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.navigationdrawerapp.adapter.LeagueAdapter
-import com.example.navigationdrawerapp.databinding.FragmentBBinding // BFragment'ın layout'u için View Binding
+import com.example.navigationdrawerapp.databinding.FragmentFootballBinding
 import com.example.navigationdrawerapp.ui.LeagueDetailFragment // LeagueDetailFragment'ı import et!
 import com.example.navigationdrawerapp.viewmodel.LeagueViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 
-class BFragment : Fragment() {
+class FootballFragment : Fragment() {
 
     //ViewBinding için bir private var oluşturalım.
-    private var _binding: FragmentBBinding? = null
+    private var _binding: FragmentFootballBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: LeagueViewModel by viewModels()
@@ -34,7 +33,7 @@ class BFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentBBinding.inflate(inflater, container, false)
+        _binding = FragmentFootballBinding.inflate(inflater, container, false)
         return binding.root
     }
 

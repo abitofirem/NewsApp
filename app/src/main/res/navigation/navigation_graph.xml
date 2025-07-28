@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/BFragment2"
-        android:name="com.example.navigationdrawerapp.ui.fragments.BFragment"
+        android:name="com.example.navigationdrawerapp.ui.fragments.FootballFragment"
         android:label="BFragment" />
 </navigation>

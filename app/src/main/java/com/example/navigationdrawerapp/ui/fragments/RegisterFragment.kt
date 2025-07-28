@@ -133,7 +133,7 @@ class RegisterFragment : Fragment() {
                     Toast.makeText(requireContext(), "Kayıt başarılı!", Toast.LENGTH_SHORT).show()
                     (requireActivity() as? MainActivity)?.updateNavigationMenu()
                     parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, CFragment())
+                        .replace(R.id.fragment_container, NewsFragment())
                         .commit()
 
                 } else {
@@ -183,7 +183,7 @@ class RegisterFragment : Fragment() {
                     Toast.makeText(requireContext(), "Google ile giriş başarılı! Hoş geldiniz, ${user?.displayName}", Toast.LENGTH_SHORT).show()
                     (requireActivity() as? MainActivity)?.updateNavigationMenu()
                     parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, CFragment())
+                        .replace(R.id.fragment_container, NewsFragment())
                         .commit()
 
                 } else {

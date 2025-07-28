@@ -139,7 +139,7 @@ class LoginFragment : Fragment() {
                     Toast.makeText(requireContext(), "Giriş başarılı! Hoş geldiniz, ${user?.email}", Toast.LENGTH_SHORT).show()
                     (requireActivity() as? MainActivity)?.updateNavigationMenu()
                     parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, CFragment())
+                        .replace(R.id.fragment_container, NewsFragment())
                         .commit()
 
 
@@ -196,7 +196,7 @@ class LoginFragment : Fragment() {
                     Toast.makeText(requireContext(), "Google ile giriş başarılı! Hoş geldiniz, ${user?.displayName ?: user?.email}", Toast.LENGTH_SHORT).show()
                     (requireActivity() as? MainActivity)?.updateNavigationMenu()
                     parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, CFragment())
+                        .replace(R.id.fragment_container, NewsFragment())
                         .commit()
 
                 } else {

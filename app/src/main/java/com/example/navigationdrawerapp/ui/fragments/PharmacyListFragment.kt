@@ -1,4 +1,6 @@
-package com.example.navigationdrawerapp // Paket yolunuzu kontrol edin ve gerekirse düzenleyin
+package com.example.navigationdrawerapp.ui.fragments // Paket yolunuzu kontrol edin ve gerekirse düzenleyin
+import com.example.navigationdrawerapp.R
+
 import android.os.Bundle
 import android.util.Log // Debug için Logcat'e çıktı basmak için
 import android.view.LayoutInflater

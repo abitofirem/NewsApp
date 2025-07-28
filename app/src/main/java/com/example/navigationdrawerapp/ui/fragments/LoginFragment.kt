@@ -1,4 +1,4 @@
-package com.example.navigationdrawerapp
+package com.example.navigationdrawerapp.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -19,7 +19,8 @@ import com.google.firebase.auth.GoogleAuthProvider //Google kimlik bilgilerini F
 import android.app.AlertDialog
 import android.widget.EditText
 import android.widget.Button
-import android.widget.TextView
+import com.example.navigationdrawerapp.MainActivity
+import com.example.navigationdrawerapp.R
 
 class LoginFragment : Fragment() {
 

@@ -1,4 +1,6 @@
-package com.example.navigationdrawerapp
+package com.example.navigationdrawerapp.ui.fragments
+import com.example.navigationdrawerapp.R
+
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,16 +12,16 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.navigationdrawerapp.adapter.HaberAdapter
-import com.example.navigationdrawerapp.Haber
+import com.example.navigationdrawerapp.adapter.NewsAdapter
+import com.example.navigationdrawerapp.model.News
 
 class ShareFragment : Fragment() {
 
     private var _binding: FragmentShareBinding? = null // Binding sınıfı adını güncelleyin
     private val binding get() = _binding!!
 
-    private lateinit var haberAdapter: HaberAdapter
-    private var haberList: List<Haber> = emptyList()
+    private lateinit var newsAdapter: NewsAdapter
+    private var newsList: List<News> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,8 +34,8 @@ class ShareFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        haberAdapter = HaberAdapter(haberList, { /* tıklama işlemi */ }) { loadSavedNews() }
-        binding.recyclerViewKaydedilenler.adapter = haberAdapter
+        newsAdapter = NewsAdapter(newsList, { /* tıklama işlemi */ }) { loadSavedNews() }
+        binding.recyclerViewKaydedilenler.adapter = newsAdapter
         binding.recyclerViewKaydedilenler.layoutManager = LinearLayoutManager(requireContext())
 
         loadSavedNews()
@@ -49,12 +51,12 @@ class ShareFragment : Fragment() {
                 .get()
                 .addOnSuccessListener { result ->
                     val savedNewsList = result.documents.mapNotNull { doc ->
-                        doc.toObject(Haber::class.java)
+                        doc.toObject(News::class.java)
                     }
-                    haberAdapter.updateNews(savedNewsList)
+                    newsAdapter.updateNews(savedNewsList)
                     // EKLENDİ: Kaydedilenlerin key'lerini adapter'a ilet
-                    val savedKeys = savedNewsList.map { it.haberUrl.hashCode().toString() }.toSet()
-                    haberAdapter.setSavedSet(savedKeys)
+                    val savedKeys = savedNewsList.map { it.newsUrl.hashCode().toString() }.toSet()
+                    newsAdapter.setSavedSet(savedKeys)
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(context, "Kaydedilenler yüklenemedi: ${e.message}", Toast.LENGTH_SHORT).show()

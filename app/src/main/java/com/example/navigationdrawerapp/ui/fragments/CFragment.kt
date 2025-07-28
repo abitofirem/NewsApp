@@ -1,4 +1,4 @@
-package com.example.navigationdrawerapp
+package com.example.navigationdrawerapp.ui.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,7 +9,9 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.navigationdrawerapp.adapter.HaberAdapter
+import com.example.navigationdrawerapp.MainActivity
+import com.example.navigationdrawerapp.R
+import com.example.navigationdrawerapp.adapter.NewsAdapter
 import com.example.navigationdrawerapp.databinding.FragmentCBinding
 import com.example.navigationdrawerapp.viewmodel.NewsViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -22,7 +24,7 @@ class CFragment : Fragment() {
 
     //NewsViewModel'i oluşturun (Fragment KTX'in viewModels delegesi ile)
     private val newsViewModel: NewsViewModel by viewModels()
-    private lateinit var haberAdapter: HaberAdapter
+    private lateinit var newsAdapter: NewsAdapter
 
 
     override fun onCreateView(
@@ -54,7 +56,7 @@ class CFragment : Fragment() {
                     fun urlToKey(url: String): String = url.hashCode().toString()
                     val savedUrls = result.documents.mapNotNull { it.getString("haberUrl") }
                     val savedKeys = savedUrls.map { urlToKey(it) }.toSet()
-                    haberAdapter.setSavedSet(savedKeys)
+                    newsAdapter.setSavedSet(savedKeys)
                 }
         }
     }
@@ -67,15 +69,15 @@ class CFragment : Fragment() {
     private fun setupRecyclerView() {
 
         //Adaptörü boş bir liste ile başlatıyoruz, çünkü veriler ViewModel'den gelecek
-        haberAdapter = HaberAdapter(emptyList(), { haber ->
+        newsAdapter = NewsAdapter(emptyList(), { news ->
             //Haber öğesine tıklandığında NewsDetailFragment'ı aç
             val detailFragment = NewsDetailFragment().apply {
                 arguments = Bundle().apply {
                     // Haber objesindeki 'id' artık String, buna dikkat!
-                    putString("haber_id", haber.id)
-                    putString("haber_baslik", haber.baslik)
-                    putString("haber_icerik", haber.icerik)
-                    putString("haber_gorsel_url", haber.gorselUrl)
+                    putString("haber_id", news.id)
+                    putString("haber_baslik", news.title)
+                    putString("haber_icerik", news.content)
+                    putString("haber_gorsel_url", news.imageUrl)
                 }
             }
 
@@ -89,7 +91,7 @@ class CFragment : Fragment() {
 
         binding.recyclerViewHaberler.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = haberAdapter
+            adapter = newsAdapter
             // Sonsuz kaydırma için RecyclerView kaydırma dinleyicisini ekle
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -117,7 +119,7 @@ class CFragment : Fragment() {
     private fun observeViewModel() {
         newsViewModel.newsList.observe(viewLifecycleOwner) { news ->
             // ViewModel'den yeni haber listesi geldiğinde adaptörü güncelle
-            haberAdapter.updateNews(news)
+            newsAdapter.updateNews(news)
         }
 
         newsViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->

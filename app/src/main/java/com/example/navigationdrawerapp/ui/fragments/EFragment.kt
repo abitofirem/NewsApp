@@ -1,4 +1,4 @@
-package com.example.navigationdrawerapp // Paket yolunuzu kontrol edin ve gerekirse düzenleyin
+package com.example.navigationdrawerapp.ui.fragments // Paket yolunuzu kontrol edin ve gerekirse düzenleyin
 
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +10,7 @@ import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.navigationdrawerapp.R
 
 class EFragment : Fragment() {
 

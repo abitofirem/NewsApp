@@ -14,7 +14,7 @@ import com.example.navigationdrawerapp.R
 import com.example.navigationdrawerapp.adapter.StandingsAdapter
 import com.example.navigationdrawerapp.databinding.FragmentLeagueDetailBinding
 import com.example.navigationdrawerapp.adapter.MatchResultAdapter
-import com.example.navigationdrawerapp.ui.viewmodel.LeagueDetailViewModel
+import com.example.navigationdrawerapp.viewmodel.LeagueDetailViewModel
 import com.example.navigationdrawerapp.adapter.GoalKingAdapter
 
 class LeagueDetailFragment : Fragment() {

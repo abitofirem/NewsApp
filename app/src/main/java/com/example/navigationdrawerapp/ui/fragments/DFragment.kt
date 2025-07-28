@@ -1,4 +1,4 @@
-package com.example.navigationdrawerapp
+package com.example.navigationdrawerapp.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.navigationdrawerapp.R
 import com.example.navigationdrawerapp.adapter.WeatherForecastAdapter // Adaptörü import et
 import com.example.navigationdrawerapp.model.WeatherForecast // WeatherForecast modelini import et
 import com.example.navigationdrawerapp.viewmodel.WeatherViewModel // ViewModel'i import et

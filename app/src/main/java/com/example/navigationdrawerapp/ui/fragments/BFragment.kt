@@ -1,4 +1,6 @@
 package com.example.navigationdrawerapp.ui.fragments // Projenizin Fragment paketi
+import com.example.navigationdrawerapp.R
+
 
 import android.os.Bundle
 import android.util.Log
@@ -10,11 +12,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 // import androidx.navigation.fragment.findNavController // BU SATIRI SİLİNDİ!
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.navigationdrawerapp.R // R.id.fragment_container için gerekli
 import com.example.navigationdrawerapp.adapter.LeagueAdapter
 import com.example.navigationdrawerapp.databinding.FragmentBBinding // BFragment'ın layout'u için View Binding
 import com.example.navigationdrawerapp.ui.LeagueDetailFragment // LeagueDetailFragment'ı import et!
-import com.example.navigationdrawerapp.ui.viewmodel.LeagueViewModel // LeagueViewModel'ı import ettik
+import com.example.navigationdrawerapp.viewmodel.LeagueViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 

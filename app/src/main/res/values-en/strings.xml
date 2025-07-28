@@ -106,6 +106,7 @@
     <string name="finance_crypto_currencies">Crypto Currencies</string>
     <string name="finance_commodities">Commodities</string>
     <string name="finance_currency_converter_title">Currency Converter</string>
+    <string name="currency_converter_title">Currency Converter</string>
     <string name="finance_currency_converter_subtitle">Currency Converter</string>
     <string name="finance_swap_currencies_description">Swap currencies</string>
     <string name="finance_amount_hint">Amount</string>

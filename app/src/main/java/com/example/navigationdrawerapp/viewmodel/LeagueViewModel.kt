@@ -1,24 +1,16 @@
-package com.example.navigationdrawerapp.ui.viewmodel
+package com.example.navigationdrawerapp.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.navigationdrawerapp.model.League
-import com.example.navigationdrawerapp.api.FootballApiService // import et!
-import com.example.navigationdrawerapp.api.RetrofitClient
+import com.example.navigationdrawerapp.repository.FootballRepository
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
 class LeagueViewModel : ViewModel() {
 
-    private val footballApiService: FootballApiService = RetrofitClient.footballApiService // <-- Burayı değiştirdik
-
-
-
+    private val repository = FootballRepository(com.example.navigationdrawerapp.api.RetrofitClient.footballApiService)
 
     private val _leagues = MutableLiveData<List<League>?>()
     val leagues: LiveData<List<League>?> = _leagues
@@ -35,7 +27,7 @@ class LeagueViewModel : ViewModel() {
 
         viewModelScope.launch {
             try {
-                val response = footballApiService.getLeagues()
+                val response = repository.getLeagues()
                 if (response.isSuccessful) {
                     _leagues.value = response.body()?.result
                 } else {

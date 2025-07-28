@@ -1,4 +1,6 @@
-package com.example.navigationdrawerapp
+package com.example.navigationdrawerapp.ui.fragments
+import com.example.navigationdrawerapp.R
+
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.navigationdrawerapp.MainActivity
 import com.example.navigationdrawerapp.databinding.FragmentRegisterBinding //View Binding için
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth

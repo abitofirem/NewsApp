@@ -4,25 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.navigationdrawerapp.BuildConfig // Eklendi: BuildConfig'den API anahtarını almak için
-import com.example.navigationdrawerapp.api.FinanceApiService
-import com.example.navigationdrawerapp.api.RetrofitClient
-import com.example.navigationdrawerapp.model.BistResponse
-import com.example.navigationdrawerapp.model.CriptoResponse
-import com.example.navigationdrawerapp.model.CurrencyResponse
-import com.example.navigationdrawerapp.model.EmtiaResponse
-import com.example.navigationdrawerapp.model.ExchangeResponse
-import com.example.navigationdrawerapp.model.GoldResponse
-import com.example.navigationdrawerapp.model.SilverResponse
+import com.example.navigationdrawerapp.model.*
+import com.example.navigationdrawerapp.repository.FinanceRepository
 import kotlinx.coroutines.launch
-
 
 class FinanceViewModel : ViewModel() {
 
-
-
-    private val apiService: FinanceApiService = RetrofitClient.financeApiService // <-- Burayı değiştirdik
-
+    private val repository = FinanceRepository(com.example.navigationdrawerapp.api.RetrofitClient.financeApiService)
 
     //LiveData'lar
     private val _bistData = MutableLiveData<BistResponse?>()
@@ -57,13 +45,13 @@ class FinanceViewModel : ViewModel() {
     private val _exchangeData = MutableLiveData<ExchangeResponse?>()
     val exchangeData: LiveData<ExchangeResponse?> get() = _exchangeData
 
-    // BIST 100 verilerini çeken fonksiyon (Değişiklik yok)
+    // BIST 100 verilerini çeken fonksiyon
     fun fetchBistData() {
         _isLoading.value = true
         _errorMessage.value = null
         viewModelScope.launch {
             try {
-                val response = apiService.getBistData()
+                val response = repository.getBistRates()
                 if (response.isSuccessful) {
                     _bistData.value = response.body()
                 } else {
@@ -80,13 +68,13 @@ class FinanceViewModel : ViewModel() {
         }
     }
 
-    // DÖVİZ KURLARI İÇİN YENİ FONKSİYON (Değişiklik yok)
+    // DÖVİZ KURLARI İÇİN YENİ FONKSİYON
     fun fetchAllCurrencyData() {
         _isLoading.value = true
         _errorMessage.value = null
         viewModelScope.launch {
             try {
-                val response = apiService.getAllCurrencyData()
+                val response = repository.getCurrencyRates()
                 if (response.isSuccessful) {
                     _currencyData.value = response.body()
                 } else {
@@ -103,12 +91,12 @@ class FinanceViewModel : ViewModel() {
         }
     }
 
-    // Altın ve Gümüş verilerini çeken fonksiyonlar (Değişiklik yok)
+    // Altın ve Gümüş verilerini çeken fonksiyonlar
     fun fetchGoldPrice() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val response = apiService.getGoldPrice()
+                val response = repository.getGoldRates()
                 if (response.isSuccessful) {
                     _goldData.value = response.body()
                 } else {
@@ -126,7 +114,7 @@ class FinanceViewModel : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val response = apiService.getSilverPrice()
+                val response = repository.getSilverRates()
                 if (response.isSuccessful) {
                     _silverData.value = response.body()
                 } else {
@@ -140,12 +128,12 @@ class FinanceViewModel : ViewModel() {
         }
     }
 
-    // Kripto Para verilerini çeken fonksiyon (Değişiklik yok)
+    // Kripto Para verilerini çeken fonksiyon
     fun fetchCriptoPrice() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val response = apiService.getCriptoPrice()
+                val response = repository.getCryptoRates()
                 if (response.isSuccessful) {
                     _criptoData.value = response.body()
                 } else {
@@ -159,13 +147,13 @@ class FinanceViewModel : ViewModel() {
         }
     }
 
-    // Emtia verilerini çeken fonksiyon (Değişiklik yok)
+    // Emtia verilerini çeken fonksiyon
     fun fetchEmtiaData() {
         viewModelScope.launch {
             _isLoading.value = true
             _errorMessage.value = null
             try {
-                val response = apiService.getEmtiaData()
+                val response = repository.getEmtiaRates()
                 if (response.isSuccessful) {
                     _emtiaData.value = response.body()
                 } else {
@@ -179,7 +167,7 @@ class FinanceViewModel : ViewModel() {
         }
     }
 
-    // Para birimi dönüştürme işlemi (Değişiklik yok)
+    // Para birimi dönüştürme işlemi
     fun convertCurrency(baseCurrency: String, toCurrency: String, amount: String) {
         if (amount.isNullOrEmpty() || amount.toDoubleOrNull() == 0.0) {
             _exchangeData.value = null
@@ -189,7 +177,7 @@ class FinanceViewModel : ViewModel() {
             _isLoading.value = true
             _errorMessage.value = null
             try {
-                val response = apiService.convertCurrency(baseCurrency, toCurrency, amount)
+                val response = repository.convertCurrency(baseCurrency, toCurrency, amount)
                 if (response.isSuccessful) {
                     _exchangeData.value = response.body()
                 } else {

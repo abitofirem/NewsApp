@@ -1,4 +1,4 @@
-package com.example.navigationdrawerapp
+package com.example.navigationdrawerapp.ui.fragments
 
 import android.content.Context
 import android.content.res.Configuration
@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.Switch
 import android.widget.TextView
 import androidx.fragment.app.viewModels
+import com.example.navigationdrawerapp.MainActivity
+import com.example.navigationdrawerapp.R
 import com.example.navigationdrawerapp.databinding.FragmentSettingsBinding
 import com.example.navigationdrawerapp.viewmodel.NewsViewModel
 import java.util.Locale

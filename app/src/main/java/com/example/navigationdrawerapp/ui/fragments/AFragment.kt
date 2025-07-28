@@ -1,4 +1,4 @@
-package com.example.navigationdrawerapp
+package com.example.navigationdrawerapp.ui.fragments
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.navigationdrawerapp.R
 import com.example.navigationdrawerapp.adapter.CriptoAdapter
 import com.example.navigationdrawerapp.adapter.CurrencyAdapter
 import com.example.navigationdrawerapp.adapter.EmtiaAdapter

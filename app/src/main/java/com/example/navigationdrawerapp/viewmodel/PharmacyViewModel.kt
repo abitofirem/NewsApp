@@ -4,16 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.navigationdrawerapp.api.PharmacyApiService
-import com.example.navigationdrawerapp.api.RetrofitClient
 import com.example.navigationdrawerapp.model.Pharmacy
+import com.example.navigationdrawerapp.repository.PharmacyRepository
 import kotlinx.coroutines.launch
-
 
 class PharmacyViewModel : ViewModel() {
 
-    //RetrofitClient'tan API servis örneğini alıyoruz
-    private val apiService: PharmacyApiService = RetrofitClient.pharmacyApiService
+    private val repository = PharmacyRepository(com.example.navigationdrawerapp.api.RetrofitClient.pharmacyApiService)
 
     //Nöbetçi eczane listesini tutacak LiveData
     private val _pharmacies = MutableLiveData<List<Pharmacy>>()
@@ -52,10 +49,7 @@ class PharmacyViewModel : ViewModel() {
 
         viewModelScope.launch {
             try {
-                //city.isNullOrBlank() kontrolünü zaten yaptığımız için,
-                //Kotlin'in akıllı dönüştürmesi (smart-cast) 'city'yi burada null olamayan bir String olarak algılayacaktır.
-                //'city' değerini doğrudan 'il' parametresine ve 'district' değerini 'ilce' parametresine iletiyoruz.
-                val response = apiService.getDutyPharmacies(il = city, ilce = district)
+                val response = repository.getPharmacies(city, district ?: "")
 
                 if (response.isSuccessful) {
                     response.body()?.let { pharmacyResponse ->

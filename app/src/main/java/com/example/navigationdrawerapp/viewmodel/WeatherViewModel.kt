@@ -4,18 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.navigationdrawerapp.api.RetrofitClient
-import com.example.navigationdrawerapp.api.WeatherApiService // WeatherApiService import edildi
-import com.example.navigationdrawerapp.model.WeatherResponse // Model import edildi
+import com.example.navigationdrawerapp.model.WeatherResponse
+import com.example.navigationdrawerapp.repository.WeatherRepository
 import kotlinx.coroutines.launch
-
 
 class WeatherViewModel : ViewModel() {
 
-    private val weatherApiService: WeatherApiService = RetrofitClient.weatherApiService // <-- Burayı değiştirin
-
-
-
+    private val repository = WeatherRepository(com.example.navigationdrawerapp.api.RetrofitClient.weatherApiService)
 
     // LiveData'lar
     private val _weatherData = MutableLiveData<WeatherResponse?>()
@@ -34,9 +29,7 @@ class WeatherViewModel : ViewModel() {
 
         viewModelScope.launch {
             try {
-                //API anahtarını zaten OkHttpClient interceptor'ı eklediği için
-                //getWeather fonksiyonuna authorization parametresi göndermiyoruz.
-                val response = weatherApiService.getWeather(city = city) //authorization parametresi yok!
+                val response = repository.getWeatherForecast(city)
                 if (response.isSuccessful) {
                     _weatherData.value = response.body()
                 } else {

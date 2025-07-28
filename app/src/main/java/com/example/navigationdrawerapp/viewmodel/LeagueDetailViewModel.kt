@@ -1,4 +1,4 @@
-package com.example.navigationdrawerapp.ui.viewmodel
+package com.example.navigationdrawerapp.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -6,21 +6,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.navigationdrawerapp.model.TeamStanding
-import com.example.navigationdrawerapp.api.FootballApiService
-import com.example.navigationdrawerapp.api.RetrofitClient
 import com.example.navigationdrawerapp.model.GoalKing
-import com.example.navigationdrawerapp.model.GoalKingResponse // Eklendi
 import com.example.navigationdrawerapp.model.MatchResult
+import com.example.navigationdrawerapp.repository.FootballRepository
 import kotlinx.coroutines.launch
-
 import java.io.IOException
 import retrofit2.HttpException
 
 class LeagueDetailViewModel : ViewModel() {
 
-
-    private val footballApiService: FootballApiService = RetrofitClient.footballApiService // <-- Burayı değiştirdik
-
+    private val repository = FootballRepository(com.example.navigationdrawerapp.api.RetrofitClient.footballApiService)
 
     // Puan Durumu LiveData'ları
     private val _standings = MutableLiveData<List<TeamStanding>?>()
@@ -30,7 +25,7 @@ class LeagueDetailViewModel : ViewModel() {
     private val _matchResults = MutableLiveData<List<MatchResult>?>()
     val matchResults: LiveData<List<MatchResult>?> = _matchResults
 
-    // Gol Krallığı LiveData'ları (Eklendi)
+    // Gol Krallığı LiveData'ları
     private val _goalKings = MutableLiveData<List<GoalKing>?>()
     val goalKings: LiveData<List<GoalKing>?> = _goalKings
 
@@ -41,14 +36,13 @@ class LeagueDetailViewModel : ViewModel() {
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
-
     fun fetchStandings(leagueKey: String) {
         _isLoading.value = true
-        _errorMessage.value = null // Her yeni istekte hatayı sıfırla
+        _errorMessage.value = null
 
         viewModelScope.launch {
             try {
-                val response = footballApiService.getLeagueStandings(leagueKey)
+                val response = repository.getStandings(leagueKey)
                 if (response.isSuccessful) {
                     _standings.value = response.body()?.result
                     if (response.body()?.result.isNullOrEmpty()) {
@@ -79,11 +73,11 @@ class LeagueDetailViewModel : ViewModel() {
 
     fun fetchMatchResults(leagueKey: String) {
         _isLoading.value = true
-        _errorMessage.value = null // Her yeni istekte hatayı sıfırla
+        _errorMessage.value = null
 
         viewModelScope.launch {
             try {
-                val response = footballApiService.getMatchResults(leagueKey)
+                val response = repository.getMatchResults(leagueKey)
                 if (response.isSuccessful) {
                     val matchResultResponse = response.body()
                     Log.d("API_RESPONSE", "Match Results Raw Response: ${matchResultResponse.toString()}")
@@ -125,11 +119,11 @@ class LeagueDetailViewModel : ViewModel() {
 
     fun fetchGoalKings(leagueKey: String) {
         _isLoading.value = true
-        _errorMessage.value = null // Her yeni istekte eski hatayı temizle
+        _errorMessage.value = null
 
         viewModelScope.launch {
             try {
-                val response = footballApiService.getGoalKings(leagueKey)
+                val response = repository.getGoalKings(leagueKey)
                 if (response.isSuccessful) {
                     val goalKingResponse = response.body()
                     Log.d("API_RESPONSE", "Goal Kings Raw Response: ${goalKingResponse.toString()}")
@@ -138,9 +132,8 @@ class LeagueDetailViewModel : ViewModel() {
                         _goalKings.value = goalKingResponse.result
                         Log.d("LeagueDetailViewModel", "Gol krallığı verisi başarıyla çekildi: ${goalKingResponse.result.size} oyuncu.")
                     } else {
-                        // success=false ise veya result boş/null ise hata mesajı göster
                         _errorMessage.value = goalKingResponse?.message ?: "Gol krallığı verisi bulunamadı veya API tarafından desteklenmiyor."
-                        _goalKings.value = emptyList() // Boş liste gönder
+                        _goalKings.value = emptyList()
                         Log.e("LeagueDetailViewModel", "API'den gol krallığı boş veya başarısız geldi: ${goalKingResponse?.message}")
                     }
                 } else {

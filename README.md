@@ -1,5 +1,4 @@
-<img width="1080" height="2400" alt="haberler" src="https://github.com/user-attachments/assets/56c83f3d-f105-4b3f-920e-d597919a7064" /># 📱 NewsApp - Çok Fonks![Uploading ayarlar.png…]()
-iyonlu Haber Uygulaması
+📱 NewsApp - Çok Fonksiyonlu Haber Uygulaması
 
 [![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://developer.android.com/)
 [![Kotlin](https://img.shields.io/badge/Kotlin-0095D5?style=for-the-badge&logo=kotlin&logoColor=white)](https://kotlinlang.org/)

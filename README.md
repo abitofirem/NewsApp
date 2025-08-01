@@ -1,4 +1,5 @@
-# 📱 NewsApp - Çok Fonksiyonlu Haber Uygulaması
+<img width="1080" height="2400" alt="haberler" src="https://github.com/user-attachments/assets/56c83f3d-f105-4b3f-920e-d597919a7064" /># 📱 NewsApp - Çok Fonks![Uploading ayarlar.png…]()
+iyonlu Haber Uygulaması
 
 [![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://developer.android.com/)
 [![Kotlin](https://img.shields.io/badge/Kotlin-0095D5?style=for-the-badge&logo=kotlin&logoColor=white)](https://kotlinlang.org/)
@@ -69,17 +70,21 @@
 
 ## 📱 Ekran Görüntüleri
 
-| Ana Sayfa | Haberler | Finans |
+| Giriş | Kayıt | Haberler (Ana) |
 |---|---|---|
-| ![](https://via.placeholder.com/200x400/4CAF50/FFFFFF?text=Ana+Ekran) | ![](https://via.placeholder.com/200x400/2196F3/FFFFFF?text=Haberler) | ![](https://via.placeholder.com/200x400/FF9800/FFFFFF?text=Finans) |
+| ![Giriş Ekranı](https://via.placeholder.com/200x400/FF5722/FFFFFF?text=Giriş) | ![Kayıt Ekranı](https://via.placeholder.com/200x400/795548/FFFFFF?text=Kayıt) | ![Haberler Ana Sayfa](https://via.placeholder.com/200x400/2196F3/FFFFFF?text=Haberler) |
 
-| Futbol | Hava Durumu | Eczane |
+| Kaydedilen Haberler | Finans 1 | Finans 2 |
 |---|---|---|
-| ![](https://via.placeholder.com/200x400/4CAF50/FFFFFF?text=Futbol) | ![](https://via.placeholder.com/200x400/03A9F4/FFFFFF?text=Hava+Durumu) | ![](https://via.placeholder.com/200x400/9C27B0/FFFFFF?text=Eczane) |
+| ![Favoriler](https://via.placeholder.com/200x400/1976D2/FFFFFF?text=Favoriler) | ![Finans Sayfası 1](https://via.placeholder.com/200x400/FF9800/FFFFFF?text=Finans+1) | ![Finans Sayfası 2](https://via.placeholder.com/200x400/F57C00/FFFFFF?text=Finans+2) |
 
-| Giriş | Kayıt | Ayarlar |
+| Futbol 1 | Futbol 2 | Hava Durumu |
 |---|---|---|
-| ![](https://via.placeholder.com/200x400/FF5722/FFFFFF?text=Giriş) | ![](https://via.placeholder.com/200x400/795548/FFFFFF?text=Kayıt) | ![](https://via.placeholder.com/200x400/607D8B/FFFFFF?text=Ayarlar) |
+| ![Futbol Sayfası 1](https://via.placeholder.com/200x400/4CAF50/FFFFFF?text=Futbol+1) | ![Futbol Sayfası 2](https://via.placeholder.com/200x400/388E3C/FFFFFF?text=Futbol+2) | ![Hava Durumu](https://via.placeholder.com/200x400/03A9F4/FFFFFF?text=Hava+Durumu) |
+
+| Eczane 1 | Eczane 2 | Ayarlar |
+|---|---|---|
+| ![Eczane Listesi](https://via.placeholder.com/200x400/9C27B0/FFFFFF?text=Eczane+1) | ![Eczane Haritası](https://via.placeholder.com/200x400/7B1FA2/FFFFFF?text=Eczane+2) | ![Ayarlar](https://via.placeholder.com/200x400/607D8B/FFFFFF?text=Ayarlar) |
 
 ---
 

@@ -71,19 +71,19 @@
 
 | Giriş | Kayıt | Haberler (Ana) |
 |---|---|---|
-| ![Giriş Ekranı](https://via.placeholder.com/200x400/FF5722/FFFFFF?text=Giriş) | ![Kayıt Ekranı](https://via.placeholder.com/200x400/795548/FFFFFF?text=Kayıt) | ![Haberler Ana Sayfa](https://via.placeholder.com/200x400/2196F3/FFFFFF?text=Haberler) |
+| <img src="https://github.com/user-attachments/assets/eb37c79c-ce33-4f49-89f6-30a1dcbf8403" width="200" alt="Giriş Ekranı"> | <img src="https://github.com/user-attachments/assets/88e55a1a-af99-49f2-a662-46566cd936ac" width="200" alt="Kayıt Ekranı"> | <img src="https://github.com/user-attachments/assets/1de3f288-a985-4030-a134-3aeb1cb45969" width="200" alt="Haberler Ana Sayfa"> |
 
 | Kaydedilen Haberler | Finans 1 | Finans 2 |
 |---|---|---|
-| ![Favoriler](https://via.placeholder.com/200x400/1976D2/FFFFFF?text=Favoriler) | ![Finans Sayfası 1](https://via.placeholder.com/200x400/FF9800/FFFFFF?text=Finans+1) | ![Finans Sayfası 2](https://via.placeholder.com/200x400/F57C00/FFFFFF?text=Finans+2) |
+| <img src="https://github.com/user-attachments/assets/37f08f15-db28-4de6-ad75-8ff6bbc61b50" width="200" alt="Favoriler"> | <img src="https://github.com/user-attachments/assets/2f40e126-e523-4657-8307-38d2b23e5989" width="200" alt="Finans Sayfası 1"> | <img src="https://github.com/user-attachments/assets/15c181ef-b66d-4e20-93ac-1d8492616ba4" width="200" alt="Finans Sayfası 2"> |
 
 | Futbol 1 | Futbol 2 | Hava Durumu |
 |---|---|---|
-| ![Futbol Sayfası 1](https://via.placeholder.com/200x400/4CAF50/FFFFFF?text=Futbol+1) | ![Futbol Sayfası 2](https://via.placeholder.com/200x400/388E3C/FFFFFF?text=Futbol+2) | ![Hava Durumu](https://via.placeholder.com/200x400/03A9F4/FFFFFF?text=Hava+Durumu) |
+| <img src="https://github.com/user-attachments/assets/7aa789be-f5d3-4d4a-aa6e-ae193a81fcfc" width="200" alt="Futbol Sayfası 1"> | <img src="https://github.com/user-attachments/assets/4ac46b01-8aaf-40a4-afd3-97134ce0411c" width="200" alt="Futbol Sayfası 2"> | <img src="https://github.com/user-attachments/assets/d84d93d0-c973-4a45-ab1a-86e354581282" width="200" alt="Hava Durumu"> |
 
 | Eczane 1 | Eczane 2 | Ayarlar |
 |---|---|---|
-| ![Eczane Listesi](https://via.placeholder.com/200x400/9C27B0/FFFFFF?text=Eczane+1) | ![Eczane Haritası](https://via.placeholder.com/200x400/7B1FA2/FFFFFF?text=Eczane+2) | ![Ayarlar](https://via.placeholder.com/200x400/607D8B/FFFFFF?text=Ayarlar) |
+| <img src="https://github.com/user-attachments/assets/bcdda2c3-7ebb-4ae6-8322-a0317116abae" width="200" alt="Eczane Listesi"> | <img src="https://github.com/user-attachments/assets/92a16165-355b-4d8e-b517-05a31dd99943" width="200" alt="Eczane Haritası"> | <img src="https://github.com/user-attachments/assets/a8efe76c-0443-4dc1-8d14-131a3c67b7a4" width="200" alt="Ayarlar"> |
 
 ---
 
